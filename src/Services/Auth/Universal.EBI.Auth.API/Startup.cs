@@ -1,16 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.OpenApi.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Universal.EBI.Auth.API.Configurations;
 
 namespace Universal.EBI.Auth.API
@@ -30,12 +21,13 @@ namespace Universal.EBI.Auth.API
             services.AddSwaggerConfiguration();
             services.AddIdentityConfiguration(Configuration);
             services.AddApiConfiguration();
-            services.AddMessageBusConfiguration(Configuration);            
+            //services.AddMessageBusConfiguration(Configuration);            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {           
+        {
+            app.UseSwaggerConfiguration();
             app.UseApiConfiguration(env);
         }
     }

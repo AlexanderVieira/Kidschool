@@ -2,6 +2,11 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using NetDevPack.Security.Jwt.AspNetCore;
+using Universal.EBI.Auth.API.Services;
+using Universal.EBI.WebAPI.Core.AspNetUser;
+using Universal.EBI.WebAPI.Core.AspNetUser.Interfaces;
+using Universal.EBI.WebAPI.Core.Auth;
 
 namespace Universal.EBI.Auth.API.Configurations
 {
@@ -10,30 +15,27 @@ namespace Universal.EBI.Auth.API.Configurations
         public static IServiceCollection AddApiConfiguration(this IServiceCollection services)
         {
             services.AddControllers();
-            //services.AddScoped<AuthenticationService>();
-            //services.AddScoped<IAspNetUser, AspNetUser>();
+            services.AddScoped<AuthenticationService>();
+            services.AddScoped<IAspNetUser, AspNetUser>();
             return services;
         }
         public static IApplicationBuilder UseApiConfiguration(this IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
-                app.UseSwaggerConfiguration();
+                app.UseDeveloperExceptionPage();                
             }
 
             app.UseHttpsRedirection();
-
             app.UseRouting();
-
-            //app.UseAuthConfiguration();
+            app.UseAuthConfiguration();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
 
-            //app.UseJwksDiscovery();
+            app.UseJwksDiscovery();
 
             return app;
         }
