@@ -5,6 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AspNetCore.HealthChecks.MongoDb" Version="5.0.1" />
+    <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="5.0.1" />
+    <PackageReference Include="MongoDB.Driver" Version="2.13.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.2" />
   </ItemGroup>
 
@@ -12,10 +15,6 @@
     <ProjectReference Include="..\..\..\BuildingBlocks\Core\Universal.EBI.Core\Universal.EBI.Core.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\MessageBus\Universal.EBI.MessageBus\Universal.EBI.MessageBus.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\Services\Universal.EBI.WebAPI.Core\Universal.EBI.WebAPI.Core.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Controllers\" />
   </ItemGroup>
 
 </Project>
