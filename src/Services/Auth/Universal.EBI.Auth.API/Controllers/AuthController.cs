@@ -14,10 +14,10 @@ namespace Universal.EBI.Auth.API.Controllers
     [Route("api/auth")]
     public class AuthController : BaseController
     {
-        private readonly AuthenticationService _authenticationService;
+        private readonly AuthService _authenticationService;
         //private readonly IMessageBus _bus;
 
-        public AuthController(AuthenticationService authenticationService)
+        public AuthController(AuthService authenticationService)
         {
             _authenticationService = authenticationService;            
         }
@@ -45,11 +45,11 @@ namespace Universal.EBI.Auth.API.Controllers
 
             if (result.Succeeded)
             {
-                //var customerResult = await EducatorRecord(userRegister);
-                //if (!customerResult.ValidationResult.IsValid)
+                //var educatorResult = await EducatorRecord(userRegister);
+                //if (!educatorResult.ValidationResult.IsValid)
                 //{
                 //    await _authenticationService.UserManager.DeleteAsync(user);
-                //    return CustomResponse(customerResult.ValidationResult);
+                //    return CustomResponse(educatorResult.ValidationResult);
                 //}
                 return CustomResponse(await _authenticationService.GenerateJwt(userRegister.Email));
             }

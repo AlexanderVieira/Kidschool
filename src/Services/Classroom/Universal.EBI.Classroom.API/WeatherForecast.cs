@@ -1,6 +1,6 @@
 using System;
 
-namespace Universal.EBI.Childs.API
+namespace Universal.EBI.Classroom.API
 {
     public class WeatherForecast
     {

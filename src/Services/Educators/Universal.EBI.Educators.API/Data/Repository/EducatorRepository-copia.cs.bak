@@ -1,0 +1,62 @@
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using Universal.EBI.Core.Data.Interfaces;
+using Universal.EBI.Educators.API.Models;
+
+namespace Universal.EBI.Educators.API.Data.Repository
+{
+    public class EducatorRepository : IEducatorRepository
+    {
+        private readonly EducatorContext _context;
+        public IUnitOfWork UnitOfWork => _context;
+        public EducatorRepository(EducatorContext context)
+        {
+            _context = context;
+        }
+
+        public void AddEducator(Educator educator)
+        {
+            _context.Educators.Add(educator);
+        }
+
+        public void Dispose()
+        {
+            _context.Dispose();
+        }
+
+        public Task<IEnumerable<Educator>> GetEducators()
+        {
+            return await _context.Educators.AsNoTracking().ToListAsync();
+        }
+
+        public Task<IEnumerable<Educator>> GetEducatorByName(string name)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<Educator> GetEducatorByCpf(string cpf)
+        {
+            return _context.Educators.FirstOrDefaultAsync(c => c.Cpf.Number == cpf);
+        }
+
+        public Task<Educator> GetEducatorById(string id)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task CreateEducator(Educator educator)
+        {
+            return _context.Educators.Add(educator);
+        }
+
+        public Task<bool> UpdateEducator(Educator educator)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<bool> DeleteEducator(string id)
+        {
+            throw new System.NotImplementedException();
+        }
+    }
+}

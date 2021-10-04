@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using System;
 
-namespace Universal.EBI.Core.Messages.Integration
+namespace Universal.EBI.Core.Messages
 {
     public class Event : Message, INotification
     {

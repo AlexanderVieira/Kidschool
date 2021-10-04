@@ -1,6 +1,6 @@
 using System;
 
-namespace Universal.EBI.Educators.API
+namespace Universal.EBI.Basket.API
 {
     public class WeatherForecast
     {

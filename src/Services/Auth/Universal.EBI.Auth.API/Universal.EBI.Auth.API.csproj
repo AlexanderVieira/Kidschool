@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <UserSecretsId>8a1e7905-72f6-48a2-a089-bf2508b3842f</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,7 +19,7 @@
     </PackageReference>
     <PackageReference Include="NetDevPack.Security.Jwt.AspNetCore" Version="5.0.17" />
     <PackageReference Include="NetDevPack.Security.Jwt.Store.EntityFrameworkCore" Version="5.0.17" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.2" />
   </ItemGroup>
 
   <ItemGroup>

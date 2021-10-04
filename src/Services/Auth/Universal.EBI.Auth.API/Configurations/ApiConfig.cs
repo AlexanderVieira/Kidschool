@@ -15,7 +15,7 @@ namespace Universal.EBI.Auth.API.Configurations
         public static IServiceCollection AddApiConfiguration(this IServiceCollection services)
         {
             services.AddControllers();
-            services.AddScoped<AuthenticationService>();
+            services.AddScoped<AuthService>();
             services.AddScoped<IAspNetUser, AspNetUser>();
             return services;
         }

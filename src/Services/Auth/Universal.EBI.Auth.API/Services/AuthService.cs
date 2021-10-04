@@ -16,7 +16,7 @@ using Universal.EBI.WebAPI.Core.AspNetUser.Interfaces;
 
 namespace Universal.EBI.Auth.API.Services
 {
-    public class AuthenticationService
+    public class AuthService
     {
         public readonly SignInManager<IdentityUser> SignInManager;
         public readonly UserManager<IdentityUser> UserManager;        
@@ -25,7 +25,7 @@ namespace Universal.EBI.Auth.API.Services
         private readonly IJsonWebKeySetService _jwksService;
         private readonly IAspNetUser _aspNetUser;
 
-        public AuthenticationService(SignInManager<IdentityUser> signInManager, 
+        public AuthService(SignInManager<IdentityUser> signInManager, 
                                      UserManager<IdentityUser> userManager,
                                      IOptions<AppTokenSettings> appTokenSettings,
                                      AuthDbContext context,
@@ -73,7 +73,7 @@ namespace Universal.EBI.Auth.API.Services
                 Username = email,
                 ExpirationDate = DateTime.UtcNow.AddHours(_appTokenSettings.RefreshTokenExpiration)
             };
-            _context.RefreshTokens.AddRange(_context.RefreshTokens.Where(u => u.Username == email));
+            _context.RefreshTokens.RemoveRange(_context.RefreshTokens.Where(u => u.Username == email));
             await _context.RefreshTokens.AddAsync(refreshToken);
             await _context.SaveChangesAsync();
             return refreshToken;

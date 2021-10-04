@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Universal.EBI.Childs.API.Controllers
+namespace Universal.EBI.Classroom.API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
