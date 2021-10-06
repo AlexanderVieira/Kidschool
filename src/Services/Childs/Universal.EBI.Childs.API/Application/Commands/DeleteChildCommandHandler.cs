@@ -11,18 +11,19 @@ namespace Universal.EBI.Childs.API.Application.Commands
 {
     public class DeleteChildCommandHandler : CommandHandler, IRequestHandler<DeleteChildCommand, ValidationResult>
     {
-        private readonly IChildRepository _ChildRepository;
+        private readonly IChildRepository _childRepository;
         private readonly IChildQueries _childQueries;
 
-        public DeleteChildCommandHandler(IChildRepository ChildRepository)
+        public DeleteChildCommandHandler(IChildRepository childRepository, IChildQueries childQueries)
         {
-            _ChildRepository = ChildRepository;
+            _childRepository = childRepository;
+            _childQueries = childQueries;
         }
 
         public async Task<ValidationResult> Handle(DeleteChildCommand message, CancellationToken cancellationToken)
         {
             if (!message.IsValid()) return message.ValidationResult;
-           
+
             var existingChild = await _childQueries.GetChildById(message.Id);
 
             if (existingChild == null)
@@ -31,14 +32,15 @@ namespace Universal.EBI.Childs.API.Application.Commands
                 return ValidationResult;
             }
 
-            var success = await _ChildRepository.DeleteChild(existingChild.Id);
+            var success = await _childRepository.DeleteChild(existingChild.Id);
 
-            existingChild.AddEvent(new UpdatedChildEvent 
-            {                
-                Id = message.Id                
-            });            
+            existingChild.AddEvent(new DeletedChildEvent
+            {
+                AggregateId = message.Id,
+                Id = message.Id
+            });
 
-            return await PersistData(_ChildRepository.UnitOfWork, success);
+             return await PersistData(_childRepository.UnitOfWork, success);
         }
     }
 }

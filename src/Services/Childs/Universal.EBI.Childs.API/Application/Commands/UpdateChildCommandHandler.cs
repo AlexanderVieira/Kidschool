@@ -4,57 +4,68 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Universal.EBI.Childs.API.Application.Events;
+using Universal.EBI.Childs.API.Application.Queries.Interfaces;
+using Universal.EBI.Childs.API.Models;
+using Universal.EBI.Childs.API.Models.Interfaces;
 using Universal.EBI.Core.DomainObjects;
 using Universal.EBI.Core.Messages;
+using Universal.EBI.Core.Utils;
 
 namespace Universal.EBI.Childs.API.Application.Commands
 {
     public class UpdateChildCommandHandler : CommandHandler, IRequestHandler<UpdateChildCommand, ValidationResult>
     {
-        private readonly IChildRepository _ChildRepository;
+        private readonly IChildRepository _childRepository;
+        private readonly IChildQueries _childQueries;
 
-        public UpdateChildCommandHandler(IChildRepository ChildRepository)
+        public UpdateChildCommandHandler(IChildRepository childRepository, IChildQueries childQueries)
         {
-            _ChildRepository = ChildRepository;
+            _childRepository = childRepository;
+            _childQueries = childQueries;
         }
 
         public async Task<ValidationResult> Handle(UpdateChildCommand message, CancellationToken cancellationToken)
         {
-            if (!message.IsValid()) return message.ValidationResult;          
+            if (!message.IsValid()) return message.ValidationResult;
 
-            var existingChild = await _ChildRepository.GetChildByCpf(message.Cpf);
+            var existingChild = await _childQueries.GetChildByCpf(message.Cpf);
 
             existingChild.FirstName = message.FirstName;
             existingChild.LastName = message.LastName;
-            existingChild.Email = new Email(message.Email);
-            existingChild.Cpf = new Cpf(message.Cpf);
+            existingChild.FullName = $"{message.FirstName} {message.LastName}";
+            existingChild.Email = ValidationUtils.ValidateRequestEmail(message.Email);
+            existingChild.Cpf = ValidationUtils.ValidateRequestCpf(message.Email);
             existingChild.Phones = message.Phones;
             existingChild.Address = message.Address;
             existingChild.BirthDate = DateTime.Parse(message.BirthDate);
-            existingChild.Gender = (Gender)Enum.Parse(typeof(Gender), message.Gender, true);
-            existingChild.FunctionType = (FunctionType)Enum.Parse(typeof(FunctionType), message.Function, true);
+            existingChild.GenderType = (GenderType)Enum.Parse(typeof(GenderType), message.Gender, true);
+            existingChild.AgeGroupType = (AgeGroupType)Enum.Parse(typeof(AgeGroupType), message.AgeGroup, true);
             existingChild.PhotoUrl = message.PhotoUrl;
             existingChild.Excluded = message.Excluded;
-           
-            await _ChildRepository.UpdateChild(existingChild);
+            existingChild.Responsibles = message.Responsibles;
 
-            existingChild.AddEvent(new UpdatedChildEvent 
-            {                
+            var success = await _childRepository.UpdateChild(existingChild);
+
+            existingChild.AddEvent(new UpdatedChildEvent
+            {
+                AggregateId = message.Id,
                 Id = message.Id,
                 FirstName = message.FirstName,
                 LastName = message.LastName,
+                FullName = message.FullName,
                 Email = message.Email,
                 Cpf = message.Cpf,
                 Phones = message.Phones,
                 Address = message.Address,
                 BirthDate = message.BirthDate,
                 Gender = message.Gender,
-                Function = message.Function,
+                AgeGroup = message.AgeGroup,
                 PhotoUrl = message.PhotoUrl,
-                Excluded = message.Excluded
+                Excluded = message.Excluded,
+                Responsibles = message.Responsibles
             });
-            
-            return await PersistData(_ChildRepository.UnitOfWork);
+
+            return await PersistData(_childRepository.UnitOfWork, success);
         }
     }
 }

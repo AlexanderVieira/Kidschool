@@ -8,6 +8,7 @@ using Universal.EBI.Childs.API.Application.Queries.Interfaces;
 using Universal.EBI.Childs.API.Models;
 using Universal.EBI.WebAPI.Core.AspNetUser.Interfaces;
 using Universal.EBI.WebAPI.Core.Controllers;
+using Universal.EBI.Childs.API.Application.DTOs;
 
 namespace Universal.EBI.Childs.API.Controllers
 {
@@ -30,7 +31,7 @@ namespace Universal.EBI.Childs.API.Controllers
             var child = await _childQueries.GetChilds(ps, page, q);
             return child == null ? NotFound() : CustomResponse(child);
         }
-        
+
         [HttpGet("api/child/{id}")]
         public async Task<IActionResult> GetChildById(Guid id)
         {
@@ -39,7 +40,7 @@ namespace Universal.EBI.Childs.API.Controllers
         }
 
         [HttpGet("api/child/{cpf:length(11)}", Name = "GetChildByCpf")]
-        public async Task<ActionResult<Child>> GetChildByCpf(string cpf)
+        public async Task<ActionResult> GetChildByCpf(string cpf)
         {
             var child = await _childQueries.GetChildByCpf(cpf);
             return child == null ? NotFound() : CustomResponse(child);

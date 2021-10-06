@@ -149,7 +149,7 @@ namespace Universal.EBI.Educators.API.Application.Queries
                     var total = educators.Count;
                     var pageResult = new PagedResult<Educator>
                     {
-                        List = educators,
+                        List = educators.OrderBy(e => e.FirstName).ToList(),
                         TotalResults = total,
                         PageIndex = pageIndex,
                         PageSize = pageSize,

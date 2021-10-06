@@ -4,8 +4,8 @@ namespace Universal.EBI.Core.Messages
 {
     public abstract class Message
     {
-        public string MessageType { get; protected set; }
-        public Guid AggregateId { get; protected set; }
+        public string MessageType { get; set; }
+        public Guid AggregateId { get; set; }
 
         protected Message()
         {

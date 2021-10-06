@@ -2,9 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <UserSecretsId>f8598e0f-5b95-479d-a00e-2de976e69902</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
     <PackageReference Include="AspNetCore.HealthChecks.MongoDb" Version="5.0.1" />
     <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="5.0.1" />
     <PackageReference Include="MongoDB.Driver" Version="2.13.1" />

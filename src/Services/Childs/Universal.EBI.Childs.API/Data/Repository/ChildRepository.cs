@@ -17,7 +17,7 @@ namespace Universal.EBI.Childs.API.Data.Repository
         public ChildRepository(IChildContext context)
         {
             _context = context;
-        }        
+        }
 
         public async Task CreateChild(Child child)
         {
@@ -42,7 +42,7 @@ namespace Universal.EBI.Childs.API.Data.Repository
 
             return deleteResult.IsAcknowledged
                 && deleteResult.DeletedCount > 0;
-        }       
+        }
 
         public Task<IChildContext> GetContext()
         {
@@ -51,7 +51,7 @@ namespace Universal.EBI.Childs.API.Data.Repository
 
         public void Dispose()
         {
-            _context?.Commit().Dispose();
+            //_context?.Commit().Dispose();
         }
     }
 }

@@ -13,7 +13,7 @@ namespace Universal.EBI.Educators.API.Models
         public string ZipCode { get; set; }
         public string City { get; set; }
         public string State { get; set; }
-        public Guid EducatorId { get; set; }
+        public Guid? EducatorId { get; set; }
 
         // EF Relation
         [JsonIgnore]
@@ -22,7 +22,7 @@ namespace Universal.EBI.Educators.API.Models
         // EF Constructor
         public Address() { }
 
-        public Address(string publicPlace, string number, string complement, string district, string zipCode, string city, string state, Guid educatorId)
+        public Address(string publicPlace, string number, string complement, string district, string zipCode, string city, string state, Guid? educatorId)
         {            
             PublicPlace = publicPlace;
             Number = number;

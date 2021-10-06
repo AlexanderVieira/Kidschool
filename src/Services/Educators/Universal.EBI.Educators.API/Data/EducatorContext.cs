@@ -43,5 +43,10 @@ namespace Universal.EBI.Educators.API.Data
             if (success) await _mediatorHandler.PublishEvents(this);
             return success;
         }
+
+        public Task<bool> Commit(bool commited)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

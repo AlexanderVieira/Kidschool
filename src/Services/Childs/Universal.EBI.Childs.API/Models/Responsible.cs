@@ -1,19 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+using System;
+using Universal.EBI.Core.DomainObjects;
 using Universal.EBI.Core.DomainObjects.Interfaces;
 
 namespace Universal.EBI.Childs.API.Models
 {
-    public class Responsible : Person, IAggregateRoot
+    public class Responsible : IAggregateRoot
     {
-        public bool Excluded { get; set; }
-        public ICollection<Child> Childs { get; set; }
-
-        public Guid ChildId { get; set; }
+        //[BsonId]
+        //[BsonGuidRepresentation(GuidRepresentation.CSharpLegacy)]
+        public Guid Id { get; set; }                
+        
+        public Guid? ChildId { get; set; }
 
         public Responsible()
         {
-            Childs = new HashSet<Child>();
+            Id = Guid.NewGuid();
         }
+                
     }
 }

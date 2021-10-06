@@ -8,7 +8,7 @@ namespace Universal.EBI.Educators.API.Models
     {
         public string Number { get; set; }
         public PhoneType PhoneType { get; set; }
-        public Guid EducatorId { get; set; }
+        public Guid? EducatorId { get; set; }
         
         [JsonIgnore]
         public virtual Educator Educator { get; set; }

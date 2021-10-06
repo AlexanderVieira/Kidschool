@@ -1,8 +1,12 @@
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.Serializers;
 using Universal.EBI.Childs.API.Configuration;
 using Universal.EBI.Childs.API.Configurations;
 
@@ -29,10 +33,13 @@ namespace Universal.EBI.Childs.API
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddApiConfiguration(Configuration);
+            //BsonSerializer.RegisterSerializer(new GuidSerializer(BsonType.String));
+            //BsonSerializer.RegisterSerializer(new GuidSerializer(GuidRepresentation.CSharpLegacy));
+            //BsonDefaults.GuidRepresentationMode = GuidRepresentationMode.V3;
+            services.AddApiConfiguration(Configuration);            
             //services.AddJwtConfiguration(Configuration);
             services.AddSwaggerConfiguration();
-            //services.AddMediatR(typeof(Startup));
+            services.AddMediatR(typeof(Startup));
             services.RegisterServices();
             services.AddMessageBusConfiguration(Configuration);
         }

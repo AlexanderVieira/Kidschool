@@ -1,7 +1,10 @@
-﻿using System;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Universal.EBI.Childs.API.Models;
+using Universal.EBI.Core.Data.Interfaces;
 
 namespace Universal.EBI.Childs.API.Application.Queries.Interfaces
 {

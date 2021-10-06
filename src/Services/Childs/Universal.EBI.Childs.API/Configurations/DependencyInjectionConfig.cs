@@ -1,5 +1,14 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using FluentValidation.Results;
+using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using Universal.EBI.Childs.API.Application.Commands;
+using Universal.EBI.Childs.API.Application.Events;
+using Universal.EBI.Childs.API.Application.Queries;
+using Universal.EBI.Childs.API.Application.Queries.Interfaces;
+using Universal.EBI.Childs.API.Data;
+using Universal.EBI.Childs.API.Data.Repository;
+using Universal.EBI.Childs.API.Models.Interfaces;
 using Universal.EBI.Core.Mediator;
 using Universal.EBI.Core.Mediator.Interfaces;
 using Universal.EBI.WebAPI.Core.AspNetUser;
@@ -16,22 +25,22 @@ namespace Universal.EBI.Childs.API.Configuration
             services.AddScoped<IAspNetUser, AspNetUser>();
 
             // Commands
-            //services.AddScoped<IRequestHandler<RegisterChildCommand, ValidationResult>, RegisterChildCommandHandler>();
-            //services.AddScoped<IRequestHandler<UpdateChildCommand, ValidationResult>, UpdateChildCommandHandler>();
-            //services.AddScoped<IRequestHandler<DeleteChildCommand, ValidationResult>, DeleteChildCommandHandler>();
+            services.AddScoped<IRequestHandler<RegisterChildCommand, ValidationResult>, RegisterChildCommandHandler>();
+            services.AddScoped<IRequestHandler<UpdateChildCommand, ValidationResult>, UpdateChildCommandHandler>();
+            services.AddScoped<IRequestHandler<DeleteChildCommand, ValidationResult>, DeleteChildCommandHandler>();
 
             //// Events
-            //services.AddScoped<INotificationHandler<RegisteredChildEvent>, RegisterChildEventHandler>();
-            //services.AddScoped<INotificationHandler<UpdatedChildEvent>, UpdateChildEventHandler>();
-            //services.AddScoped<INotificationHandler<DeletedChildEvent>, DeleteChildEventHandler>();
+            services.AddScoped<INotificationHandler<RegisteredChildEvent>, RegisterChildEventHandler>();
+            services.AddScoped<INotificationHandler<UpdatedChildEvent>, UpdateChildEventHandler>();
+            services.AddScoped<INotificationHandler<DeletedChildEvent>, DeleteChildEventHandler>();
 
             // Application
             services.AddScoped<IMediatorHandler, MediatorHandler>();            
-            //services.AddScoped<IChildQueries, ChildQueries>();
+            services.AddScoped<IChildQueries, ChildQueries>();
 
             // Data
-            //services.AddScoped<IChildRepository, ChildRepository>();            
-            //services.AddScoped<ChildContext>();
+            services.AddScoped<IChildRepository, ChildRepository>();            
+            services.AddScoped<IChildContext, ChildContext>();
         }
     }
 }

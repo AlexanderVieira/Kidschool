@@ -5,7 +5,11 @@ namespace Universal.EBI.Childs.API.Integration
 {
     public class DeletedChildIntegrationEvent : IntegrationEvent
     {
-        public Guid Id { get; set; }        
-        
+        public Guid Id { get; set; }
+
+        public DeletedChildIntegrationEvent(Guid id)
+        {
+            Id = id;
+        }
     }
 }

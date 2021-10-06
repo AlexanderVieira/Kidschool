@@ -1,4 +1,6 @@
-﻿using MongoDB.Driver;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
+using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -10,21 +12,21 @@ namespace Universal.EBI.Childs.API.Application.Queries
 {
     public class ChildQueries : IChildQueries
     {
-        private readonly IChildRepository _ChildRepository;
+        //private readonly IChildRepository _childRepository;
+        private readonly IChildContext _context;
 
-        public ChildQueries(IChildRepository childRepository)
+        public ChildQueries(IChildContext context)
         {
-            _ChildRepository = childRepository;
+            _context = context;
         }
 
         public async Task<PagedResult<Child>> GetChilds(int pageSize, int pageIndex, string query = null)
         {
-            FilterDefinition<Child> filter = Builders<Child>.Filter.ElemMatch(c => c.FullName, query);
-            var childs = await _ChildRepository.GetContext()
-                                               .Result
-                                               .Childs
-                                               .Find(filter)
-                                               .ToListAsync();
+            
+            query = string.IsNullOrEmpty(query) ? "" : query;
+            var filter = new BsonDocument { { "FullName", new BsonDocument { { "$regex", query }, { "$options", "i" } } } };
+
+            var childs = await _context.Childs.Find(filter).ToListAsync();
 
             var total = childs.Count;
             var pageResult = new PagedResult<Child>
@@ -41,22 +43,20 @@ namespace Universal.EBI.Childs.API.Application.Queries
 
         public async Task<Child> GetChildByCpf(string cpf)
         {
-            return await _ChildRepository.GetContext()
-                                         .Result
-                                         .Childs
-                                         .Find(c => c.Cpf.Equals(cpf))
-                                         .FirstOrDefaultAsync();
+            return await _context
+                            .Childs
+                            .Find(c => c.Cpf.Number.Equals(cpf))
+                            .FirstOrDefaultAsync();
 
         }
 
         public async Task<Child> GetChildById(Guid id)
         {
-            return await _ChildRepository.GetContext()
-                                         .Result
-                                         .Childs
-                                         .Find(c => c.Id == id)
-                                         .FirstOrDefaultAsync();
-        }        
+            return await _context
+                            .Childs
+                            .Find(c => c.Id == id)
+                            .FirstOrDefaultAsync();
+        }
 
         public Task<IEnumerable<Child>> GetChildsByName(string name)
         {
