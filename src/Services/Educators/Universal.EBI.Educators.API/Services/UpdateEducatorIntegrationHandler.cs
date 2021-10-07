@@ -43,6 +43,7 @@ namespace Universal.EBI.Educators.API.Services
         {            
             var educatorCommand = new UpdateEducatorCommand
             {
+                AggregateId = message.Id,
                 Id = message.Id,
                 FirstName = message.FirstName,
                 LastName = message.LastName,

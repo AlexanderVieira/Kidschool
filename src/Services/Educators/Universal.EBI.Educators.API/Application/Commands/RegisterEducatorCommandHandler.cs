@@ -67,7 +67,8 @@ namespace Universal.EBI.Educators.API.Application.Commands
             await _educatorRepository.CreateEducator(educator);
 
             educator.AddEvent(new RegisteredEducatorEvent 
-            {                
+            {
+                AggregateId = message.Id,
                 Id = message.Id,
                 FirstName = message.FirstName,
                 LastName = message.LastName,

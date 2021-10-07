@@ -43,6 +43,7 @@ namespace Universal.EBI.Educators.API.Services
         {            
             var educatorCommand = new DeleteEducatorCommand
             {
+                AggregateId = message.Id,
                 Id = message.Id                
             };
             ValidationResult sucesso;

@@ -44,6 +44,7 @@ namespace Universal.EBI.Educators.API.Services
             //var educatorCommand = new RegisterEducatorCommand(message.Id, message.FirstName, message.LastName, message.Email, message.Cpf, message.Phones);
             var educatorCommand = new RegisterEducatorCommand
             {
+                AggregateId = message.Id,
                 Id = message.Id,
                 FirstName = message.FirstName,
                 LastName = message.LastName,

@@ -11,15 +11,15 @@ namespace Universal.EBI.Childs.API.Application.Validations
         {
             RuleFor(c => c.Id)
                 .NotEqual(Guid.Empty)
-                .WithMessage("Id do cliente inválido.");
+                .WithMessage("Id da criança inválido.");
 
             RuleFor(c => c.FirstName)
                 .NotEmpty()
-                .WithMessage("O nome do cliente não foi informado.");
+                .WithMessage("O nome da criança não foi informado.");
 
             RuleFor(c => c.LastName)
                 .NotEmpty()
-                .WithMessage("O sobrenome do cliente não foi informado.");            
+                .WithMessage("O sobrenome da criança não foi informado.");            
 
             RuleFor(c => c.Cpf)
                 .Must(ValidationUtils.HasValidCpf)

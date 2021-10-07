@@ -41,7 +41,8 @@ namespace Universal.EBI.Educators.API.Application.Commands
             await _educatorRepository.UpdateEducator(existingEducator);
 
             existingEducator.AddEvent(new UpdatedEducatorEvent 
-            {                
+            { 
+                AggregateId = message.Id,
                 Id = message.Id,
                 FirstName = message.FirstName,
                 LastName = message.LastName,

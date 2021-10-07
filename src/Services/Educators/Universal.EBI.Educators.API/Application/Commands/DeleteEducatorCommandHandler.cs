@@ -32,7 +32,8 @@ namespace Universal.EBI.Educators.API.Application.Commands
             await _educatorRepository.DeleteEducator(existingEducator.Id);
 
             existingEducator.AddEvent(new UpdatedEducatorEvent 
-            {                
+            {
+                AggregateId = message.Id,
                 Id = message.Id                
             });            
 

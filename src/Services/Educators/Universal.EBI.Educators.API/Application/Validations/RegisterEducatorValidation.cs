@@ -1,7 +1,7 @@
-﻿using Universal.EBI.Core.DomainObjects;
-using FluentValidation;
+﻿using FluentValidation;
 using System;
 using Universal.EBI.Educators.API.Application.Commands;
+using Universal.EBI.Core.Utils;
 
 namespace Universal.EBI.Educators.API.Application.Validations
 {
@@ -9,35 +9,40 @@ namespace Universal.EBI.Educators.API.Application.Validations
     {
         public RegisterEducatorValidation()
         {
-            //RuleFor(c => c.Id)
-            //    .NotEqual(Guid.Empty)
-            //    .WithMessage("Id do cliente inválido.");
+            RuleFor(c => c.Id)
+                .NotEqual(Guid.Empty)
+                .WithMessage("Id do educador inválido.");
 
             RuleFor(c => c.FirstName)
                 .NotEmpty()
-                .WithMessage("O nome do cliente não foi informado.");
+                .WithMessage("O nome do educador não foi informado.");
 
             RuleFor(c => c.LastName)
                 .NotEmpty()
-                .WithMessage("O sobrenome do cliente não foi informado.");
+                .WithMessage("O sobrenome do educador não foi informado.");
 
             RuleFor(c => c.Cpf)
-                .Must(HasValidCpf)
+                .Must(ValidationUtils.HasValidCpf)
                 .WithMessage("O CPF informado não é válido.");
 
             RuleFor(c => c.Email)
-                .Must(HasValidEmail)
+                .Must(ValidationUtils.HasValidEmail)
                 .WithMessage("O e-mail informado não é válido.");
-        }
 
-        private bool HasValidEmail(string email)
-        {
-            return Email.EmailValid(email);
-        }
+            RuleFor(c => c.BirthDate)
+                .Must(ValidationUtils.HasValidBirthDate)
+                .WithMessage("Data de nascimento não informada.");
 
-        protected bool HasValidCpf(string cpf)
-        {
-            return Cpf.CpfValid(cpf);
+            RuleFor(c => c.BirthDate)
+                .Custom((birthdate, context) =>
+                {
+                    if (!string.IsNullOrWhiteSpace(birthdate))
+                    {
+                        if (DateUtils.IsDataInformadaMaiorQueDataAtual(birthdate))
+                            context.AddFailure("A data de nascimento informada não é válida.");
+                    }
+                });
         }
+        
     }
 }
