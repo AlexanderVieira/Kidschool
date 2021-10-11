@@ -4,10 +4,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Universal.EBI.Responsible.API.Configuration;
-using Universal.EBI.Responsible.API.Configurations;
+using Universal.EBI.Responsibles.API.Configuration;
+using Universal.EBI.Responsibles.API.Configurations;
 
-namespace Universal.EBI.Responsible.API
+namespace Universal.EBI.Responsibles.API
 {
     public class Startup
     {

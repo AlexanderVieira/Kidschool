@@ -81,7 +81,7 @@ namespace Universal.EBI.Childs.API.Models
 
         public Child()
         {
-            Id = Guid.NewGuid();
+            //Id = Guid.NewGuid();
             Responsibles = new HashSet<Responsible>();
             Phones = new HashSet<Phone>();
             Notifications = new HashSet<Event>();

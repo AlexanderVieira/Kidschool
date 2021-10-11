@@ -42,6 +42,14 @@ namespace Universal.EBI.Childs.API.Application.Validations
                             context.AddFailure("A data de nascimento informada não é válida.");
                     }
                 });
+
+            RuleFor(c => c.Gender)
+                .NotEmpty()
+                .WithMessage("O sexo da criança não foi informado.");
+
+            RuleFor(c => c.AgeGroup)
+                .NotEmpty()
+                .WithMessage("A faixa etária da criança não foi informada.");
         }
         
     }

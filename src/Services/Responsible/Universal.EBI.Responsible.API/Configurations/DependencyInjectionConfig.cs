@@ -2,19 +2,19 @@
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
-using Universal.EBI.Responsible.API.Application.Commands;
-using Universal.EBI.Responsible.API.Application.Events;
-using Universal.EBI.Responsible.API.Application.Queries;
-using Universal.EBI.Responsible.API.Application.Queries.Interfaces;
-using Universal.EBI.Responsible.API.Data;
-using Universal.EBI.Responsible.API.Data.Repository;
-using Universal.EBI.Responsible.API.Models.Interfaces;
+using Universal.EBI.Responsibles.API.Application.Commands;
+using Universal.EBI.Responsibles.API.Application.Events;
+using Universal.EBI.Responsibles.API.Application.Queries;
+using Universal.EBI.Responsibles.API.Application.Queries.Interfaces;
+using Universal.EBI.Responsibles.API.Data;
+using Universal.EBI.Responsibles.API.Data.Repository;
+using Universal.EBI.Responsibles.API.Models.Interfaces;
 using Universal.EBI.Core.Mediator;
 using Universal.EBI.Core.Mediator.Interfaces;
 using Universal.EBI.WebAPI.Core.AspNetUser;
 using Universal.EBI.WebAPI.Core.AspNetUser.Interfaces;
 
-namespace Universal.EBI.Responsible.API.Configuration
+namespace Universal.EBI.Responsibles.API.Configuration
 {
     public static class DependencyInjectionConfig
     {

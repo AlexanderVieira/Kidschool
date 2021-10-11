@@ -1,8 +1,8 @@
 ﻿using System;
-using Universal.EBI.Responsible.API.Models;
+using Universal.EBI.Responsibles.API.Models;
 using Universal.EBI.Core.Messages;
 
-namespace Universal.EBI.Responsible.API.Application.Events
+namespace Universal.EBI.Responsibles.API.Application.Events
 {
     public class UpdatedResponsibleEvent : Event
     {

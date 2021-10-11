@@ -41,7 +41,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Universal.EBI.Educators.API
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4.3.Responsibles", "4.3.Responsibles", "{5D83A4F8-77DC-4D96-9D30-2F35500246A7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Universal.EBI.Responsible.API", "src\Services\Responsible\Universal.EBI.Responsible.API\Universal.EBI.Responsible.API.csproj", "{0DE1419F-9FD7-4DA5-82E4-772CB7185484}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Universal.EBI.Responsibles.API", "src\Services\Responsible\Universal.EBI.Responsible.API\Universal.EBI.Responsibles.API.csproj", "{0DE1419F-9FD7-4DA5-82E4-772CB7185484}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4.4.Childs", "4.4.Childs", "{AD1B4325-D477-4337-81F9-7D6029E246E6}"
 EndProject
@@ -57,7 +57,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Universal.EBI.Basket.API", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4.7.ClassRoom", "4.7.ClassRoom", "{E93C512E-6031-4AAE-8B3C-D7B538A7E904}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Universal.EBI.Classroom.API", "src\Services\Classroom\Universal.EBI.Classroom.API\Universal.EBI.Classroom.API.csproj", "{EBA31504-D836-42C4-AEEA-9EC2EFFF10B0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Universal.EBI.Classrooms.API", "src\Services\Classroom\Universal.EBI.Classroom.API\Universal.EBI.Classrooms.API.csproj", "{EBA31504-D836-42C4-AEEA-9EC2EFFF10B0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -18,6 +18,11 @@ namespace Universal.EBI.Auth.API.Models
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
         [EmailAddress(ErrorMessage = "O campo {0} está em formato inválido")]
         public string Email { get; set; }
+        public string BirthDate { get; set; }
+        public string PhotoUrl { get; set; }
+        public string Gender { get; set; }
+        public string Function { get; set; }
+        public bool Excluded { get; set; }
 
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
         [StringLength(100, ErrorMessage = "O campo {0} precisa ter entre {2} e {1} caracteres", MinimumLength = 6)]

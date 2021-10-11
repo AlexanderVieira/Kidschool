@@ -1,10 +1,10 @@
 ﻿using MongoDB.Driver;
-using Universal.EBI.Responsible.API.Models.Interfaces;
+using Universal.EBI.Responsibles.API.Models.Interfaces;
 using System.Threading.Tasks;
 using System;
 using Universal.EBI.Core.Data.Interfaces;
 
-namespace Universal.EBI.Responsible.API.Data.Repository
+namespace Universal.EBI.Responsibles.API.Data.Repository
 {
     public class ResponsibleRepository : IResponsibleRepository
     {

@@ -3,15 +3,15 @@ using MediatR;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Universal.EBI.Responsible.API.Application.Events;
-using Universal.EBI.Responsible.API.Application.Queries.Interfaces;
-using Universal.EBI.Responsible.API.Models;
-using Universal.EBI.Responsible.API.Models.Interfaces;
+using Universal.EBI.Responsibles.API.Application.Events;
+using Universal.EBI.Responsibles.API.Application.Queries.Interfaces;
+using Universal.EBI.Responsibles.API.Models;
+using Universal.EBI.Responsibles.API.Models.Interfaces;
 using Universal.EBI.Core.DomainObjects;
 using Universal.EBI.Core.Messages;
 using Universal.EBI.Core.Utils;
 
-namespace Universal.EBI.Responsible.API.Application.Commands
+namespace Universal.EBI.Responsibles.API.Application.Commands
 {
     public class UpdateResponsibleCommandHandler : CommandHandler, IRequestHandler<UpdateResponsibleCommand, ValidationResult>
     {
@@ -34,7 +34,7 @@ namespace Universal.EBI.Responsible.API.Application.Commands
             existingChild.LastName = message.LastName;
             existingChild.FullName = $"{message.FirstName} {message.LastName}";
             existingChild.Email = ValidationUtils.ValidateRequestEmail(message.Email);
-            existingChild.Cpf = ValidationUtils.ValidateRequestCpf(message.Email);
+            existingChild.Cpf = ValidationUtils.ValidateRequestCpf(message.Cpf);
             existingChild.Phones = message.Phones;
             existingChild.Address = message.Address;
             existingChild.BirthDate = DateTime.Parse(message.BirthDate);

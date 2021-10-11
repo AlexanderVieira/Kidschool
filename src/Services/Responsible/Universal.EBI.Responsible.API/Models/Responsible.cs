@@ -6,7 +6,7 @@ using Universal.EBI.Core.DomainObjects;
 using Universal.EBI.Core.DomainObjects.Interfaces;
 using Universal.EBI.Core.Messages;
 
-namespace Universal.EBI.Responsible.API.Models
+namespace Universal.EBI.Responsibles.API.Models
 {
     public class Responsible : IAggregateRoot
     {
@@ -55,7 +55,7 @@ namespace Universal.EBI.Responsible.API.Models
         //[BsonRepresentation(BsonType.Array)]
         public ICollection<Child> Childs { get; set; }
 
-        //private List<Event> _notifications;
+        //private ICollection<Event> _notifications;
 
         //[BsonExtraElements]
         public ICollection<Event> Notifications { get; set; }
@@ -79,10 +79,9 @@ namespace Universal.EBI.Responsible.API.Models
 
         public Responsible()
         {
-            Id = Guid.NewGuid();
+            //Id = Guid.NewGuid();
             Childs = new HashSet<Child>();
-            Phones = new HashSet<Phone>();
-            Notifications = new HashSet<Event>();
+            Phones = new HashSet<Phone>();            
         }
 
     }    

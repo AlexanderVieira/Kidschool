@@ -2,13 +2,13 @@
 using Universal.EBI.Core.Mediator.Interfaces;
 using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
-using Universal.EBI.Responsible.API.Models.Interfaces;
-using Universal.EBI.Responsible.API.Extensions;
+using Universal.EBI.Responsibles.API.Models.Interfaces;
+using Universal.EBI.Responsibles.API.Extensions;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 
-namespace Universal.EBI.Responsible.API.Data
+namespace Universal.EBI.Responsibles.API.Data
 {
     public class ResponsibleContext : IResponsibleContext
     {
@@ -68,7 +68,8 @@ namespace Universal.EBI.Responsible.API.Data
         {
             if (success) await _mediatorHandler.PublishEvents(this);
             return success;
-        }        
+        }         
+        
     }
     
 }

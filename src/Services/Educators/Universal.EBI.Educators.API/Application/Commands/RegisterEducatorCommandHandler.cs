@@ -8,6 +8,7 @@ using Universal.EBI.Core.DomainObjects;
 using Universal.EBI.Core.Messages;
 using Universal.EBI.Educators.API.Application.Events;
 using Universal.EBI.Educators.API.Models;
+using Universal.EBI.Educators.API.Models.Enums;
 using Universal.EBI.Educators.API.Models.Interfaces;
 
 namespace Universal.EBI.Educators.API.Application.Commands

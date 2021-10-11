@@ -1,9 +1,10 @@
 ﻿using FluentValidation;
-using Universal.EBI.Responsible.API.Application.Commands;
+using Universal.EBI.Responsibles.API.Application.Commands;
 using System;
 using Universal.EBI.Core.Utils;
+using Universal.EBI.Core.DomainObjects;
 
-namespace Universal.EBI.Responsible.API.Application.Validations
+namespace Universal.EBI.Responsibles.API.Application.Validations
 {
     public class UpdateResponsibleValidation : AbstractValidator<UpdateResponsibleCommand>
     {
@@ -11,18 +12,20 @@ namespace Universal.EBI.Responsible.API.Application.Validations
         {
             RuleFor(c => c.Id)
                 .NotEqual(Guid.Empty)
-                .WithMessage("Id da criança inválido.");
+                .WithMessage("Id do responsável inválido.");
 
             RuleFor(c => c.FirstName)
                 .NotEmpty()
-                .WithMessage("O nome da criança não foi informado.");
+                .WithMessage("O nome do responsável não foi informado.");
 
             RuleFor(c => c.LastName)
                 .NotEmpty()
-                .WithMessage("O sobrenome da criança não foi informado.");
+                .WithMessage("O sobrenome do responsável não foi informado.");
 
             RuleFor(c => c.Cpf)
-                .Must(ValidationUtils.HasValidCpf)
+                .NotEmpty()
+                .WithMessage("O CPF do responsável não foi informado.")
+                .Must(HasValidCpf)
                 .WithMessage("O CPF informado não é válido.");
 
             RuleFor(c => c.Email)
@@ -33,6 +36,10 @@ namespace Universal.EBI.Responsible.API.Application.Validations
                 .Must(ValidationUtils.HasValidBirthDate)
                 .WithMessage("Data de nascimento não informada.");
 
+            RuleFor(c => c.Address)
+                .NotNull()
+                .WithMessage("O endereço do responsável não foi informado.");
+
             RuleFor(c => c.BirthDate)
                 .Custom((birthdate, context) =>
                 {
@@ -42,7 +49,20 @@ namespace Universal.EBI.Responsible.API.Application.Validations
                             context.AddFailure("A data de nascimento informada não é válida.");
                     }
                 });
+
+            RuleFor(c => c.Gender)
+                .NotEmpty()
+                .WithMessage("O sexo do responsável não foi informado.");
+
+            RuleFor(c => c.Kinship)
+                .NotEmpty()
+                .WithMessage("O parenteco do responsável não foi informado.");
         }
-        
+
+        public static bool HasValidCpf(string strCpf)
+        {            
+            return Cpf.CpfValid(strCpf);            
+        }
+
     }
 }

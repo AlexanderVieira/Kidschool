@@ -4,13 +4,13 @@ using System.Threading.Tasks;
 using FluentValidation.Results;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Universal.EBI.Responsible.API.Application.Commands;
-using Universal.EBI.Responsible.API.Integration;
+using Universal.EBI.Responsibles.API.Application.Commands;
+using Universal.EBI.Responsibles.API.Integration;
 using Universal.EBI.Core.Mediator.Interfaces;
 using Universal.EBI.Core.Messages;
 using Universal.EBI.MessageBus.Interfaces;
 
-namespace Universal.EBI.Responsible.API.Services
+namespace Universal.EBI.Responsibles.API.Services
 {
     public class DeleteResponsibleIntegrationHandler : BackgroundService
     {

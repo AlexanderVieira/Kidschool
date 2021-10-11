@@ -1,10 +1,10 @@
 ﻿using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
-using Universal.EBI.Responsible.API.Integration;
+using Universal.EBI.Responsibles.API.Integration;
 using Universal.EBI.MessageBus.Interfaces;
 
-namespace Universal.EBI.Responsible.API.Application.Events
+namespace Universal.EBI.Responsibles.API.Application.Events
 {
     public class DeleteResponsibleEventHandler : INotificationHandler<DeletedResponsibleEvent>
     {

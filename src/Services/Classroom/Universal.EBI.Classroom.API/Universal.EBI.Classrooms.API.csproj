@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <UserSecretsId>22e6b66f-216e-4831-9ba5-0c0e480516fa</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
+    <PackageReference Include="AspNetCore.HealthChecks.MongoDb" Version="5.0.1" />
+    <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="5.0.1" />
+    <PackageReference Include="MongoDB.Driver" Version="2.13.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\BuildingBlocks\Core\Universal.EBI.Core\Universal.EBI.Core.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\MessageBus\Universal.EBI.MessageBus\Universal.EBI.MessageBus.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\Services\Universal.EBI.WebAPI.Core\Universal.EBI.WebAPI.Core.csproj" />
+  </ItemGroup>
+
+</Project>

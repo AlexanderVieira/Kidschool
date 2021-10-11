@@ -9,6 +9,8 @@ using Universal.EBI.Childs.API.Models;
 using Universal.EBI.WebAPI.Core.AspNetUser.Interfaces;
 using Universal.EBI.WebAPI.Core.Controllers;
 using Universal.EBI.Childs.API.Application.DTOs;
+using Universal.EBI.Core.Messages.Integration;
+using Universal.EBI.Core.Messages;
 
 namespace Universal.EBI.Childs.API.Controllers
 {
@@ -60,9 +62,11 @@ namespace Universal.EBI.Childs.API.Controllers
         }
         
         [HttpDelete("api/child/delete/{id}")]
-        public async Task<IActionResult> DeleteChild([FromBody] DeleteChildCommand command)
+        public async Task<IActionResult> DeleteChild(Guid id)
         {
+            var command = new DeleteChildCommand { Id = id };
             return CustomResponse(await _mediator.SendCommand(command));
         }
+       
     }
 }

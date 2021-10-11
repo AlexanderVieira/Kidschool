@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Universal.EBI.Responsible.API.Models
+namespace Universal.EBI.Responsibles.API.Models
 {
     public class PagedResult<T> where T : class
     {

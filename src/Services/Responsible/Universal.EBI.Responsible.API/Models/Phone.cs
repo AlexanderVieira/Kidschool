@@ -1,7 +1,7 @@
 ﻿using System;
 using Universal.EBI.Core.DomainObjects.Interfaces;
 
-namespace Universal.EBI.Responsible.API.Models
+namespace Universal.EBI.Responsibles.API.Models
 {
     public class Phone : IAggregateRoot
     {

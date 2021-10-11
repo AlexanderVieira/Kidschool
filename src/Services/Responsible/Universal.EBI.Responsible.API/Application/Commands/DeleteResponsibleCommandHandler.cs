@@ -2,12 +2,12 @@
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
-using Universal.EBI.Responsible.API.Application.Events;
-using Universal.EBI.Responsible.API.Application.Queries.Interfaces;
-using Universal.EBI.Responsible.API.Models.Interfaces;
+using Universal.EBI.Responsibles.API.Application.Events;
+using Universal.EBI.Responsibles.API.Application.Queries.Interfaces;
+using Universal.EBI.Responsibles.API.Models.Interfaces;
 using Universal.EBI.Core.Messages;
 
-namespace Universal.EBI.Responsible.API.Application.Commands
+namespace Universal.EBI.Responsibles.API.Application.Commands
 {
     public class DeleteResponsibleCommandHandler : CommandHandler, IRequestHandler<DeleteResponsibleCommand, ValidationResult>
     {

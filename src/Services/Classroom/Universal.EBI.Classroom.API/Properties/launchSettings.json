@@ -17,7 +17,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "Universal.EBI.Classroom.API": {
+    "Universal.EBI.Classrooms.API": {
       "commandName": "Project",
       "dotnetRunMessages": "true",
       "launchBrowser": true,

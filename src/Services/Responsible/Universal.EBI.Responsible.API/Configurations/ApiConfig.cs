@@ -8,7 +8,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Universal.EBI.WebAPI.Core.Auth;
 
-namespace Universal.EBI.Responsible.API.Configurations
+namespace Universal.EBI.Responsibles.API.Configurations
 {
     public static class ApiConfig
     {

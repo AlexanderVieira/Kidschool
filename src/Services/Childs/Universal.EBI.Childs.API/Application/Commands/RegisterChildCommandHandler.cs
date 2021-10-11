@@ -7,10 +7,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using Universal.EBI.Childs.API.Application.Events;
 using Universal.EBI.Childs.API.Application.Queries.Interfaces;
+using Universal.EBI.Childs.API.Application.Validations;
 using Universal.EBI.Childs.API.Models;
 using Universal.EBI.Childs.API.Models.Interfaces;
+using Universal.EBI.Core.Integration.Child;
 using Universal.EBI.Core.Messages;
 using Universal.EBI.Core.Utils;
+using Universal.EBI.MessageBus.Interfaces;
 
 namespace Universal.EBI.Childs.API.Application.Commands
 {
@@ -18,11 +21,13 @@ namespace Universal.EBI.Childs.API.Application.Commands
     {
         private readonly IChildRepository _childRepository;
         private readonly IChildQueries _childQueries;
+        private readonly IMessageBus _bus;
 
-        public RegisterChildCommandHandler(IChildRepository childRepository, IChildQueries childQueries)
+        public RegisterChildCommandHandler(IChildRepository childRepository, IChildQueries childQueries, IMessageBus bus)
         {
             _childRepository = childRepository;
             _childQueries = childQueries;
+            _bus = bus;
         }
 
         public async Task<ValidationResult> Handle(RegisterChildCommand message, CancellationToken cancellationToken)
@@ -30,37 +35,27 @@ namespace Universal.EBI.Childs.API.Application.Commands
             if (!message.IsValid()) return message.ValidationResult;
 
             var child = new Child
-            {                
+            {   
+                Id = message.Id,
                 FirstName = message.FirstName,
                 LastName = message.LastName,
                 FullName = $"{message.FirstName} {message.LastName}",
                 Email = ValidationUtils.ValidateRequestEmail(message.Email),
-                Cpf = ValidationUtils.ValidateRequestCpf(message.Email),
+                Cpf = ValidationUtils.ValidateRequestCpf(message.Cpf),
                 Phones = new List<Phone>(),
-                Address = new Address 
-                { 
-                    PublicPlace = message.Address.PublicPlace, 
-                    Number = message.Address.Number, 
-                    Complement = message.Address.Complement, 
-                    District = message.Address.District,
-                    City = message.Address.City,
-                    State = message.Address.State,
-                    ZipCode = message.Address.ZipCode                  
-                },
+                Address = RegisterChildValidation.ValidateRequestAddress(message.Address),
                 BirthDate = DateTime.Parse(message.BirthDate).Date,
                 GenderType = (GenderType)Enum.Parse(typeof(GenderType), message.Gender, true),
                 AgeGroupType = (AgeGroupType)Enum.Parse(typeof(AgeGroupType), message.AgeGroup, true),
                 PhotoUrl = message.PhotoUrl,
                 Excluded = message.Excluded,
                 Responsibles = new List<Responsible>()              
-            };
-
-            child.Address.ChildId = child.Id;
+            };            
 
             var responsilblesLength = message.Responsibles.Length;
             for (int i = 0; i < responsilblesLength; i++)
             {                
-                child.Responsibles.Add(new Responsible { ChildId = child.Id });
+                child.Responsibles.Add(new Responsible { Id = message.Responsibles[i].Id, ChildId = child.Id });
             }
 
             var phonesLength = message.Phones.Length;
@@ -78,7 +73,7 @@ namespace Universal.EBI.Childs.API.Application.Commands
 
             if (existingChild != null)
             {
-                AddError("Este CPF já está em uso.");
+                AddError("Esta criança já está cadastrada.");
                 return ValidationResult;
             }
 
@@ -104,7 +99,17 @@ namespace Universal.EBI.Childs.API.Application.Commands
                 Excluded = child.Excluded,
                 Responsibles = child.Responsibles.ToArray()
             });
+
+            var guidIds = new Guid[message.Responsibles.Length];       
             
+            for (int i = 0; i < message.Responsibles.Length; i++)
+            {
+                guidIds[i] = message.Responsibles[i].Id;
+            }           
+
+            await _bus.PublishAsync(new RegisteredChildIntegrationBaseEvent { Id = child.Id, ResponsibleIds = guidIds });
+            //await _bus.PublishAsync(new RegisteredResponsibleIntegrationBaseEvent { ChildId = child.Id });
+
             return await PersistData(_childRepository.UnitOfWork, success);
         }
     }

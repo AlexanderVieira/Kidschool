@@ -10,13 +10,12 @@ namespace Universal.EBI.Childs.API.Models
     {
         //[BsonId]
         //[BsonGuidRepresentation(GuidRepresentation.CSharpLegacy)]
-        public Guid Id { get; set; }                
-        
+        public Guid Id { get; set; }        
         public Guid? ChildId { get; set; }
 
         public Responsible()
         {
-            Id = Guid.NewGuid();
+            //Id = Guid.NewGuid();
         }
                 
     }

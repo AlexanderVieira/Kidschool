@@ -2,6 +2,7 @@
 using Universal.EBI.Childs.API.Application.Commands;
 using System;
 using Universal.EBI.Core.Utils;
+using Universal.EBI.Childs.API.Models;
 
 namespace Universal.EBI.Childs.API.Application.Validations
 {
@@ -27,7 +28,7 @@ namespace Universal.EBI.Childs.API.Application.Validations
            
             RuleFor(c => c.Email)
                 .Must(ValidationUtils.HasValidEmail)
-                .WithMessage("O e-mail informado não é válido.");
+                .WithMessage("O e-mail informado não é válido.");            
 
             RuleFor(c => c.BirthDate)
                 .Must(ValidationUtils.HasValidBirthDate)
@@ -42,8 +43,35 @@ namespace Universal.EBI.Childs.API.Application.Validations
                             context.AddFailure("A data de nascimento informada não é válida.");
                     }
                 });
+
+            RuleFor(c => c.Gender)
+                .NotEmpty()
+                .WithMessage("O sexo da criança não foi informado.");
+
+            RuleFor(c => c.AgeGroup)
+                .NotEmpty()
+                .WithMessage("A faixa etária da criança não foi informada.");
+
+        }
+
+        public static Address ValidateRequestAddress(Address address)
+        {
+            //return address != null ? new Address(address.PublicPlace, address.Number, address.Complement,
+            //                       address.District, address.ZipCode, address.City, address.State, address.ChildId): null;
+            return address != null ? new Address
+            {
+                PublicPlace = address.PublicPlace,
+                Number = address.Number,
+                Complement = address.Complement,
+                District = address.District,
+                ZipCode = address.ZipCode,
+                City = address.City,
+                State = address.State,
+                ChildId = address.ChildId
+
+            } : null;
             
-        }        
-        
+        }
+
     }
 }

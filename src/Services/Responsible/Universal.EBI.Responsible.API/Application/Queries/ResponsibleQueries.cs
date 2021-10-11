@@ -3,11 +3,11 @@ using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Universal.EBI.Responsible.API.Application.Queries.Interfaces;
-using Universal.EBI.Responsible.API.Models;
-using Universal.EBI.Responsible.API.Models.Interfaces;
+using Universal.EBI.Responsibles.API.Application.Queries.Interfaces;
+using Universal.EBI.Responsibles.API.Models;
+using Universal.EBI.Responsibles.API.Models.Interfaces;
 
-namespace Universal.EBI.Responsible.API.Application.Queries
+namespace Universal.EBI.Responsibles.API.Application.Queries
 {
     public class ResponsibleQueries : IResponsibleQueries
     {

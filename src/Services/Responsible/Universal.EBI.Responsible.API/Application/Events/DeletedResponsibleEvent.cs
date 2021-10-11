@@ -1,7 +1,7 @@
 ﻿using System;
 using Universal.EBI.Core.Messages;
 
-namespace Universal.EBI.Responsible.API.Application.Events
+namespace Universal.EBI.Responsibles.API.Application.Events
 {
     public class DeletedResponsibleEvent : Event
     {

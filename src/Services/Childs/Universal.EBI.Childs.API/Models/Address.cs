@@ -29,8 +29,10 @@ namespace Universal.EBI.Childs.API.Models
             Id = Guid.NewGuid();
         }
 
-        public Address(string publicPlace, string number, string complement, string district, string zipCode, string city, string state, Guid? child_Id)
-        {            
+        public Address(string publicPlace, string number, string complement,
+                       string district, string zipCode, string city, string state, Guid? child_Id)
+        {
+            Id = Guid.NewGuid();
             PublicPlace = publicPlace;
             Number = number;
             Complement = complement;

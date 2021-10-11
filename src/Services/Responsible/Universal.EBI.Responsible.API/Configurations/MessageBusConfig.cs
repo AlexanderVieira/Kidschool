@@ -1,10 +1,10 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Universal.EBI.Responsible.API.Services;
+using Universal.EBI.Responsibles.API.Services;
 using Universal.EBI.Core.Utils;
 using Universal.EBI.MessageBus.Configuration;
 
-namespace Universal.EBI.Responsible.API.Configurations
+namespace Universal.EBI.Responsibles.API.Configurations
 {
     public static class MessageBusConfig
     {

@@ -1,9 +1,9 @@
 ﻿using System;
-using Universal.EBI.Responsible.API.Application.Validations;
-using Universal.EBI.Responsible.API.Models;
+using Universal.EBI.Responsibles.API.Application.Validations;
+using Universal.EBI.Responsibles.API.Models;
 using Universal.EBI.Core.Messages;
 
-namespace Universal.EBI.Responsible.API.Application.Commands
+namespace Universal.EBI.Responsibles.API.Application.Commands
 {
     public class UpdateResponsibleCommand : Command
     {

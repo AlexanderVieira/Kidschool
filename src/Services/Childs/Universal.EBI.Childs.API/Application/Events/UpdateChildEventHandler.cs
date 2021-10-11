@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
-using Universal.EBI.Childs.API.Integration;
 using Universal.EBI.MessageBus.Interfaces;
 
 namespace Universal.EBI.Childs.API.Application.Events
@@ -17,8 +16,11 @@ namespace Universal.EBI.Childs.API.Application.Events
 
         public Task Handle(UpdatedChildEvent notification, CancellationToken cancellationToken)
         {
-            //return Task.CompletedTask;
-            return _bus.PublishAsync(new UpdatedChildIntegrationEvent(notification.Id));
+            return Task.CompletedTask;
+            //return _bus.PublishAsync(new UpdatedChildIntegrationEvent 
+            //{ 
+            //    Id = notification.Id 
+            //});
         }
     }
 }

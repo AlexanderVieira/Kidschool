@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Universal.EBI.Responsible.API.Models;
+using Universal.EBI.Responsibles.API.Models;
 
-namespace Universal.EBI.Responsible.API.Application.Queries.Interfaces
+namespace Universal.EBI.Responsibles.API.Application.Queries.Interfaces
 {
     public interface IResponsibleQueries
     {

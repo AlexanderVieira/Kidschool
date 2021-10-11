@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Universal.EBI.Responsible.API.Application.DTOs
+namespace Universal.EBI.Responsibles.API.Application.DTOs
 {
     public class AddressDto
     {

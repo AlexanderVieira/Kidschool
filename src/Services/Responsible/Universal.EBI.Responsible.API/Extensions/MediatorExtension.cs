@@ -1,10 +1,10 @@
 ﻿using MongoDB.Driver;
 using System.Linq;
 using System.Threading.Tasks;
-using Universal.EBI.Responsible.API.Data;
+using Universal.EBI.Responsibles.API.Data;
 using Universal.EBI.Core.Mediator.Interfaces;
 
-namespace Universal.EBI.Responsible.API.Extensions
+namespace Universal.EBI.Responsibles.API.Extensions
 {
     public static class MediatorExtension
     {

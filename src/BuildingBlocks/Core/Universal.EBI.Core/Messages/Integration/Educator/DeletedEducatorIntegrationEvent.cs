@@ -1,11 +1,11 @@
 ﻿using System;
 using Universal.EBI.Core.Messages.Integration;
 
-namespace Universal.EBI.Educators.API.Integration
+namespace Universal.EBI.Core.Integration.Educator
 {
     public class DeletedEducatorIntegrationEvent : IntegrationEvent
     {
-        public Guid Id { get; set; }        
+        public Guid Id { get; set; }
         
     }
 }

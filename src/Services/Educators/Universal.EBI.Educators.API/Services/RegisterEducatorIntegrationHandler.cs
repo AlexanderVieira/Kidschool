@@ -41,7 +41,7 @@ namespace Universal.EBI.Educators.API.Services
 
         private async Task<ResponseMessage> RegisterEducator(RegisteredEducatorIntegrationEvent message)
         {
-            //var educatorCommand = new RegisterEducatorCommand(message.Id, message.FirstName, message.LastName, message.Email, message.Cpf, message.Phones);
+            
             var educatorCommand = new RegisterEducatorCommand
             {
                 AggregateId = message.Id,

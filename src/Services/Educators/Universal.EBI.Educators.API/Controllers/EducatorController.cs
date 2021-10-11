@@ -59,8 +59,9 @@ namespace Universal.EBI.Educators.API.Controllers
         }
         
         [HttpDelete("api/educator/delete/{id}")]
-        public async Task<IActionResult> DeleteEducator([FromBody] DeleteEducatorCommand command)
+        public async Task<IActionResult> DeleteEducator(Guid id)
         {
+            var command = new DeleteEducatorCommand { Id = id };
             return CustomResponse(await _mediator.SendCommand(command));
         }
     }

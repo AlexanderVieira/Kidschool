@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Universal.EBI.Responsible.API
+namespace Universal.EBI.Responsibles.API
 {
     public class Program
     {

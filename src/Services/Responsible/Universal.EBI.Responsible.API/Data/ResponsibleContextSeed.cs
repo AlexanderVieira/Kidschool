@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Universal.EBI.Responsible.API.Data
+namespace Universal.EBI.Responsibles.API.Data
 {
     public class ResponsibleContextSeed
     {

@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 
-namespace Universal.EBI.Responsible.API.Configurations
+namespace Universal.EBI.Responsibles.API.Configurations
 {
     public static class SwaggerConfig
     {
@@ -10,7 +10,7 @@ namespace Universal.EBI.Responsible.API.Configurations
         {
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Universal.EBI.Responsible.API", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Universal.EBI.Responsibles.API", Version = "v1" });
             });
 
             return services;
@@ -21,7 +21,7 @@ namespace Universal.EBI.Responsible.API.Configurations
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Universal.EBI.Responsible.API v1");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Universal.EBI.Responsibles.API v1");
             });
 
             return app;

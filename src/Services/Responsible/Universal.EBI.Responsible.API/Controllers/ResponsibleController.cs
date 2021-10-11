@@ -3,12 +3,12 @@ using System;
 using System.Net;
 using System.Threading.Tasks;
 using Universal.EBI.Core.Mediator.Interfaces;
-using Universal.EBI.Responsible.API.Application.Commands;
-using Universal.EBI.Responsible.API.Application.Queries.Interfaces;
+using Universal.EBI.Responsibles.API.Application.Commands;
+using Universal.EBI.Responsibles.API.Application.Queries.Interfaces;
 using Universal.EBI.WebAPI.Core.AspNetUser.Interfaces;
 using Universal.EBI.WebAPI.Core.Controllers;
 
-namespace Universal.EBI.Responsible.API.Controllers
+namespace Universal.EBI.Responsibles.API.Controllers
 {
     public class ResponsibleController : BaseController
     {
@@ -58,8 +58,9 @@ namespace Universal.EBI.Responsible.API.Controllers
         }
         
         [HttpDelete("api/Responsible/delete/{id}")]
-        public async Task<IActionResult> DeleteResponsible([FromBody] DeleteResponsibleCommand command)
+        public async Task<IActionResult> DeleteResponsible(Guid id)
         {
+            var command = new DeleteResponsibleCommand { Id = id };
             return CustomResponse(await _mediator.SendCommand(command));
         }
     }

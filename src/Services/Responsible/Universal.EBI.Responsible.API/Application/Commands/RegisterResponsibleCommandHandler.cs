@@ -5,24 +5,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Universal.EBI.Responsible.API.Application.Events;
-using Universal.EBI.Responsible.API.Application.Queries.Interfaces;
-using Universal.EBI.Responsible.API.Models;
-using Universal.EBI.Responsible.API.Models.Interfaces;
+using Universal.EBI.Responsibles.API.Application.Events;
+using Universal.EBI.Responsibles.API.Application.Queries.Interfaces;
+using Universal.EBI.Responsibles.API.Models;
+using Universal.EBI.Responsibles.API.Models.Interfaces;
 using Universal.EBI.Core.Messages;
 using Universal.EBI.Core.Utils;
+using Universal.EBI.MessageBus.Interfaces;
+using Universal.EBI.Core.Integration.Responsible;
 
-namespace Universal.EBI.Responsible.API.Application.Commands
+namespace Universal.EBI.Responsibles.API.Application.Commands
 {
     public class RegisterResponsibleCommandHandler : CommandHandler, IRequestHandler<RegisterResponsibleCommand, ValidationResult>
     {
         private readonly IResponsibleRepository _responsibleRepository;
         private readonly IResponsibleQueries _responsibleQueries;
+        private readonly IMessageBus _bus;
 
-        public RegisterResponsibleCommandHandler(IResponsibleRepository responsibleRepository, IResponsibleQueries responsibleQueries)
+        public RegisterResponsibleCommandHandler(IResponsibleRepository responsibleRepository, IResponsibleQueries responsibleQueries, IMessageBus bus)
         {
             _responsibleRepository = responsibleRepository;
             _responsibleQueries = responsibleQueries;
+            _bus = bus;
         }
 
         public async Task<ValidationResult> Handle(RegisterResponsibleCommand message, CancellationToken cancellationToken)
@@ -30,12 +34,13 @@ namespace Universal.EBI.Responsible.API.Application.Commands
             if (!message.IsValid()) return message.ValidationResult;
 
             var responsible = new Models.Responsible
-            {                
+            {
+                Id = message.Id,
                 FirstName = message.FirstName,
                 LastName = message.LastName,
                 FullName = $"{message.FirstName} {message.LastName}",
                 Email = ValidationUtils.ValidateRequestEmail(message.Email),
-                Cpf = ValidationUtils.ValidateRequestCpf(message.Email),
+                Cpf = ValidationUtils.ValidateRequestCpf(message.Cpf),
                 Phones = new List<Phone>(),
                 Address = new Address
                 { 
@@ -45,7 +50,8 @@ namespace Universal.EBI.Responsible.API.Application.Commands
                     District = message.Address.District,
                     City = message.Address.City,
                     State = message.Address.State,
-                    ZipCode = message.Address.ZipCode                  
+                    ZipCode = message.Address.ZipCode,
+                    ResponsibleId = message.Id
                 },
                 BirthDate = DateTime.Parse(message.BirthDate).Date,
                 GenderType = (GenderType)Enum.Parse(typeof(GenderType), message.Gender, true),
@@ -104,7 +110,16 @@ namespace Universal.EBI.Responsible.API.Application.Commands
                 Excluded = responsible.Excluded,
                 Childs = responsible.Childs.ToArray()
             });
-            
+
+            var guidIds = new Guid[message.Childs.Length];
+
+            for (int i = 0; i < message.Childs.Length; i++)
+            {
+                guidIds[i] = message.Childs[i].Id;
+            }
+
+            await _bus.PublishAsync(new RegisteredResponsibleIntegrationBaseEvent { Id = responsible.Id, ChildIds = guidIds });            
+
             return await PersistData(_responsibleRepository.UnitOfWork, success);
         }
     }

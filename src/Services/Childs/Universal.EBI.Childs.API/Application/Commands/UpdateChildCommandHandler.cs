@@ -7,7 +7,6 @@ using Universal.EBI.Childs.API.Application.Events;
 using Universal.EBI.Childs.API.Application.Queries.Interfaces;
 using Universal.EBI.Childs.API.Models;
 using Universal.EBI.Childs.API.Models.Interfaces;
-using Universal.EBI.Core.DomainObjects;
 using Universal.EBI.Core.Messages;
 using Universal.EBI.Core.Utils;
 
@@ -28,7 +27,7 @@ namespace Universal.EBI.Childs.API.Application.Commands
         {
             if (!message.IsValid()) return message.ValidationResult;
 
-            var existingChild = await _childQueries.GetChildByCpf(message.Cpf);
+            var existingChild = await _childQueries.GetChildById(message.Id);
 
             existingChild.FirstName = message.FirstName;
             existingChild.LastName = message.LastName;

@@ -4,6 +4,7 @@ using System;
 using System.Threading.Tasks;
 using Universal.EBI.Auth.API.Models;
 using Universal.EBI.Auth.API.Services;
+using Universal.EBI.Core.Integration.Educator;
 using Universal.EBI.Core.Messages;
 using Universal.EBI.Core.Messages.Integration;
 using Universal.EBI.MessageBus.Interfaces;
@@ -15,18 +16,18 @@ namespace Universal.EBI.Auth.API.Controllers
     public class AuthController : BaseController
     {
         private readonly AuthService _authenticationService;
-        //private readonly IMessageBus _bus;
+        private readonly IMessageBus _bus;
 
-        public AuthController(AuthService authenticationService)
-        {
-            _authenticationService = authenticationService;            
-        }
-
-        //public AuthController(AuthenticationService authenticationService, IMessageBus bus)
+        //public AuthController(AuthService authenticationService)
         //{
-        //    _authenticationService = authenticationService;
-        //    _bus = bus;
+        //    _authenticationService = authenticationService;            
         //}
+
+        public AuthController(AuthService authenticationService, IMessageBus bus)
+        {
+            _authenticationService = authenticationService;
+            _bus = bus;
+        }
 
         [HttpPost("signup")]
         public async Task<ActionResult> Register(UserRegister userRegister)
@@ -45,12 +46,12 @@ namespace Universal.EBI.Auth.API.Controllers
 
             if (result.Succeeded)
             {
-                //var educatorResult = await EducatorRecord(userRegister);
-                //if (!educatorResult.ValidationResult.IsValid)
-                //{
-                //    await _authenticationService.UserManager.DeleteAsync(user);
-                //    return CustomResponse(educatorResult.ValidationResult);
-                //}
+                var educatorResult = await EducatorRecord(userRegister);
+                if (!educatorResult.ValidationResult.IsValid)
+                {
+                    await _authenticationService.UserManager.DeleteAsync(user);
+                    return CustomResponse(educatorResult.ValidationResult);
+                }
                 return CustomResponse(await _authenticationService.GenerateJwt(userRegister.Email));
             }
 
@@ -105,19 +106,33 @@ namespace Universal.EBI.Auth.API.Controllers
             return CustomResponse(await _authenticationService.GenerateJwt(token.Username));
         }
 
-        //private async Task<ResponseMessage> EducatorRecord(UserRegister userRegister)
-        //{
-        //    var user = await _authenticationService.UserManager.FindByEmailAsync(userRegister.Email);
-        //    var registeredUser = new RegisteredUserIntegrationEvent(Guid.Parse(user.Id), userRegister.Name, userRegister.Email, userRegister.Cpf);
-        //    try
-        //    {
-        //        return await _bus.RequestAsync<RegisteredUserIntegrationEvent, ResponseMessage>(registeredUser);
-        //    }
-        //    catch
-        //    {
-        //        await _authenticationService.UserManager.DeleteAsync(user);
-        //        throw;
-        //    }
-        //}
+        private async Task<ResponseMessage> EducatorRecord(UserRegister userRegister)
+        {
+            var user = await _authenticationService.UserManager.FindByEmailAsync(userRegister.Email);
+            var registeredUser = new RegisteredEducatorIntegrationBaseEvent
+            {
+                AggregateId = Guid.Parse(user.Id),
+                Id = Guid.Parse(user.Id),
+                FirstName = userRegister.FirstName,
+                LastName = userRegister.LastName,
+                Email = userRegister.Email,
+                Cpf = userRegister.Cpf,
+                BirthDate = userRegister.BirthDate,
+                Function = userRegister.Function,
+                Gender = userRegister.Gender,
+                PhotoUrl = userRegister.PhotoUrl,
+                Excluded = userRegister.Excluded
+            };
+
+            try
+            {
+                return await _bus.RequestAsync<RegisteredEducatorIntegrationBaseEvent, ResponseMessage>(registeredUser);
+            }
+            catch
+            {
+                await _authenticationService.UserManager.DeleteAsync(user);
+                throw;
+            }
+        }
     }
 }
