@@ -33,7 +33,7 @@ namespace Universal.EBI.Classrooms.API.Data
             var database = client.GetDatabase(configuration.GetValue<string>("DatabaseSettings:DatabaseName"));
 
             Classrooms = database.GetCollection<Classroom>(configuration.GetValue<string>("DatabaseSettings:CollectionName"));
-            ClassroomContextSeed.SeedData(Classrooms);
+            //ClassroomContextSeed.SeedData(Classrooms);
         }
 
         public IMongoCollection<Classroom> Classrooms { get; }

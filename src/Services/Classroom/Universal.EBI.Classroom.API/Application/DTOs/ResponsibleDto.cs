@@ -1,12 +1,11 @@
-﻿using System;
+﻿using System.Collections.Generic;
 
 namespace Universal.EBI.Classrooms.API.Application.DTOs
 {
-    public class ClassroomDto
-    {        
-        public Guid Id { get; set; }
-        
-        public Guid ChildId { get; set; }
-        
+    public class ResponsibleDto : PersonDto
+    {
+        public int KinshipType { get; set; }
+        public List<PhoneDto> Phones { get; set; }        
+
     }
 }

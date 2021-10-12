@@ -5,7 +5,7 @@ namespace Universal.EBI.Classrooms.API.Models
 {
     public class Educator : Person
     {   
-        public FunctionType? FunctionType { get; set; }        
+        public FunctionType FunctionType { get; set; }        
         public ICollection<Phone> Phones { get; set; }        
         
         public Educator()

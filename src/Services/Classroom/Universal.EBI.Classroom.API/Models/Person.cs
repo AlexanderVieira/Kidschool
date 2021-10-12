@@ -15,7 +15,7 @@ namespace Universal.EBI.Classrooms.API.Models
         public Email Email { get; set; }
         public Cpf Cpf { get; set; }
         public string PhotoUrl { get; set; }
-        public DateTime? BirthDate { get; set; }        
+        public DateTime BirthDate { get; set; }        
         public GenderType GenderType { get; set; }
         public Address Address { get; set; }
 

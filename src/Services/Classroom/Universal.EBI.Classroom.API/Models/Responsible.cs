@@ -7,8 +7,9 @@ namespace Universal.EBI.Classrooms.API.Models
     {   
         public KinshipType KinshipType { get; set; }        
         public ICollection<Phone> Phones { get; set; }
-              
-        
+        //public ICollection<Child> Childs { get; set; }
+
+
         public Responsible()
         {
             //Id = Guid.NewGuid();            

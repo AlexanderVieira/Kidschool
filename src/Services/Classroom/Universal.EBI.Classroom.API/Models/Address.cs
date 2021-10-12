@@ -20,7 +20,8 @@ namespace Universal.EBI.Classrooms.API.Models
             //Id = Guid.NewGuid();
         }
 
-        public Address(string publicPlace, string number, string complement, string district, string zipCode, string city, string state, Guid? foreingKeyId)
+        public Address(string publicPlace, string number, string complement, string district, 
+                       string zipCode, string city, string state, Guid? foreingKeyId)
         {            
             PublicPlace = publicPlace;
             Number = number;

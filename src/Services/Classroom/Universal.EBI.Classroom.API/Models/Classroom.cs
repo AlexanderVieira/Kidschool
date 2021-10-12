@@ -14,13 +14,13 @@ namespace Universal.EBI.Classrooms.API.Models
         public ClassroomType ClassroomType { get; set; }      
         public string MeetingTime { get; set; }
         public Educator Educator { get; set; }
-        public Dictionary<string, Child> Childs { get; set; }
+        public ICollection<Child> Childs { get; set; }
         public bool Actived { get; set; }        
         public ICollection<Event> Notifications { get; set; }        
 
         public Classroom()
         {
-            Childs = new Dictionary<string, Child>();            
+            Childs = new HashSet<Child>();            
             Notifications = new HashSet<Event>();            
         }
 

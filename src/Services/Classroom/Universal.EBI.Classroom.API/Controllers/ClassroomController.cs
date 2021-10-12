@@ -42,16 +42,16 @@ namespace Universal.EBI.Classrooms.API.Controllers
             //return CustomResponse();
         }        
 
-        [HttpPost("api/classroom/create")]
+        [HttpPost("api/classroom/create")]        
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        public async Task<ActionResult> CreateClassroom([FromBody] RegisterClassroomCommand command)
+        public async Task<IActionResult> CreateClassroom([FromBody] RegisterClassroomCommand command)
         {               
             return CustomResponse(await _mediator.SendCommand(command));
         }
 
         [HttpPost("api/classroom/child/add")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        public async Task<ActionResult> AddChildsClassroom([FromBody] UpdateClassroomCommand command)
+        public async Task<IActionResult> AddChildsClassroom([FromBody] UpdateClassroomCommand command)
         {
             if (command.Childs.Length == 0)
             {

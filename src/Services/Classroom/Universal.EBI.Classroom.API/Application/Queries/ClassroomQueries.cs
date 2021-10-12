@@ -23,7 +23,7 @@ namespace Universal.EBI.Classrooms.API.Application.Queries
         {
             
             query = string.IsNullOrEmpty(query) ? "" : query;
-            var filter = new BsonDocument { { "FullName", new BsonDocument { { "$regex", query }, { "$options", "i" } } } };
+            var filter = new BsonDocument { { "Church", new BsonDocument { { "$regex", query }, { "$options", "i" } } } };
 
             var Classrooms = await _context.Classrooms.Find(filter).ToListAsync();
 

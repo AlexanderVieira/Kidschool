@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <UserSecretsId>12349e44-124e-4ce3-b816-59262ebc3e7b</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -9,8 +10,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-    <Folder Include="Extensions\" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\Core\Universal.EBI.Core\Universal.EBI.Core.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\MessageBus\Universal.EBI.MessageBus\Universal.EBI.MessageBus.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\Services\Universal.EBI.WebAPI.Core\Universal.EBI.WebAPI.Core.csproj" />
   </ItemGroup>
 
 </Project>
