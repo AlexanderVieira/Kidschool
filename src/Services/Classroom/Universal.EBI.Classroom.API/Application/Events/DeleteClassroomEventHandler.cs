@@ -17,8 +17,8 @@ namespace Universal.EBI.Classrooms.API.Application.Events
 
         public Task Handle(DeletedClassroomEvent notification, CancellationToken cancellationToken)
         {
-            //return Task.CompletedTask;
-            return _bus.PublishAsync(new DeletedClassroomIntegrationEvent { Id = notification.Id });
+            return Task.CompletedTask;
+            //return _bus.PublishAsync(new DeletedClassroomIntegrationEvent { Id = notification.Id });
         }
     }
 }

@@ -13,5 +13,6 @@ namespace Universal.EBI.BFF.Report.API.Services.Interfaces
         Task<ResponseResult> UpdateClassroom(ClassroomDto classroom);
         Task<ResponseResult> DeleteClassroom(Guid id);
         Task<ResponseResult> AddChildsClassroom(ClassroomDto classroom);
+        Task<ResponseResult> DeleteChildsClassroom(DeleteChildClassroomDto deleteChildClassroomDto);
     }
 }

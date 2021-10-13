@@ -30,10 +30,10 @@ namespace Universal.EBI.Classrooms.API.Application.DTOs
                 Educator = new Educator(),
                 Church = classroomDto.Church,
                 Region = classroomDto.Region,
-                ClassroomType = (ClassroomType)classroomDto.ClassroomType, //(ClassroomType)Enum.Parse(typeof(ClassroomType), message.ClassroomType, true),
+                ClassroomType = (ClassroomType)classroomDto.ClassroomType,
                 Actived = classroomDto.Actived,
                 MeetingTime = classroomDto.MeetingTime,
-                Childs = new List<Child>() //new Dictionary<string, Child>()
+                Childs = new List<Child>() 
             };
 
             var educator = classroomDto.Educator.ToConvertEducator(classroomDto.Educator);

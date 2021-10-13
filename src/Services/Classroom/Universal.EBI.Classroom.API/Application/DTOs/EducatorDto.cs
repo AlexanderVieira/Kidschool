@@ -23,9 +23,9 @@ namespace Universal.EBI.Classrooms.API.Application.DTOs
                 Cpf = new Cpf(educatorDto.Cpf.Number),
                 Phones = new List<Phone>(),
                 Address = new Address(),
-                BirthDate = DateTime.Parse(educatorDto.BirthDate).Date, //DateTime.Parse(educatorDto.BirthDate),
-                GenderType = (GenderType)educatorDto.GenderType, //(Gender)Enum.Parse(typeof(Gender), message.Gender, true),
-                FunctionType = (FunctionType)educatorDto.FunctionType, //(FunctionType)Enum.Parse(typeof(FunctionType), message.Function, true),
+                BirthDate = DateTime.Parse(educatorDto.BirthDate).Date, 
+                GenderType = (GenderType)educatorDto.GenderType, 
+                FunctionType = (FunctionType)educatorDto.FunctionType,
                 PhotoUrl = educatorDto.PhotoUrl,
                 Excluded = educatorDto.Excluded
             };
@@ -57,7 +57,52 @@ namespace Universal.EBI.Classrooms.API.Application.DTOs
             return educator;
         }
 
-        public EducatorDto ToConvertEducatorDto(RegisterClassroomCommand command)
+        public EducatorDto ConvertRegisterCommandToEducatorDto(RegisterClassroomCommand command)
+        {            
+            var EducatorDto = new EducatorDto
+            {
+                Id = command.Educator.Id,
+                FirstName = command.Educator.FirstName,
+                LastName = command.Educator.LastName,
+                Email = new Email(command.Educator.Email.Address),
+                Cpf = new Cpf(command.Educator.Cpf.Number),
+                Phones = new List<PhoneDto>(),
+                Address = new AddressDto(),
+                BirthDate = command.Educator.BirthDate, 
+                GenderType = (int)command.Educator.GenderType, 
+                FunctionType = (int)command.Educator.FunctionType,
+                PhotoUrl = command.Educator.PhotoUrl,
+                Excluded = command.Educator.Excluded
+            };
+
+            EducatorDto.Address = new AddressDto
+            {
+                Id = command.Educator.Address.Id,
+                PublicPlace = command.Educator.Address.PublicPlace,
+                Number = command.Educator.Address.Number,
+                Complement = command.Educator.Address.Complement,
+                District = command.Educator.Address.District,
+                City = command.Educator.Address.City,
+                State = command.Educator.Address.State,
+                ZipCode = command.Educator.Address.ZipCode,
+                ForeingKeyId = command.Educator.Address.ForeingKeyId
+            };
+
+            foreach (var phone in command.Educator.Phones)
+            {
+                EducatorDto.Phones.Add(new PhoneDto
+                {
+                    Id = phone.Id,
+                    Number = phone.Number,
+                    PhoneType = (int)phone.PhoneType,
+                    ForeingKeyId = phone.ForeingKeyId
+                });
+            }
+
+            return EducatorDto;
+        }
+
+        public EducatorDto ConvertUpdateCommandToEducatorDto(UpdateClassroomCommand command)
         {
             var EducatorDto = new EducatorDto
             {
@@ -68,9 +113,9 @@ namespace Universal.EBI.Classrooms.API.Application.DTOs
                 Cpf = new Cpf(command.Educator.Cpf.Number),
                 Phones = new List<PhoneDto>(),
                 Address = new AddressDto(),
-                BirthDate = command.Educator.BirthDate, //DateTime.Parse(educatorDto.BirthDate),
-                GenderType = (int)command.Educator.GenderType, //(Gender)Enum.Parse(typeof(Gender), message.Gender, true),
-                FunctionType = (int)command.Educator.FunctionType, //(FunctionType)Enum.Parse(typeof(FunctionType), message.Function, true),
+                BirthDate = command.Educator.BirthDate,
+                GenderType = (int)command.Educator.GenderType,
+                FunctionType = (int)command.Educator.FunctionType,
                 PhotoUrl = command.Educator.PhotoUrl,
                 Excluded = command.Educator.Excluded
             };

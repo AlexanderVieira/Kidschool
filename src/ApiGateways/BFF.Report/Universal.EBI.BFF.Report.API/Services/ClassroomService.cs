@@ -94,5 +94,17 @@ namespace Universal.EBI.BFF.Report.API.Services
 
             return ReturnOk();
         }
+
+        public async Task<ResponseResult> DeleteChildsClassroom(DeleteChildClassroomDto deleteChildClassroomDto)
+        {
+            var classroomContent = GetContent(deleteChildClassroomDto);
+            var response = await _httpClient.PostAsync($"api/classroom/child/delete", classroomContent);
+            if (!HandlerResponseErrors(response))
+            {
+                return await DeserializeResponseObject<ResponseResult>(response);
+            }
+
+            return ReturnOk();
+        }
     }
 }

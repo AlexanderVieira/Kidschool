@@ -1,5 +1,6 @@
 ﻿using FluentValidation.Results;
 using MediatR;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,12 +15,12 @@ namespace Universal.EBI.Classrooms.API.Application.Commands
     public class RegisterClassroomCommandHandler : CommandHandler, IRequestHandler<RegisterClassroomCommand, ValidationResult>
     {
         private readonly IClassroomRepository _classroomRepository;
-        private readonly IClassroomQueries _ClassroomQueries;
+        private readonly IClassroomQueries _classroomQueries;
 
         public RegisterClassroomCommandHandler(IClassroomRepository classroomRepository, IClassroomQueries classroomQueries)
         {
             _classroomRepository = classroomRepository;
-            _ClassroomQueries = classroomQueries;
+            _classroomQueries = classroomQueries;
         }
 
         public async Task<ValidationResult> Handle(RegisterClassroomCommand message, CancellationToken cancellationToken)
@@ -35,15 +36,15 @@ namespace Universal.EBI.Classrooms.API.Application.Commands
                 ClassroomType = (int)message.ClassroomType,
                 Actived = message.Actived,
                 MeetingTime = message.MeetingTime,
-                Childs = message.Childs.ToDictionary(c => c.Id.ToString())                
+                Childs = message.Childs.Length > 0 ? message.Childs.ToDictionary(c => c.Id.ToString()) : new Dictionary<string, ChildDto>()
             };
             
-             var educatorDto = new EducatorDto().ToConvertEducatorDto(message);
+             var educatorDto = new EducatorDto().ConvertRegisterCommandToEducatorDto(message);
             classroomDto.Educator = educatorDto;
             
             var classroom = classroomDto.ToConvertClassroom(classroomDto);           
 
-            var existingClassroom = await _ClassroomQueries.GetClassroomById(classroom.Id);
+            var existingClassroom = await _classroomQueries.GetClassroomById(classroom.Id);
 
             if (existingClassroom != null)
             {
@@ -52,7 +53,7 @@ namespace Universal.EBI.Classrooms.API.Application.Commands
             }
 
             await _classroomRepository.CreateClassroom(classroom);
-            var createdClassroom = await _ClassroomQueries.GetClassroomById(classroom.Id);
+            var createdClassroom = await _classroomQueries.GetClassroomById(classroom.Id);
             var success = createdClassroom != null;            
 
             classroom.AddEvent(new RegisteredClassroomEvent 
