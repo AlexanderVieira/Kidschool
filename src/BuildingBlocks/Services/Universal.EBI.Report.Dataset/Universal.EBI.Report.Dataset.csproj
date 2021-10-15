@@ -4,4 +4,36 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Update="DataSets\dsClassroomChild.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>dsClassroomChild.xsd</DependentUpon>
+    </Compile>
+    <Compile Update="DataSets\dsClassroomResponsible.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>dsClassroomResponsible.xsd</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="DataSets\dsClassroomChild.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsClassroomChild.Designer.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="DataSets\dsClassroomResponsible.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsClassroomResponsible.Designer.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Reports\ReportClassroomResponsible.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Reports\SubReportClassroomChild.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

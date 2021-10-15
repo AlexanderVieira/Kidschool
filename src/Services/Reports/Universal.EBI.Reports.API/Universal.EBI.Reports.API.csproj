@@ -5,15 +5,49 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="ReportViewerCore.NETCore" Version="15.1.14" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\Core\Universal.EBI.Core\Universal.EBI.Core.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\MessageBus\Universal.EBI.MessageBus\Universal.EBI.MessageBus.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\Services\Universal.EBI.Report.Dataset\Universal.EBI.Report.Dataset.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\Services\Universal.EBI.WebAPI.Core\Universal.EBI.WebAPI.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\BuildingBlocks\Services\Universal.EBI.Report.Dataset\Universal.EBI.Report.Dataset.csproj" />
+    <Compile Update="DataSets\dsClassroomChild.Designer.cs">
+      <DependentUpon>dsClassroomChild.xsd</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="DataSets\dsClassroomResponsible.Designer.cs">
+      <DependentUpon>dsClassroomResponsible.xsd</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="DataSets\dsClassroomChild.xsd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+      <LastGenOutput>dsClassroomChild.Designer.cs</LastGenOutput>
+      <Generator>MSDataSetGenerator</Generator>
+    </None>
+    <None Update="DataSets\dsClassroomResponsible.xsd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+      <LastGenOutput>dsClassroomResponsible.Designer.cs</LastGenOutput>
+      <Generator>MSDataSetGenerator</Generator>
+    </None>
+    <None Update="Reports\ReportClassroomResponsible.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Reports\SubReportClassroomChild.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
