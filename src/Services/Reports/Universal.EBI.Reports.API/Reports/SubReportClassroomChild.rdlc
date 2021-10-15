@@ -64,22 +64,22 @@
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>9.7091cm</Width>
+                  <Width>8.40382cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>3.25898cm</Width>
+                  <Width>3.01203cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>2.01412cm</Width>
+                  <Width>1.92592cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>5.75641cm</Width>
+                  <Width>5.40363cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>3.05374cm</Width>
+                  <Width>2.96555cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>2.92144cm</Width>
+                  <Width>2.83325cm</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
@@ -544,7 +544,7 @@
             <DataSetName>dsClassroomChild</DataSetName>
             <Top>0.3525cm</Top>
             <Height>1.2cm</Height>
-            <Width>26.71378cm</Width>
+            <Width>24.5442cm</Width>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -555,7 +555,7 @@
         <Height>0.91667in</Height>
         <Style />
       </Body>
-      <Width>10.51724in</Width>
+      <Width>9.66307in</Width>
       <Page>
         <PageHeight>21cm</PageHeight>
         <PageWidth>29.7cm</PageWidth>

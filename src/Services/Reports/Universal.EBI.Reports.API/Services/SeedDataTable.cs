@@ -30,7 +30,7 @@ namespace Universal.EBI.Reports.API.Services
                     row["Id"] = child.Id.ToString();
                     row["StartTimeMeeting"] = child.StartTimeMeeting.Value.ToShortTimeString();
                     row["EndTimeMeeting"] = child.EndTimeMeeting.Value.ToShortTimeString();
-                    row["ResponsibleId"] = child.Responsibles.ToList()[0].Id.ToString();
+                    row["ResponsibleId"] = child.Responsibles.ToList()[j].Id.ToString();
                     dt.Rows.Add(row);
                     
                 }
@@ -52,9 +52,9 @@ namespace Universal.EBI.Reports.API.Services
             {
                 for (int j = 0; j < classrooms[i].Childs.Count; j++)
                 {
-                    for (int k = 0; k < classrooms[j].Childs.ToList()[j].Responsibles.Count; k++)
+                    for (int k = 0; k < classrooms[i].Childs.ToList()[j].Responsibles.Count; k++)
                     {
-                        var responsible = classrooms[k].Childs.ToList()[k].Responsibles.ToList()[k];
+                        var responsible = classrooms[i].Childs.ToList()[j].Responsibles.ToList()[k];
                         row = dt.NewRow();
                         row["ResponsibleId"] = responsible.Id.ToString();
                         row["Cpf"] = responsible.Cpf.Number;

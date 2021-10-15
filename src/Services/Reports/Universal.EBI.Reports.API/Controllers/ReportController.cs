@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Universal.EBI.Core.DomainObjects;
 using Universal.EBI.Reports.API.Models;
 using Universal.EBI.Reports.API.Services.Interfaces;
 using Universal.EBI.WebAPI.Core.Controllers;
@@ -77,19 +78,62 @@ namespace Universal.EBI.Reports.API.Controllers
                                 {
                                     Id = Guid.NewGuid(),
                                     FullName = "ALEXANDER VIEIRA DA SILVA",
-                                    Cpf = new Core.DomainObjects.Cpf("041.380.007-55"),
+                                    Cpf = new Cpf("709.375.217-95"),
                                     KinshipType = "PAI",
                                     Phones = new List<Phone>
                                     {
                                         new Phone
                                         {
-                                            Number = "(21) 96520-0293"
+                                            Number = "(21) 98469-0691"
                                         }
                                     }
 
                                 }
                             }
                             
+                        }
+                    }
+                },
+                new Classroom
+                {
+                    Region = "SÃO JOÃO I",
+                    Church = "SÃO MATEUS II",
+                    MeetingTime = DateTime.UtcNow,
+                    ClassroomType = "MISTA",
+                    Lunch = "IOGURTE E BISCOITO",
+                    Educator = new Educator
+                    {
+                        FirstName = "JOSILENE"
+                    },
+                    Childs = new List<Child>
+                    {
+                        new Child
+                        {
+                            Id = Guid.NewGuid(),
+                            FullName = "GUILHERME GONÇALVE DIAS",
+                            BirthDate = DateTime.UtcNow.AddYears(-9),
+                            GenderType = "M",
+                            StartTimeMeeting = DateTime.UtcNow,
+                            EndTimeMeeting = DateTime.UtcNow.AddHours(2.0),
+                            Responsibles = new List<Responsible>
+                            {
+                                new Responsible
+                                {
+                                    Id = Guid.NewGuid(),
+                                    FullName = "RODRIGO GONÇALVES DIAS",
+                                    Cpf = new Cpf("439.599.527-67"),
+                                    KinshipType = "PAI",
+                                    Phones = new List<Phone>
+                                    {
+                                        new Phone
+                                        {
+                                            Number = "(21) 95598-0668"
+                                        }
+                                    }
+
+                                }
+                            }
+
                         }
                     }
                 }
