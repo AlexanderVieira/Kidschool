@@ -9,9 +9,9 @@ namespace Universal.EBI.Classrooms.API.Application.DTOs
 {
     public class ChildDto : PersonDto
     {
-        public string StartTimeMeeting { get; set; }
-        public string EndTimeMeeting { get; set; }        
-        public int AgeGroupType { get; set; }
+        public string HoraryOfEntry { get; set; }
+        public string HoraryOfExit { get; set; }        
+        public string AgeGroupType { get; set; }
         public List<PhoneDto> Phones { get; set; }
         public List<ResponsibleDto> Responsibles { get; set; }
 
@@ -28,13 +28,15 @@ namespace Universal.EBI.Classrooms.API.Application.DTOs
                 Phones = new List<PhoneDto>(),
                 Address = new AddressDto(), //RegisterChildValidation.ValidateRequestAddress(message.Address),
                 BirthDate = child.BirthDate.ToShortDateString(), //DateTime.Parse(child.BirthDate).Date,
-                GenderType = (int)child.GenderType, //(GenderType)Enum.Parse(typeof(GenderType), message.Gender, true),
-                AgeGroupType = (int)child.AgeGroupType, //(AgeGroupType)Enum.Parse(typeof(AgeGroupType), message.AgeGroup, true),
+                GenderType = child.GenderType.ToString(), //(GenderType)Enum.Parse(typeof(GenderType), message.Gender, true),
+                AgeGroupType = child.AgeGroupType.ToString(), //(AgeGroupType)Enum.Parse(typeof(AgeGroupType), message.AgeGroup, true),
                 PhotoUrl = child.PhotoUrl,
                 Excluded = child.Excluded,
                 Responsibles = new List<ResponsibleDto>(),
-                StartTimeMeeting = child.StartTimeMeeting.ToString(),
-                EndTimeMeeting = child.EndTimeMeeting.ToString()
+                HoraryOfEntry = child.HoraryOfEntry,
+                HoraryOfExit = child.HoraryOfExit,
+                CreatedAt = child.CreatedAt,
+                UpdatedAt = child.UpdatedAt
             };
 
             childDto.Address = new AddressDto
@@ -56,7 +58,7 @@ namespace Universal.EBI.Classrooms.API.Application.DTOs
                 { 
                     Id = phone.Id,
                     Number = phone.Number, 
-                    PhoneType = (int)phone.PhoneType,
+                    PhoneType = phone.PhoneType.ToString(),
                     ForeingKeyId = phone.ForeingKeyId
                 });
             }
@@ -76,8 +78,8 @@ namespace Universal.EBI.Classrooms.API.Application.DTOs
                     Phones = new List<PhoneDto>(),
                     Address = new AddressDto(),                    
                     BirthDate = responsible.BirthDate.ToShortDateString(), //DateTime.Parse(responsible.BirthDate).Date,
-                    GenderType = (int)responsible.GenderType, //(GenderType)Enum.Parse(typeof(GenderType), message.Gender, true),
-                    KinshipType = (int)responsible.KinshipType, //(KinshipType)Enum.Parse(typeof(KinshipType), message.Kinship, true),
+                    GenderType = responsible.GenderType.ToString(), //(GenderType)Enum.Parse(typeof(GenderType), message.Gender, true),
+                    KinshipType = responsible.KinshipType.ToString(), //(KinshipType)Enum.Parse(typeof(KinshipType), message.Kinship, true),
                     PhotoUrl = responsible.PhotoUrl,
                     Excluded = responsible.Excluded                    
                     
@@ -102,7 +104,7 @@ namespace Universal.EBI.Classrooms.API.Application.DTOs
                     {
                         Id = phone.Id,
                         Number = phone.Number,
-                        PhoneType = (int)phone.PhoneType,
+                        PhoneType = phone.PhoneType.ToString(),
                         ForeingKeyId = phone.ForeingKeyId
                     });
                 }
@@ -126,13 +128,15 @@ namespace Universal.EBI.Classrooms.API.Application.DTOs
                 Phones = new List<Phone>(),
                 Address = new Address(), //RegisterChildValidation.ValidateRequestAddress(message.Address),
                 BirthDate = DateTime.Parse(childDto.BirthDate).Date,
-                GenderType = (GenderType)childDto.GenderType, //(GenderType)Enum.Parse(typeof(GenderType), message.Gender, true),
-                AgeGroupType = (AgeGroupType)childDto.AgeGroupType, //(AgeGroupType)Enum.Parse(typeof(AgeGroupType), message.AgeGroup, true),
+                GenderType = (GenderType)Enum.Parse(typeof(GenderType), childDto.GenderType, true),
+                AgeGroupType = (AgeGroupType)Enum.Parse(typeof(AgeGroupType), childDto.AgeGroupType, true),
                 PhotoUrl = childDto.PhotoUrl,
                 Excluded = childDto.Excluded,
                 Responsibles = new List<Responsible>(),
-                StartTimeMeeting = DateTime.Parse(childDto.StartTimeMeeting).Date,
-                EndTimeMeeting = childDto.EndTimeMeeting != null ? DateTime.Parse(childDto.EndTimeMeeting).Date : null
+                HoraryOfEntry = childDto.HoraryOfEntry,
+                HoraryOfExit = childDto.HoraryOfEntry,
+                CreatedAt = childDto.CreatedAt,
+                UpdatedAt = childDto.UpdatedAt
             };
 
             child.Address = new Address
@@ -154,7 +158,7 @@ namespace Universal.EBI.Classrooms.API.Application.DTOs
                 {
                     Id = phone.Id,
                     Number = phone.Number,
-                    PhoneType = (PhoneType)phone.PhoneType,
+                    PhoneType = (PhoneType)Enum.Parse(typeof(PhoneType), phone.PhoneType, true),                    
                     ForeingKeyId = phone.ForeingKeyId
                 });
             }
@@ -176,14 +180,14 @@ namespace Universal.EBI.Classrooms.API.Application.DTOs
                           {
                                 Id = responsibleDto.Phones[j].Id, 
                                 Number = responsibleDto.Phones[j].Number, 
-                                PhoneType = (PhoneType)responsibleDto.Phones[j].PhoneType,
+                                PhoneType = (PhoneType)Enum.Parse(typeof(PhoneType), responsibleDto.Phones[j].PhoneType, true),
                                 ForeingKeyId = responsibleDto.Phones[j].ForeingKeyId 
                           }                  
                     },
                     Address = new Address(),
                     BirthDate = DateTime.Parse(responsibleDto.BirthDate).Date, 
-                    GenderType = (GenderType)responsibleDto.GenderType, 
-                    KinshipType = (KinshipType)responsibleDto.KinshipType,
+                    GenderType = (GenderType)Enum.Parse(typeof(GenderType), responsibleDto.GenderType, true), 
+                    KinshipType = (KinshipType)Enum.Parse(typeof(KinshipType), responsibleDto.KinshipType, true),                    
                     PhotoUrl = responsibleDto.PhotoUrl,
                     Excluded = responsibleDto.Excluded
 

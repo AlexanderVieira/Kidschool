@@ -12,6 +12,11 @@ namespace Universal.EBI.Reports.API.Models
         public string ZipCode { get; set; }
         public string City { get; set; }
         public string State { get; set; }
-        public Guid? ForeingKeyId { get; set; }
+        public Guid? ChildId { get; set; }
+        public Guid? ResponsibleId { get; set; }
+        public Guid? EducatorId { get; set; }       
+        public virtual Child Child { get; set; }
+        public virtual Responsible  Responsible { get; set; }
+        public virtual Educator Educator { get; set; }
     }
 }

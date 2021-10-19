@@ -49,97 +49,125 @@ namespace Universal.EBI.Reports.API.Controllers
 
         private List<Classroom> SeedDataBase()
         {
-            var classrooms = new List<Classroom>
-            {
-                new Classroom
-                {
-                    Region = "SÃO JOÃO I",
-                    Church = "SÃO MATEUS II",
-                    MeetingTime = DateTime.UtcNow,
-                    ClassroomType = "MISTA",
-                    Lunch = "IOGURTE E BISCOITO",
-                    Educator = new Educator
-                    {
-                        FirstName = "JOSILENE"
-                    },
-                    Childs = new List<Child>
-                    {
-                        new Child
-                        {
-                            Id = Guid.NewGuid(),
-                            FullName = "JONATHAN DE SALES DA SILVA",
-                            BirthDate = DateTime.UtcNow.AddYears(-9),
-                            GenderType = "M",
-                            StartTimeMeeting = DateTime.UtcNow,
-                            EndTimeMeeting = DateTime.UtcNow.AddHours(2.0),
-                            Responsibles = new List<Responsible>
-                            {
-                                new Responsible
-                                {
-                                    Id = Guid.NewGuid(),
-                                    FullName = "ALEXANDER VIEIRA DA SILVA",
-                                    Cpf = new Cpf("709.375.217-95"),
-                                    KinshipType = "PAI",
-                                    Phones = new List<Phone>
-                                    {
-                                        new Phone
-                                        {
-                                            Number = "(21) 98469-0691"
-                                        }
-                                    }
+            //var classrooms = new List<Classroom>
+            //{
+            //    new Classroom
+            //    {
+            //        Region = "SÃO JOÃO I",
+            //        Church = "SÃO MATEUS II",
+            //        MeetingTime = DateTime.UtcNow,
+            //        ClassroomType = "MISTA",
+            //        Lunch = "IOGURTE E BISCOITO",
+            //        Educator = new Educator
+            //        {
+            //            FirstName = "JOSILENE"
+            //        },
+            //        Childs = new List<Child>
+            //        {
+            //            new Child
+            //            {
+            //                Id = 1, //Guid.NewGuid(),
+            //                FullName = "JONATHAN DE SALES DA SILVA",
+            //                BirthDate = DateTime.UtcNow.AddYears(-9),
+            //                GenderType = "M",
+            //                StartTimeMeeting = DateTime.UtcNow,
+            //                EndTimeMeeting = DateTime.UtcNow.AddHours(2.0),
+            //                Responsibles = new List<Responsible>
+            //                {
+            //                    new Responsible
+            //                    {
+            //                        Id = 1, //Guid.NewGuid(),
+            //                        FullName = "ALEXANDER VIEIRA DA SILVA",
+            //                        Cpf = new Cpf("709.375.217-95"),
+            //                        KinshipType = "PAI",
+            //                        Phones = new List<Phone>
+            //                        {
+            //                            new Phone
+            //                            {
+            //                                Number = "(21) 98469-0691"
+            //                            }
+            //                        }
 
-                                }
-                            }
+            //                    }
+            //                }
                             
-                        }
-                    }
-                },
-                new Classroom
-                {
-                    Region = "SÃO JOÃO I",
-                    Church = "SÃO MATEUS II",
-                    MeetingTime = DateTime.UtcNow,
-                    ClassroomType = "MISTA",
-                    Lunch = "IOGURTE E BISCOITO",
-                    Educator = new Educator
-                    {
-                        FirstName = "JOSILENE"
-                    },
-                    Childs = new List<Child>
-                    {
-                        new Child
-                        {
-                            Id = Guid.NewGuid(),
-                            FullName = "GUILHERME GONÇALVE DIAS",
-                            BirthDate = DateTime.UtcNow.AddYears(-9),
-                            GenderType = "M",
-                            StartTimeMeeting = DateTime.UtcNow,
-                            EndTimeMeeting = DateTime.UtcNow.AddHours(2.0),
-                            Responsibles = new List<Responsible>
-                            {
-                                new Responsible
-                                {
-                                    Id = Guid.NewGuid(),
-                                    FullName = "RODRIGO GONÇALVES DIAS",
-                                    Cpf = new Cpf("439.599.527-67"),
-                                    KinshipType = "PAI",
-                                    Phones = new List<Phone>
-                                    {
-                                        new Phone
-                                        {
-                                            Number = "(21) 95598-0668"
-                                        }
-                                    }
+            //            },
+            //            new Child
+            //            {
+            //                Id = 2, //Guid.NewGuid(),
+            //                FullName = "GUILHERME GONÇALVE DIAS",
+            //                BirthDate = DateTime.UtcNow.AddYears(-11),
+            //                GenderType = "M",
+            //                StartTimeMeeting = DateTime.UtcNow.AddDays(-1.0),
+            //                EndTimeMeeting = DateTime.UtcNow.AddDays(-1.0).AddHours(2.0),
+            //                Responsibles = new List<Responsible>
+            //                {
+            //                    new Responsible
+            //                    {
+            //                        Id = 2, //Guid.NewGuid(),
+            //                        FullName = "RODRIGO GONÇALVES DIAS",
+            //                        Cpf = new Cpf("439.599.527-67"),
+            //                        KinshipType = "PAI",
+            //                        Phones = new List<Phone>
+            //                        {
+            //                            new Phone
+            //                            {
+            //                                Number = "(21) 95598-0668"
+            //                            }
+            //                        }
 
-                                }
-                            }
+            //                    }
+            //                }
 
-                        }
-                    }
-                }
-            };
+            //            }
+            //        }
+            //    },
+            //    new Classroom
+            //    {
+            //        Region = "SÃO JOÃO I",
+            //        Church = "SÃO MATEUS II",
+            //        MeetingTime = DateTime.UtcNow.AddDays(-1.0),
+            //        ClassroomType = "MISTA",
+            //        Lunch = "IOGURTE E BISCOITO",
+            //        Educator = new Educator
+            //        {
+            //            FirstName = "JOSILENE"
+            //        },
+            //        Childs = new List<Child>
+            //        {
+            //            new Child
+            //            {
+            //                Id = 2, //Guid.NewGuid(),
+            //                FullName = "GUILHERME GONÇALVE DIAS",
+            //                BirthDate = DateTime.UtcNow.AddYears(-11),
+            //                GenderType = "M",
+            //                StartTimeMeeting = DateTime.UtcNow.AddDays(-1.0),
+            //                EndTimeMeeting = DateTime.UtcNow.AddDays(-1.0).AddHours(2.0),
+            //                Responsibles = new List<Responsible>
+            //                {
+            //                    new Responsible
+            //                    {
+            //                        Id = 2, //Guid.NewGuid(),
+            //                        FullName = "RODRIGO GONÇALVES DIAS",
+            //                        Cpf = new Cpf("439.599.527-67"),
+            //                        KinshipType = "PAI",
+            //                        Phones = new List<Phone>
+            //                        {
+            //                            new Phone
+            //                            {
+            //                                Number = "(21) 95598-0668"
+            //                            }
+            //                        }
 
-            return classrooms;
+            //                    }
+            //                }
+
+            //            }
+            //        }
+            //    }
+            //};
+
+            return new List<Classroom>();
 
         }
     }

@@ -5,9 +5,9 @@ using Universal.EBI.Classrooms.API.Models.Enums;
 namespace Universal.EBI.Classrooms.API.Models
 {
     public class Child : Person
-    {        
-        public DateTime? StartTimeMeeting { get; set; }
-        public DateTime? EndTimeMeeting { get; set; }
+    {
+        public string HoraryOfEntry { get; set; }
+        public string HoraryOfExit { get; set; }
         public AgeGroupType AgeGroupType { get; set; }              
         public ICollection<Phone> Phones { get; set; }        
         public ICollection<Responsible> Responsibles { get; set; }

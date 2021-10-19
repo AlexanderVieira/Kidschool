@@ -5,7 +5,7 @@ using Universal.EBI.Core.Messages;
 namespace Universal.EBI.Core.DomainObjects
 {
     public abstract class Entity
-    {
+    {        
         public Guid Id { get; set; }
 
         protected Entity()

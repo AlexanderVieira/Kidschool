@@ -9,7 +9,7 @@ namespace Universal.EBI.Classrooms.API.Application.DTOs
 {
     public class EducatorDto : PersonDto
     {   
-        public int FunctionType { get; set; }        
+        public string FunctionType { get; set; }        
         public List<PhoneDto> Phones { get; set; }        
 
         public Educator ToConvertEducator(EducatorDto educatorDto)
@@ -24,8 +24,8 @@ namespace Universal.EBI.Classrooms.API.Application.DTOs
                 Phones = new List<Phone>(),
                 Address = new Address(),
                 BirthDate = DateTime.Parse(educatorDto.BirthDate).Date, 
-                GenderType = (GenderType)educatorDto.GenderType, 
-                FunctionType = (FunctionType)educatorDto.FunctionType,
+                GenderType = (GenderType)Enum.Parse(typeof(GenderType), educatorDto.GenderType, true),
+                FunctionType = (FunctionType)Enum.Parse(typeof(FunctionType), educatorDto.FunctionType, true),                
                 PhotoUrl = educatorDto.PhotoUrl,
                 Excluded = educatorDto.Excluded
             };
@@ -49,7 +49,7 @@ namespace Universal.EBI.Classrooms.API.Application.DTOs
                 {
                     Id = phone.Id,
                     Number = phone.Number,
-                    PhoneType = (PhoneType)phone.PhoneType,
+                    PhoneType = (PhoneType)Enum.Parse(typeof(PhoneType), phone.PhoneType, true),                    
                     ForeingKeyId = phone.ForeingKeyId
                 });
             }
@@ -69,8 +69,8 @@ namespace Universal.EBI.Classrooms.API.Application.DTOs
                 Phones = new List<PhoneDto>(),
                 Address = new AddressDto(),
                 BirthDate = command.Educator.BirthDate, 
-                GenderType = (int)command.Educator.GenderType, 
-                FunctionType = (int)command.Educator.FunctionType,
+                GenderType = command.Educator.GenderType.ToString(), 
+                FunctionType = command.Educator.FunctionType.ToString(),
                 PhotoUrl = command.Educator.PhotoUrl,
                 Excluded = command.Educator.Excluded
             };
@@ -94,7 +94,7 @@ namespace Universal.EBI.Classrooms.API.Application.DTOs
                 {
                     Id = phone.Id,
                     Number = phone.Number,
-                    PhoneType = (int)phone.PhoneType,
+                    PhoneType = phone.PhoneType.ToString(),
                     ForeingKeyId = phone.ForeingKeyId
                 });
             }
@@ -114,8 +114,8 @@ namespace Universal.EBI.Classrooms.API.Application.DTOs
                 Phones = new List<PhoneDto>(),
                 Address = new AddressDto(),
                 BirthDate = command.Educator.BirthDate,
-                GenderType = (int)command.Educator.GenderType,
-                FunctionType = (int)command.Educator.FunctionType,
+                GenderType = command.Educator.GenderType.ToString(),
+                FunctionType = command.Educator.FunctionType.ToString(),
                 PhotoUrl = command.Educator.PhotoUrl,
                 Excluded = command.Educator.Excluded
             };
@@ -139,7 +139,7 @@ namespace Universal.EBI.Classrooms.API.Application.DTOs
                 {
                     Id = phone.Id,
                     Number = phone.Number,
-                    PhoneType = (int)phone.PhoneType,
+                    PhoneType = phone.PhoneType.ToString(),
                     ForeingKeyId = phone.ForeingKeyId
                 });
             }

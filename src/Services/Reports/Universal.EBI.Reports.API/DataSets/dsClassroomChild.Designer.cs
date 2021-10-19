@@ -419,7 +419,7 @@ namespace Universal.EBI.Reports.API.DataSets {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public DT_CLASS_CHILDRow AddDT_CLASS_CHILDRow(string Id, string FullName, string BurthDate, string GenderType, string StartTimeMeeting, string EndTimeMeeting, string ResponsibleId) {
+            public DT_CLASS_CHILDRow AddDT_CLASS_CHILDRow(int Id, string FullName, string BurthDate, string GenderType, string StartTimeMeeting, string EndTimeMeeting, int ResponsibleId) {
                 DT_CLASS_CHILDRow rowDT_CLASS_CHILDRow = ((DT_CLASS_CHILDRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         Id,
@@ -463,7 +463,7 @@ namespace Universal.EBI.Reports.API.DataSets {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             private void InitClass() {
-                this.columnId = new global::System.Data.DataColumn("Id", typeof(string), null, global::System.Data.MappingType.Element);
+                this.columnId = new global::System.Data.DataColumn("Id", typeof(int), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnId);
                 this.columnFullName = new global::System.Data.DataColumn("FullName", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnFullName);
@@ -475,7 +475,7 @@ namespace Universal.EBI.Reports.API.DataSets {
                 base.Columns.Add(this.columnStartTimeMeeting);
                 this.columnEndTimeMeeting = new global::System.Data.DataColumn("EndTimeMeeting", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnEndTimeMeeting);
-                this.columnResponsibleId = new global::System.Data.DataColumn("ResponsibleId", typeof(string), null, global::System.Data.MappingType.Element);
+                this.columnResponsibleId = new global::System.Data.DataColumn("ResponsibleId", typeof(int), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnResponsibleId);
             }
             
@@ -619,10 +619,10 @@ namespace Universal.EBI.Reports.API.DataSets {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public string Id {
+            public int Id {
                 get {
                     try {
-                        return ((string)(this[this.tableDT_CLASS_CHILD.IdColumn]));
+                        return ((int)(this[this.tableDT_CLASS_CHILD.IdColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
                         throw new global::System.Data.StrongTypingException("O valor da coluna \'Id\' na tabela \'DT_CLASS_CHILD\' é DBNull.", e);
@@ -715,10 +715,10 @@ namespace Universal.EBI.Reports.API.DataSets {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public string ResponsibleId {
+            public int ResponsibleId {
                 get {
                     try {
-                        return ((string)(this[this.tableDT_CLASS_CHILD.ResponsibleIdColumn]));
+                        return ((int)(this[this.tableDT_CLASS_CHILD.ResponsibleIdColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
                         throw new global::System.Data.StrongTypingException("O valor da coluna \'ResponsibleId\' na tabela \'DT_CLASS_CHILD\' é DBNull.", e);

@@ -6,8 +6,7 @@ namespace Universal.EBI.Classrooms.API.Models
     public class Responsible : Person
     {   
         public KinshipType KinshipType { get; set; }        
-        public ICollection<Phone> Phones { get; set; }
-        //public ICollection<Child> Childs { get; set; }
+        public ICollection<Phone> Phones { get; set; }        
 
 
         public Responsible()

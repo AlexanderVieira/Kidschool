@@ -11,8 +11,10 @@ namespace Universal.EBI.Classrooms.API.Application.DTOs
         public Guid Id { get; set; }
         public string Region { get; set; }
         public string Church { get; set; }
-        public int ClassroomType { get; set; }      
+        public string ClassroomType { get; set; }      
         public string MeetingTime { get; set; }
+        public DateTime? CreatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
         public EducatorDto Educator { get; set; }
         public Dictionary<string, ChildDto> Childs { get; set; }
         public bool Actived { get; set; }
@@ -30,7 +32,7 @@ namespace Universal.EBI.Classrooms.API.Application.DTOs
                 Educator = new Educator(),
                 Church = classroomDto.Church,
                 Region = classroomDto.Region,
-                ClassroomType = (ClassroomType)classroomDto.ClassroomType,
+                ClassroomType = (ClassroomType)Enum.Parse(typeof(ClassroomType), classroomDto.ClassroomType, true),                
                 Actived = classroomDto.Actived,
                 MeetingTime = classroomDto.MeetingTime,
                 Childs = new List<Child>() 

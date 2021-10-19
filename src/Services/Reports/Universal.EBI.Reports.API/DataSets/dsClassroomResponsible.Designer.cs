@@ -399,7 +399,7 @@ namespace Universal.EBI.Reports.API.DataSets {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public DT_CLASSROOM_RESPONSIBLERow AddDT_CLASSROOM_RESPONSIBLERow(string FullName, string Cpf, string KinshipType, string PhoneNumber, string ResponsibleId) {
+            public DT_CLASSROOM_RESPONSIBLERow AddDT_CLASSROOM_RESPONSIBLERow(string FullName, string Cpf, string KinshipType, string PhoneNumber, int ResponsibleId) {
                 DT_CLASSROOM_RESPONSIBLERow rowDT_CLASSROOM_RESPONSIBLERow = ((DT_CLASSROOM_RESPONSIBLERow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         FullName,
@@ -447,7 +447,7 @@ namespace Universal.EBI.Reports.API.DataSets {
                 base.Columns.Add(this.columnKinshipType);
                 this.columnPhoneNumber = new global::System.Data.DataColumn("PhoneNumber", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnPhoneNumber);
-                this.columnResponsibleId = new global::System.Data.DataColumn("ResponsibleId", typeof(string), null, global::System.Data.MappingType.Element);
+                this.columnResponsibleId = new global::System.Data.DataColumn("ResponsibleId", typeof(int), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnResponsibleId);
             }
             
@@ -655,10 +655,10 @@ namespace Universal.EBI.Reports.API.DataSets {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public string ResponsibleId {
+            public int ResponsibleId {
                 get {
                     try {
-                        return ((string)(this[this.tableDT_CLASSROOM_RESPONSIBLE.ResponsibleIdColumn]));
+                        return ((int)(this[this.tableDT_CLASSROOM_RESPONSIBLE.ResponsibleIdColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
                         throw new global::System.Data.StrongTypingException("O valor da coluna \'ResponsibleId\' na tabela \'DT_CLASSROOM_RESPONSIBLE\' é DBNull.", e);

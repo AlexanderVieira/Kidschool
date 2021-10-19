@@ -11,7 +11,9 @@ using Universal.EBI.Core.Messages;
 
 namespace Universal.EBI.Classrooms.API.Application.Commands
 {
-    public class DeleteClassroomCommandHandler : CommandHandler, IRequestHandler<DeleteClassroomCommand, ValidationResult>, IRequestHandler<DeleteChildClassroomCommand, ValidationResult>
+    public class DeleteClassroomCommandHandler : CommandHandler, 
+                                                 IRequestHandler<DeleteClassroomCommand, ValidationResult>, 
+                                                 IRequestHandler<DeleteChildClassroomCommand, ValidationResult>
     {
         private readonly IClassroomRepository _ClassroomRepository;
         private readonly IClassroomQueries _ClassroomQueries;
@@ -53,7 +55,7 @@ namespace Universal.EBI.Classrooms.API.Application.Commands
 
             if (existingClassroom == null)
             {
-                AddError("Criança não encontrado.");
+                AddError("Criança não encontrada.");
                 return ValidationResult;
             }
             var dictinary = existingClassroom.Childs.ToDictionary(c => c.Id.ToString());

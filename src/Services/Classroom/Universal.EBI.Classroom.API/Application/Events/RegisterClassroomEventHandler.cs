@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Universal.EBI.Classrooms.API.Integration;
+using Universal.EBI.Core.Integration.Classroom;
 using Universal.EBI.MessageBus.Interfaces;
 
 namespace Universal.EBI.Classrooms.API.Application.Events
@@ -17,8 +18,19 @@ namespace Universal.EBI.Classrooms.API.Application.Events
 
         public Task Handle(RegisteredClassroomEvent notification, CancellationToken cancellationToken)
         {
-            return Task.CompletedTask;
-            //return _bus.PublishAsync(new RegisteredClassroomIntegrationEvent(notification.Id));
+            //return Task.CompletedTask;
+            return _bus.PublishAsync(new RegisteredClassroomIntegrationEvent
+            {
+                AggregateId = notification.Id,
+                Educator = notification.Educator,
+                Church = notification.Church,
+                Region = notification.Region,
+                ClassroomType = notification.ClassroomType.ToString(),
+                Actived = notification.Actived,
+                MeetingTime = notification.MeetingTime,
+                Childs = notification.Childs
+
+            });
         }
     }
 }

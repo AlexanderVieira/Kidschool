@@ -33,7 +33,7 @@ namespace Universal.EBI.Classrooms.API.Application.Commands
                 Educator = new EducatorDto(),
                 Church = message.Church,
                 Region = message.Region,
-                ClassroomType = (int)message.ClassroomType,
+                ClassroomType = message.ClassroomType.ToString(),
                 Actived = message.Actived,
                 MeetingTime = message.MeetingTime,
                 Childs = message.Childs.Length > 0 ? message.Childs.ToDictionary(c => c.Id.ToString()) : new Dictionary<string, ChildDto>()
