@@ -3,6 +3,7 @@ using Universal.EBI.Responsibles.API.Models.Interfaces;
 using System.Threading.Tasks;
 using System;
 using Universal.EBI.Core.Data.Interfaces;
+using Universal.EBI.Core.DomainObjects.Models;
 
 namespace Universal.EBI.Responsibles.API.Data.Repository
 {
@@ -17,12 +18,12 @@ namespace Universal.EBI.Responsibles.API.Data.Repository
             _context = context;
         }
 
-        public async Task CreateResponsible(Models.Responsible responsible)
+        public async Task CreateResponsible(Responsible responsible)
         {
             await _context.Responsibles.InsertOneAsync(responsible);
         }
 
-        public async Task<bool> UpdateResponsible(Models.Responsible responsible)
+        public async Task<bool> UpdateResponsible(Responsible responsible)
         {
             var updateResult = await _context
                                         .Responsibles
@@ -33,7 +34,7 @@ namespace Universal.EBI.Responsibles.API.Data.Repository
 
         public async Task<bool> DeleteResponsible(Guid id)
         {
-            FilterDefinition<Models.Responsible> filter = Builders<Models.Responsible>.Filter.Eq(r => r.Id, id);
+            FilterDefinition<Responsible> filter = Builders<Responsible>.Filter.Eq(r => r.Id, id);
             DeleteResult deleteResult = await _context
                                                     .Responsibles
                                                     .DeleteOneAsync(filter);

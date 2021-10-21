@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Universal.EBI.Core.DomainObjects;
-using Universal.EBI.Reports.API.Models;
+using Universal.EBI.Core.DomainObjects.Models;
 
 namespace Universal.EBI.Reports.API.Data.Mapping
 {
@@ -21,22 +21,17 @@ namespace Universal.EBI.Reports.API.Data.Mapping
 
             builder.Property(c => c.FirstName)
                 .IsRequired()
-                .HasColumnType("varchar(250)");
+                .HasColumnType("varchar(250)");            
 
-            builder.Property(c => c.Cpf)
-                //.IsRequired()
+            builder.OwnsOne(c => c.Cpf, tf =>
+            {
+                tf.Property(c => c.Number)
+                .HasConversion<string>(c => c.ToString(), c => new Cpf(c).Number)
+                //.IsRequired()                
                 .HasMaxLength(Cpf.CPF_MAX_LENGTH)
                 .HasColumnName("Cpf")
                 .HasColumnType($"varchar({Cpf.CPF_MAX_LENGTH})");
-
-            //builder.OwnsOne(c => c.Cpf, tf =>
-            //{
-            //    tf.Property(c => c.Number)
-            //    //.IsRequired()                
-            //    .HasMaxLength(Cpf.CPF_MAX_LENGTH)
-            //    .HasColumnName("Cpf")
-            //    .HasColumnType($"varchar({Cpf.CPF_MAX_LENGTH})");
-            //});
+            });
 
             builder.OwnsOne(c => c.Email, tf =>
             {

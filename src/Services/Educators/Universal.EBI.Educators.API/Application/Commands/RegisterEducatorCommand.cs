@@ -1,7 +1,7 @@
 ﻿using System;
+using Universal.EBI.Core.DomainObjects.Models;
 using Universal.EBI.Core.Messages;
 using Universal.EBI.Educators.API.Application.Validations;
-using Universal.EBI.Educators.API.Models;
 
 namespace Universal.EBI.Educators.API.Application.Commands
 {

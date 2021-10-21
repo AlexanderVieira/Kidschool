@@ -7,12 +7,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using Universal.EBI.Responsibles.API.Application.Events;
 using Universal.EBI.Responsibles.API.Application.Queries.Interfaces;
-using Universal.EBI.Responsibles.API.Models;
 using Universal.EBI.Responsibles.API.Models.Interfaces;
 using Universal.EBI.Core.Messages;
 using Universal.EBI.Core.Utils;
 using Universal.EBI.MessageBus.Interfaces;
-using Universal.EBI.Core.Integration.Responsible;
+using Universal.EBI.Core.Messages.Integration.Responsible;
+using Universal.EBI.Core.DomainObjects.Models;
+using Universal.EBI.Core.DomainObjects.Models.Enums;
 
 namespace Universal.EBI.Responsibles.API.Application.Commands
 {
@@ -33,7 +34,7 @@ namespace Universal.EBI.Responsibles.API.Application.Commands
         {
             if (!message.IsValid()) return message.ValidationResult;
 
-            var responsible = new Models.Responsible
+            var responsible = new Responsible
             {
                 Id = message.Id,
                 FirstName = message.FirstName,
@@ -58,7 +59,7 @@ namespace Universal.EBI.Responsibles.API.Application.Commands
                 KinshipType = (KinshipType)Enum.Parse(typeof(KinshipType), message.Kinship, true),
                 PhotoUrl = message.PhotoUrl,
                 Excluded = message.Excluded,
-                Childs = new List<Child>()              
+                Children = new List<Child>()              
             };
 
             responsible.Address.ResponsibleId = responsible.Id;
@@ -66,7 +67,7 @@ namespace Universal.EBI.Responsibles.API.Application.Commands
             var childsLength = message.Childs.Length;
             for (int i = 0; i < childsLength; i++)
             {                
-                responsible.Childs.Add(new Child { ResponsibleId = responsible.Id });
+                responsible.Children.Add(new Child {  });
             }
 
             var phonesLength = message.Phones.Length;
@@ -108,17 +109,17 @@ namespace Universal.EBI.Responsibles.API.Application.Commands
                 Kinship = responsible.KinshipType.ToString(),
                 PhotoUrl = responsible.PhotoUrl,
                 Excluded = responsible.Excluded,
-                Childs = responsible.Childs.ToArray()
+                Childs = responsible.Children.ToArray()
             });
 
-            var guidIds = new Guid[message.Childs.Length];
+            //var guidIds = new Guid[message.Childs.Length];
 
-            for (int i = 0; i < message.Childs.Length; i++)
-            {
-                guidIds[i] = message.Childs[i].Id;
-            }
+            //for (int i = 0; i < message.Childs.Length; i++)
+            //{
+            //    guidIds[i] = message.Childs[i].Id;
+            //}
 
-            await _bus.PublishAsync(new RegisteredResponsibleIntegrationBaseEvent { Id = responsible.Id, ChildIds = guidIds });            
+            await _bus.PublishAsync(new RegisteredResponsibleIntegrationEvent { Id = responsible.Id });            
 
             return await PersistData(_responsibleRepository.UnitOfWork, success);
         }

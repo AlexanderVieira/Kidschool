@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Universal.EBI.Educators.API.Models;
+using Universal.EBI.Core.DomainObjects.Models;
 
 namespace Universal.EBI.Educators.API.Data.Mapping
 {

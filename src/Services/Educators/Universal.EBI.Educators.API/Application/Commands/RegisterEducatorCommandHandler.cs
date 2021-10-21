@@ -5,10 +5,10 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Universal.EBI.Core.DomainObjects;
+using Universal.EBI.Core.DomainObjects.Models;
+using Universal.EBI.Core.DomainObjects.Models.Enums;
 using Universal.EBI.Core.Messages;
 using Universal.EBI.Educators.API.Application.Events;
-using Universal.EBI.Educators.API.Models;
-using Universal.EBI.Educators.API.Models.Enums;
 using Universal.EBI.Educators.API.Models.Interfaces;
 
 namespace Universal.EBI.Educators.API.Application.Commands
@@ -36,7 +36,7 @@ namespace Universal.EBI.Educators.API.Application.Commands
                 Phones = message.Phones,
                 Address = message.Address,
                 BirthDate = DateTime.Parse(message.BirthDate),
-                Gender = (Gender)Enum.Parse(typeof(Gender), message.Gender, true),
+                GenderType = (GenderType)Enum.Parse(typeof(GenderType), message.Gender, true),
                 FunctionType = (FunctionType)Enum.Parse(typeof(FunctionType), message.Function, true),
                 PhotoUrl = message.PhotoUrl,
                 Excluded = message.Excluded
@@ -48,14 +48,17 @@ namespace Universal.EBI.Educators.API.Application.Commands
                 educator.Phones.ToList()[i].EducatorId = educator.Id;                               
             }
 
-            educator.Address = new Address(educator.Address.PublicPlace,
-                                           educator.Address.Number,
-                                           educator.Address.Complement,
-                                           educator.Address.District,
-                                           educator.Address.ZipCode,
-                                           educator.Address.City,
-                                           educator.Address.State,
-                                           educator.Id);
+            educator.Address = new Address 
+            { 
+                PublicPlace = educator.Address.PublicPlace,
+                Number = educator.Address.Number,
+                Complement = educator.Address.Complement,
+                District = educator.Address.District,
+                ZipCode = educator.Address.ZipCode,
+                City = educator.Address.City,
+                State = educator.Address.State,
+                EducatorId = educator.Id
+            };
 
             var existingCustomer = await _educatorRepository.GetEducatorByCpf(educator.Cpf.Number);
 

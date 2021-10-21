@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Universal.EBI.Core.Utils;
 using Universal.EBI.MessageBus.Configuration;
+using Universal.EBI.Reports.API.Services;
 
 namespace Universal.EBI.Reports.API.Configurations
 {
@@ -9,7 +10,8 @@ namespace Universal.EBI.Reports.API.Configurations
     {
         public static void AddMessageBusConfiguration(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddMessageBus(configuration.GetMessageQueueConnection("MessageBus"));                    
+            services.AddMessageBus(configuration.GetMessageQueueConnection("MessageBus"))
+                            .AddHostedService<RegisterClassroomReportIntegrationHandler>();
         }
     }
 }

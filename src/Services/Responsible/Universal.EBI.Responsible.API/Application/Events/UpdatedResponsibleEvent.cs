@@ -1,6 +1,7 @@
 ﻿using System;
 using Universal.EBI.Responsibles.API.Models;
 using Universal.EBI.Core.Messages;
+using Universal.EBI.Core.DomainObjects.Models;
 
 namespace Universal.EBI.Responsibles.API.Application.Events
 {

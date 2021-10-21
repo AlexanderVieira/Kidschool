@@ -2,6 +2,7 @@
 using System;
 using System.Net;
 using System.Threading.Tasks;
+using Universal.EBI.Core.DomainObjects.Models;
 using Universal.EBI.Core.Mediator.Interfaces;
 using Universal.EBI.Educators.API.Application.Commands;
 using Universal.EBI.Educators.API.Application.Queries.Interfaces;

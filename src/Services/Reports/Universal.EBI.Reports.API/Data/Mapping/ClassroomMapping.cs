@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Universal.EBI.Reports.API.Models;
+using Universal.EBI.Core.DomainObjects.Models;
 
 namespace Universal.EBI.Reports.API.Data.Mapping
 {
@@ -25,13 +25,7 @@ namespace Universal.EBI.Reports.API.Data.Mapping
             builder.HasOne(e => e.Educator)
                 .WithOne(c => c.Classroom)
                 .HasPrincipalKey<Classroom>(c => c.Id)
-                .HasForeignKey<Educator>(e => e.ClassroomId);
-
-            //builder.HasMany(cl => cl.Children)
-            //    .WithOne(c => c.Classroom)
-            //    .HasForeignKey(c => c.ClassroomId)
-            //    .HasPrincipalKey(cl => cl.Id)
-            //    .OnDelete(DeleteBehavior.Restrict);
+                .HasForeignKey<Educator>(e => e.ClassroomId);           
 
             builder.ToTable("Classrooms");
         }

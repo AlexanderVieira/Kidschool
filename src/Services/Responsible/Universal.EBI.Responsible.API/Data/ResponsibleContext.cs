@@ -7,6 +7,7 @@ using Universal.EBI.Responsibles.API.Extensions;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
+using Universal.EBI.Core.DomainObjects.Models;
 
 namespace Universal.EBI.Responsibles.API.Data
 {
@@ -23,28 +24,12 @@ namespace Universal.EBI.Responsibles.API.Data
 
             _mediatorHandler = mediatorHandler;
 
-            if (!BsonClassMap.IsClassMapRegistered(typeof(Models.Responsible)))
+            if (!BsonClassMap.IsClassMapRegistered(typeof(Responsible)))
             {
-                BsonClassMap.RegisterClassMap<Models.Responsible>(map =>
+                BsonClassMap.RegisterClassMap<Responsible>(map =>
                 {
-                    //cm.MapIdMember(m => m.Id).SetOrder(0);
-                    //cm.MapMember(m => m.FirstName).SetOrder(1);
-                    //cm.MapMember(m => m.LastName).SetOrder(2);
-                    //cm.MapMember(m => m.FullName).SetOrder(3);
-                    //cm.MapMember(m => m.Excluded).SetOrder(4);
-                    //cm.MapMember(m => m.Email).SetOrder(5);
-                    //cm.MapMember(m => m.Cpf).SetOrder(6);
-                    //cm.MapMember(m => m.PhotoUrl).SetOrder(7);
-                    //cm.MapMember(m => m.BirthDate).SetOrder(8);
-                    //map.MapMember(m => m.KinshipType).SetOrder(9);
-                    //cm.MapMember(m => m.GenderType).SetOrder(10);
-                    //cm.MapMember(m => m.Address).SetOrder(11);                    
-                    //cm.MapMember(m => m.Phones).SetOrder(12);
-                    //map.MapMember(m => m.Childs).SetOrder(13);
-
                     map.AutoMap();
-                    map.MapProperty(x => x.Id).SetSerializer(new GuidSerializer(BsonType.String));
-                    //map.MapProperty(x => x.Notifications).SetSerializer(new BsonArraySerializer());
+                    map.MapProperty(x => x.Id).SetSerializer(new GuidSerializer(BsonType.String));                    
 
                 });
             }
@@ -52,11 +37,11 @@ namespace Universal.EBI.Responsibles.API.Data
             var client = new MongoClient(configuration.GetValue<string>("DatabaseSettings:ConnectionString"));
             var database = client.GetDatabase(configuration.GetValue<string>("DatabaseSettings:DatabaseName"));
 
-            Responsibles = database.GetCollection<Models.Responsible>(configuration.GetValue<string>("DatabaseSettings:CollectionName"));
+            Responsibles = database.GetCollection<Responsible>(configuration.GetValue<string>("DatabaseSettings:CollectionName"));
             ResponsibleContextSeed.SeedData(Responsibles);
         }
 
-        public IMongoCollection<Models.Responsible> Responsibles { get; }
+        public IMongoCollection<Responsible> Responsibles { get; }
 
         public async Task<bool> Commit()
         {

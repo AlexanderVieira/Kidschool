@@ -7,7 +7,7 @@ using Universal.EBI.Classrooms.API.Extensions;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
-using Universal.EBI.Classrooms.API.Models;
+using Universal.EBI.Core.DomainObjects.Models;
 
 namespace Universal.EBI.Classrooms.API.Data
 {

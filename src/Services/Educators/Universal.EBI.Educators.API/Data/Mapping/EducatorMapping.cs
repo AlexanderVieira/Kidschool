@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Universal.EBI.Core.DomainObjects;
-using Universal.EBI.Educators.API.Models;
+using Universal.EBI.Core.DomainObjects.Models;
 
 namespace Universal.EBI.Educators.API.Data.Mapping
 {
@@ -23,6 +23,7 @@ namespace Universal.EBI.Educators.API.Data.Mapping
             {
                 tf.Property(c => c.Number)
                 .IsRequired()
+                .HasConversion<string>(c => c.ToString(), c => new Cpf(c).Number)
                 .HasMaxLength(Cpf.CPF_MAX_LENGTH)
                 .HasColumnName("Cpf")
                 .HasColumnType($"varchar({Cpf.CPF_MAX_LENGTH})");

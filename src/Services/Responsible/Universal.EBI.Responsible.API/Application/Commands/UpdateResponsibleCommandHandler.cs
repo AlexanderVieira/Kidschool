@@ -5,11 +5,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using Universal.EBI.Responsibles.API.Application.Events;
 using Universal.EBI.Responsibles.API.Application.Queries.Interfaces;
-using Universal.EBI.Responsibles.API.Models;
 using Universal.EBI.Responsibles.API.Models.Interfaces;
-using Universal.EBI.Core.DomainObjects;
 using Universal.EBI.Core.Messages;
 using Universal.EBI.Core.Utils;
+using Universal.EBI.Core.DomainObjects.Models.Enums;
 
 namespace Universal.EBI.Responsibles.API.Application.Commands
 {
@@ -42,7 +41,7 @@ namespace Universal.EBI.Responsibles.API.Application.Commands
             existingChild.KinshipType = (KinshipType)Enum.Parse(typeof(KinshipType), message.Kinship, true);
             existingChild.PhotoUrl = message.PhotoUrl;
             existingChild.Excluded = message.Excluded;
-            existingChild.Childs = message.Childs;
+            existingChild.Children = message.Childs;
 
             var success = await _responsibleRepository.UpdateResponsible(existingChild);
 

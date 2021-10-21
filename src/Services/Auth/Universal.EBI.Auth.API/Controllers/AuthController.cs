@@ -4,9 +4,8 @@ using System;
 using System.Threading.Tasks;
 using Universal.EBI.Auth.API.Models;
 using Universal.EBI.Auth.API.Services;
-using Universal.EBI.Core.Integration.Educator;
 using Universal.EBI.Core.Messages;
-using Universal.EBI.Core.Messages.Integration;
+using Universal.EBI.Core.Messages.Integration.Educator;
 using Universal.EBI.MessageBus.Interfaces;
 using Universal.EBI.WebAPI.Core.Controllers;
 
@@ -109,7 +108,7 @@ namespace Universal.EBI.Auth.API.Controllers
         private async Task<ResponseMessage> EducatorRecord(UserRegister userRegister)
         {
             var user = await _authenticationService.UserManager.FindByEmailAsync(userRegister.Email);
-            var registeredUser = new RegisteredEducatorIntegrationBaseEvent
+            var registeredUser = new RegisteredEducatorIntegrationEvent
             {
                 AggregateId = Guid.Parse(user.Id),
                 Id = Guid.Parse(user.Id),
@@ -126,7 +125,7 @@ namespace Universal.EBI.Auth.API.Controllers
 
             try
             {
-                return await _bus.RequestAsync<RegisteredEducatorIntegrationBaseEvent, ResponseMessage>(registeredUser);
+                return await _bus.RequestAsync<RegisteredEducatorIntegrationEvent, ResponseMessage>(registeredUser);
             }
             catch
             {

@@ -15,6 +15,10 @@ namespace Universal.EBI.Educators.API.Models
         public string PhotoUrl { get; set; }
         public Gender? Gender { get; set; }
         public Address Address { get; set; }
+        public string CreatedBy { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public string LastModifiedBy { get; set; }
+        public DateTime? LastModifiedDate { get; set; }
 
     }
 }

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Universal.EBI.Classrooms.API.Models;
-using Universal.EBI.Classrooms.API.Models.Enums;
+using Universal.EBI.Core.DomainObjects.Models;
+using Universal.EBI.Core.DomainObjects.Models.Enums;
 using Universal.EBI.Core.Utils;
 
 namespace Universal.EBI.Classrooms.API.Application.DTOs
@@ -12,6 +12,7 @@ namespace Universal.EBI.Classrooms.API.Application.DTOs
         public string HoraryOfEntry { get; set; }
         public string HoraryOfExit { get; set; }        
         public string AgeGroupType { get; set; }
+        public AddressDto Address { get; set; }
         public List<PhoneDto> Phones { get; set; }
         public List<ResponsibleDto> Responsibles { get; set; }
 
@@ -26,17 +27,17 @@ namespace Universal.EBI.Classrooms.API.Application.DTOs
                 Email = ValidationUtils.ValidateRequestEmail(child.Email.Address),
                 Cpf = ValidationUtils.ValidateRequestCpf(child.Cpf.Number),
                 Phones = new List<PhoneDto>(),
-                Address = new AddressDto(), //RegisterChildValidation.ValidateRequestAddress(message.Address),
-                BirthDate = child.BirthDate.ToShortDateString(), //DateTime.Parse(child.BirthDate).Date,
-                GenderType = child.GenderType.ToString(), //(GenderType)Enum.Parse(typeof(GenderType), message.Gender, true),
-                AgeGroupType = child.AgeGroupType.ToString(), //(AgeGroupType)Enum.Parse(typeof(AgeGroupType), message.AgeGroup, true),
+                Address = new AddressDto(), 
+                BirthDate = child.BirthDate.ToShortDateString(), 
+                GenderType = child.GenderType.ToString(), 
+                AgeGroupType = child.AgeGroupType.ToString(),
                 PhotoUrl = child.PhotoUrl,
                 Excluded = child.Excluded,
                 Responsibles = new List<ResponsibleDto>(),
                 HoraryOfEntry = child.HoraryOfEntry,
                 HoraryOfExit = child.HoraryOfExit,
-                CreatedAt = child.CreatedAt,
-                UpdatedAt = child.UpdatedAt
+                CreatedDate = child.CreatedDate.ToShortDateString(),
+                LastModifiedDate = child.LastModifiedDate.Value.ToShortDateString()
             };
 
             childDto.Address = new AddressDto
@@ -49,7 +50,7 @@ namespace Universal.EBI.Classrooms.API.Application.DTOs
                 City = child.Address.City,
                 State = child.Address.State,
                 ZipCode = child.Address.ZipCode,
-                ForeingKeyId = child.Address.ForeingKeyId
+                ForeingKeyId = child.Address.ChildId
             };
 
             foreach (var phone in child.Phones)
@@ -59,7 +60,7 @@ namespace Universal.EBI.Classrooms.API.Application.DTOs
                     Id = phone.Id,
                     Number = phone.Number, 
                     PhoneType = phone.PhoneType.ToString(),
-                    ForeingKeyId = phone.ForeingKeyId
+                    ForeingKeyId = phone.ChildId
                 });
             }
 
@@ -95,7 +96,7 @@ namespace Universal.EBI.Classrooms.API.Application.DTOs
                     City = responsible.Address.City,
                     State = responsible.Address.State,
                     ZipCode = responsible.Address.ZipCode,
-                    ForeingKeyId = responsible.Address.ForeingKeyId
+                    ForeingKeyId = responsible.Address.ResponsibleId
                 };
 
                 foreach (var phone in childDto.Responsibles[j++].Phones)
@@ -126,7 +127,7 @@ namespace Universal.EBI.Classrooms.API.Application.DTOs
                 Email = ValidationUtils.ValidateRequestEmail(childDto.Email.Address),
                 Cpf = ValidationUtils.ValidateRequestCpf(childDto.Cpf.Number),
                 Phones = new List<Phone>(),
-                Address = new Address(), //RegisterChildValidation.ValidateRequestAddress(message.Address),
+                Address = new Address(),
                 BirthDate = DateTime.Parse(childDto.BirthDate).Date,
                 GenderType = (GenderType)Enum.Parse(typeof(GenderType), childDto.GenderType, true),
                 AgeGroupType = (AgeGroupType)Enum.Parse(typeof(AgeGroupType), childDto.AgeGroupType, true),
@@ -135,8 +136,8 @@ namespace Universal.EBI.Classrooms.API.Application.DTOs
                 Responsibles = new List<Responsible>(),
                 HoraryOfEntry = childDto.HoraryOfEntry,
                 HoraryOfExit = childDto.HoraryOfEntry,
-                CreatedAt = childDto.CreatedAt,
-                UpdatedAt = childDto.UpdatedAt
+                CreatedDate = DateTime.Parse(childDto.CreatedDate),
+                LastModifiedDate = DateTime.Parse(childDto.LastModifiedDate)
             };
 
             child.Address = new Address
@@ -149,7 +150,7 @@ namespace Universal.EBI.Classrooms.API.Application.DTOs
                 City = childDto.Address.City,
                 State = childDto.Address.State,
                 ZipCode = childDto.Address.ZipCode,
-                ForeingKeyId = childDto.Address.ForeingKeyId
+                ChildId = childDto.Address.ForeingKeyId
             };
 
             foreach (var phone in childDto.Phones)
@@ -159,7 +160,7 @@ namespace Universal.EBI.Classrooms.API.Application.DTOs
                     Id = phone.Id,
                     Number = phone.Number,
                     PhoneType = (PhoneType)Enum.Parse(typeof(PhoneType), phone.PhoneType, true),                    
-                    ForeingKeyId = phone.ForeingKeyId
+                    ChildId = phone.ForeingKeyId
                 });
             }
                         
@@ -181,7 +182,7 @@ namespace Universal.EBI.Classrooms.API.Application.DTOs
                                 Id = responsibleDto.Phones[j].Id, 
                                 Number = responsibleDto.Phones[j].Number, 
                                 PhoneType = (PhoneType)Enum.Parse(typeof(PhoneType), responsibleDto.Phones[j].PhoneType, true),
-                                ForeingKeyId = responsibleDto.Phones[j].ForeingKeyId 
+                                ResponsibleId = responsibleDto.Phones[j].ForeingKeyId 
                           }                  
                     },
                     Address = new Address(),
@@ -203,7 +204,7 @@ namespace Universal.EBI.Classrooms.API.Application.DTOs
                     City = responsibleDto.Address.City,
                     State = responsibleDto.Address.State,
                     ZipCode = responsibleDto.Address.ZipCode,
-                    ForeingKeyId = responsibleDto.Address.ForeingKeyId
+                    ResponsibleId = responsibleDto.Address.ForeingKeyId
                 };
 
                 j++;

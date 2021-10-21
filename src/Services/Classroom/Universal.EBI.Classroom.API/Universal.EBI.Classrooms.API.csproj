@@ -6,6 +6,23 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Models\Enums\**" />
+    <Content Remove="Models\Enums\**" />
+    <EmbeddedResource Remove="Models\Enums\**" />
+    <None Remove="Models\Enums\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Models\Address.cs" />
+    <Compile Remove="Models\Child.cs" />
+    <Compile Remove="Models\Classroom.cs" />
+    <Compile Remove="Models\Educator.cs" />
+    <Compile Remove="Models\Person.cs" />
+    <Compile Remove="Models\Phone.cs" />
+    <Compile Remove="Models\Responsible.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
     <PackageReference Include="AspNetCore.HealthChecks.MongoDb" Version="5.0.1" />
     <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="5.0.1" />

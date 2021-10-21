@@ -6,6 +6,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Models\Address.cs" />
+    <Compile Remove="Models\Child.cs" />
+    <Compile Remove="Models\Phone.cs" />
+    <Compile Remove="Models\PhoneType.cs" />
+    <Compile Remove="Models\Responsible.cs" />
+    <Compile Remove="Models\TEntity.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
     <PackageReference Include="AspNetCore.HealthChecks.MongoDb" Version="5.0.1" />
     <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="5.0.1" />

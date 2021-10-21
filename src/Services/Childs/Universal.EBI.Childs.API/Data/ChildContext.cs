@@ -1,17 +1,13 @@
 ﻿using System.Threading.Tasks;
 using Universal.EBI.Core.Mediator.Interfaces;
-using Universal.EBI.Childs.API.Models;
 using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
 using Universal.EBI.Childs.API.Models.Interfaces;
 using Universal.EBI.Childs.API.Extensions;
-using System;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
-using Universal.EBI.Core.Data.Interfaces;
-using Universal.EBI.Core.Messages;
-using System.Collections;
+using Universal.EBI.Core.DomainObjects.Models;
 
 namespace Universal.EBI.Childs.API.Data
 {

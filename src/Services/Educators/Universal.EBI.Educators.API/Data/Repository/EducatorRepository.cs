@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using System;
 using System.Data.Common;
+using Universal.EBI.Core.DomainObjects.Models;
 
 namespace Universal.EBI.Educators.API.Data.Repository
 {

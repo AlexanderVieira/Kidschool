@@ -5,9 +5,9 @@ using FluentValidation.Results;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Universal.EBI.Classrooms.API.Application.Commands;
-using Universal.EBI.Core.Integration.Classroom;
 using Universal.EBI.Core.Mediator.Interfaces;
 using Universal.EBI.Core.Messages;
+using Universal.EBI.Core.Messages.Integration.Classroom;
 using Universal.EBI.MessageBus.Interfaces;
 
 namespace Universal.EBI.Classrooms.API.Services

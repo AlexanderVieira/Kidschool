@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Threading.Tasks;
 using Universal.EBI.Core.Data.Interfaces;
+using Universal.EBI.Core.DomainObjects.Models;
 
 namespace Universal.EBI.Reports.API.Models.Interfaces
 {

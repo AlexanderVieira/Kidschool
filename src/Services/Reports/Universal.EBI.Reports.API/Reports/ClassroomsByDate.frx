@@ -1,21 +1,44 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="10/17/2021 15:58:24" ReportInfo.Modified="10/18/2021 23:02:40" ReportInfo.CreatorVersion="2021.4.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="10/17/2021 15:58:24" ReportInfo.Modified="10/20/2021 02:37:24" ReportInfo.CreatorVersion="2021.4.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqJUrEa/KIcQqhhcfnlqC6PKK8MheP9IEu4gFWCPXnWzFgLjPP39mqhm6WKckRi90qfWFHDc7eZn2VVrd1T5h+haVIBlnpSJoEOiqWW8hL6mBTg+bU+eG0i30pbf4s8RY1faRVU1d2qydSXK39yxg58cyVH6/8rYRJoWi9P7UZZQOF1ZoZcptIswxqIVUhg2HystbNFiCM5NXtEcd4+AlXqg==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqJUrEa/KIcQqhhcfnlqC6PKK8MheP9IEu4gFWCPXnWzFgLjPP39mqhm6WKckRi90qfWFHDc7eZn2VVrd1T5h+haVIBlnpSJoEOiqWW8hL6mBTg+bU+eG0i30pbf4s8RY1faRVU1d2qydSXK39yxg58cyVH6/8rYRJoWi9P7UZZQOF1ZoZcptIswxqIVUhg2Hy8GlMA6BgpRNkYWoFa+Syyg==">
+      <TableDataSource Name="Addresses" DataType="System.Int32" Enabled="true" TableName="Addresses">
+        <Column Name="Id" DataType="System.Guid"/>
+        <Column Name="PublicPlace" DataType="System.String"/>
+        <Column Name="Number" DataType="System.String"/>
+        <Column Name="Complement" DataType="System.String"/>
+        <Column Name="District" DataType="System.String"/>
+        <Column Name="ZipCode" DataType="System.String"/>
+        <Column Name="City" DataType="System.String"/>
+        <Column Name="State" DataType="System.String"/>
+        <Column Name="ChildId" DataType="System.Guid"/>
+        <Column Name="ResponsibleId" DataType="System.Guid"/>
+        <Column Name="EducatorId" DataType="System.Guid"/>
+      </TableDataSource>
+      <TableDataSource Name="Phones" DataType="System.Int32" Enabled="true" TableName="Phones">
+        <Column Name="Id" DataType="System.Guid"/>
+        <Column Name="Number" DataType="System.String"/>
+        <Column Name="PhoneType" DataType="System.String"/>
+        <Column Name="ChildId" DataType="System.Guid"/>
+        <Column Name="ResponsibleId" DataType="System.Guid"/>
+        <Column Name="EducatorId" DataType="System.Guid"/>
+      </TableDataSource>
       <TableDataSource Name="Classrooms" DataType="System.Int32" Enabled="true" TableName="Classrooms">
         <Column Name="Id" DataType="System.Guid"/>
         <Column Name="Region" DataType="System.String"/>
         <Column Name="Church" DataType="System.String"/>
-        <Column Name="ClassroomType" DataType="System.Int32"/>
+        <Column Name="ClassroomType" DataType="System.String"/>
         <Column Name="Lunch" DataType="System.String"/>
         <Column Name="MeetingTime" DataType="System.String"/>
-        <Column Name="CreatedAt" DataType="System.DateTime"/>
-        <Column Name="UpdatedAt" DataType="System.DateTime"/>
         <Column Name="Actived" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="CreatedBy" DataType="System.String"/>
+        <Column Name="CreatedDate" DataType="System.DateTime"/>
+        <Column Name="LastModifiedBy" DataType="System.String"/>
+        <Column Name="LastModifiedDate" DataType="System.DateTime"/>
       </TableDataSource>
       <TableDataSource Name="Responsibles" DataType="System.Int32" Enabled="true" TableName="Responsibles">
         <Column Name="Id" DataType="System.Guid"/>
-        <Column Name="KinshipType" DataType="System.Int32"/>
+        <Column Name="KinshipType" DataType="System.String"/>
         <Column Name="FirstName" DataType="System.String"/>
         <Column Name="LastName" DataType="System.String"/>
         <Column Name="FullName" DataType="System.String"/>
@@ -24,15 +47,17 @@
         <Column Name="Cpf" DataType="System.String"/>
         <Column Name="PhotoUrl" DataType="System.String"/>
         <Column Name="BirthDate" DataType="System.DateTime"/>
-        <Column Name="CreatedAt" DataType="System.DateTime"/>
-        <Column Name="UpdatedAt" DataType="System.DateTime"/>
-        <Column Name="GenderType" DataType="System.Int32"/>
+        <Column Name="GenderType" DataType="System.String"/>
+        <Column Name="CreatedBy" DataType="System.String"/>
+        <Column Name="CreatedDate" DataType="System.DateTime"/>
+        <Column Name="LastModifiedBy" DataType="System.String"/>
+        <Column Name="LastModifiedDate" DataType="System.DateTime"/>
       </TableDataSource>
       <TableDataSource Name="Children" DataType="System.Int32" Enabled="true" TableName="Children">
         <Column Name="Id" DataType="System.Guid"/>
         <Column Name="HoraryOfEntry" DataType="System.String"/>
         <Column Name="HoraryOfExit" DataType="System.String"/>
-        <Column Name="AgeGroupType" DataType="System.Int32"/>
+        <Column Name="AgeGroupType" DataType="System.String"/>
         <Column Name="ClassroomId" DataType="System.Guid"/>
         <Column Name="FirstName" DataType="System.String"/>
         <Column Name="LastName" DataType="System.String"/>
@@ -42,13 +67,15 @@
         <Column Name="Cpf" DataType="System.String"/>
         <Column Name="PhotoUrl" DataType="System.String"/>
         <Column Name="BirthDate" DataType="System.DateTime"/>
-        <Column Name="CreatedAt" DataType="System.DateTime"/>
-        <Column Name="UpdatedAt" DataType="System.DateTime"/>
-        <Column Name="GenderType" DataType="System.Int32"/>
+        <Column Name="GenderType" DataType="System.String"/>
+        <Column Name="CreatedBy" DataType="System.String"/>
+        <Column Name="CreatedDate" DataType="System.DateTime"/>
+        <Column Name="LastModifiedBy" DataType="System.String"/>
+        <Column Name="LastModifiedDate" DataType="System.DateTime"/>
       </TableDataSource>
       <TableDataSource Name="Educators" DataType="System.Int32" Enabled="true" TableName="Educators">
         <Column Name="Id" DataType="System.Guid"/>
-        <Column Name="FunctionType" DataType="System.Int32"/>
+        <Column Name="FunctionType" DataType="System.String"/>
         <Column Name="ClassroomId" DataType="System.Guid"/>
         <Column Name="FirstName" DataType="System.String"/>
         <Column Name="LastName" DataType="System.String"/>
@@ -58,29 +85,22 @@
         <Column Name="Cpf" DataType="System.String"/>
         <Column Name="PhotoUrl" DataType="System.String"/>
         <Column Name="BirthDate" DataType="System.DateTime"/>
-        <Column Name="CreatedAt" DataType="System.DateTime"/>
-        <Column Name="UpdatedAt" DataType="System.DateTime"/>
-        <Column Name="GenderType" DataType="System.Int32"/>
+        <Column Name="GenderType" DataType="System.String"/>
+        <Column Name="CreatedBy" DataType="System.String"/>
+        <Column Name="CreatedDate" DataType="System.DateTime"/>
+        <Column Name="LastModifiedBy" DataType="System.String"/>
+        <Column Name="LastModifiedDate" DataType="System.DateTime"/>
       </TableDataSource>
       <TableDataSource Name="ChildResponsible" DataType="System.Int32" Enabled="true" TableName="ChildResponsible">
         <Column Name="ChildrenId" DataType="System.Guid"/>
         <Column Name="ResponsiblesId" DataType="System.Guid"/>
       </TableDataSource>
-      <TableDataSource Name="Phones" DataType="System.Int32" Enabled="true" TableName="Phones">
-        <Column Name="Id" DataType="System.Guid"/>
-        <Column Name="Number" DataType="System.String"/>
-        <Column Name="PhoneType" DataType="System.Int32"/>
-        <Column Name="ChildId" DataType="System.Guid"/>
-        <Column Name="ResponsibleId" DataType="System.Guid"/>
-        <Column Name="EducatorId" DataType="System.Guid"/>
-      </TableDataSource>
     </MsSqlDataConnection>
     <Relation Name="Educators_Classrooms" ParentDataSource="Educators" ChildDataSource="Classrooms" ParentColumns="ClassroomId" ChildColumns="Id" Enabled="true"/>
-    <Relation Name="Responsibles_Children" ParentDataSource="Responsibles" ChildDataSource="Children" ParentColumns="Id" ChildColumns="Id" Enabled="true"/>
     <Relation Name="Phones_Responsibles" ParentDataSource="null" ChildDataSource="Responsibles" ParentColumns="ResponsibleId" ChildColumns="Id" Enabled="true"/>
     <Relation Name="ChildResponsibles_Children1" ParentDataSource="null" ChildDataSource="Children" ParentColumns="ChildId" ChildColumns="Id" Enabled="true"/>
     <Relation Name="Responsibles_ChildResponsibles" ParentDataSource="Responsibles" ChildDataSource="null" ParentColumns="Id" ChildColumns="ResponsibleId" Enabled="true"/>
-    <Relation Name="Phones_Responsibles1" ParentDataSource="Phones" ChildDataSource="Responsibles" ParentColumns="ResponsibleId" ChildColumns="Id" Enabled="true"/>
+    <Relation Name="Phones_Responsibles" ParentDataSource="Phones" ChildDataSource="Responsibles" ParentColumns="ResponsibleId" ChildColumns="Id" Enabled="true"/>
     <Relation Name="Children_Classrooms" ParentDataSource="Children" ChildDataSource="Classrooms" ParentColumns="ClassroomId" ChildColumns="Id" Enabled="true"/>
     <Relation Name="ChildResponsible_Children" ParentDataSource="ChildResponsible" ChildDataSource="Children" ParentColumns="ChildrenId" ChildColumns="Id" Enabled="true"/>
     <Relation Name="Responsibles_ChildResponsible" ParentDataSource="Responsibles" ChildDataSource="ChildResponsible" ParentColumns="Id" ChildColumns="ResponsiblesId" Enabled="true"/>
@@ -88,16 +108,19 @@
   <ReportPage Name="Page1" Landscape="true" PaperWidth="297" PaperHeight="210" RawPaperSize="9" Watermark.Font="Arial, 60pt">
     <ReportTitleBand Name="ReportTitle1" Width="1047.06" Height="75.6">
       <TextObject Name="Text3" Left="963.9" Top="47.25" Width="94.5" Height="18.9" Text="[Date]" Font="Arial, 10pt"/>
-      <PictureObject Name="Picture1" Left="9.45" Top="9.45" Width="75.6" Height="56.7" ImageFormat="Png" Image="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"/>
+      <PictureObject Name="Picture1" Left="9.45" Top="9.45" Width="75.6" Height="56.7" ImageFormat="Png" Image="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"/>
       <TextObject Name="Text4" Left="85.05" Top="9.45" Width="935.55" Height="37.8" Text=" Este caderno deve ser preenchido TODOS OS DIAS em todas as EBI'S do Rio de Janeiro.  Preencher todos os campos e não abreviar nomes.  Para preencher o CPF do responsável, a educadora precisa VER o documento." HorzAlign="Center" Font="Arial, 10pt, style=Bold" TextFill.Color="Brown"/>
       <TextObject Name="Text5" Left="179.55" Top="47.25" Width="141.75" Height="18.9" Text="[Classrooms.Region]" Font="Arial, 10pt, style=Underline"/>
       <TextObject Name="Text6" Left="113.4" Top="47.25" Width="66.15" Height="18.9" Text="REGIÃO:" Font="Arial, 10pt"/>
       <TextObject Name="Text7" Left="330.75" Top="47.25" Width="66.15" Height="18.9" Text="IGREJA:" Font="Arial, 10pt"/>
       <TextObject Name="Text8" Left="396.9" Top="47.25" Width="160.65" Height="18.9" Text="[Classrooms.Church]" Font="Arial, 10pt, style=Underline"/>
     </ReportTitleBand>
-    <GroupHeaderBand Name="GroupHeader1" Top="78.93" Width="1047.06" Height="28.35" Condition="[Classrooms.CreatedAt]" SortOrder="Descending">
-      <TextObject Name="Text2" Left="9.45" Top="9.45" Width="708.75" Height="18.9" Text="DATA: [Classrooms.CreatedAt] Horário: [Classrooms.MeetingTime] Educadora: [Classrooms.Educators.FirstName]" Format="Date" Format.Format="d" Font="Arial, 10pt"/>
-      <TextObject Name="Text10" Left="727.65" Top="9.45" Width="311.85" Height="18.9" Text="Sala: [Classrooms.ClassroomType] Lanche: [Classrooms.Lunch]" HorzAlign="Right" Font="Arial, 10pt"/>
+    <GroupHeaderBand Name="GroupHeader1" Top="78.93" Width="1047.06" Height="28.35" Condition="[Classrooms.CreatedDate]" SortOrder="Descending">
+      <TextObject Name="Text2" Left="9.45" Top="9.45" Width="510.3" Height="18.9" Text="DATA: [Classrooms.CreatedDate]   Horário: [Classrooms.MeetingTime]   Educadora: [Classrooms.Educators.FirstName]" Format="Date" Format.Format="d" Font="Arial, 10pt"/>
+      <TextObject Name="Text11" Left="737.1" Top="9.45" Width="47.25" Height="18.9" Text="Sala:" HorzAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text12" Left="859.95" Top="9.45" Width="66.15" Height="18.9" Text="Lanche:" HorzAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text13" Left="926.1" Top="9.45" Width="113.4" Height="18.9" Text="[Classrooms.Lunch]" HorzAlign="Right" Font="Arial, 10pt"/>
+      <TextObject Name="Text10" Left="784.35" Top="9.45" Width="66.15" Height="18.9" Text="[Classrooms.ClassroomType]" Font="Arial, 10pt"/>
       <DataBand Name="Data1" Top="110.62" Width="1047.06" Height="47.25" DataSource="Classrooms">
         <TableObject Name="Table1" Left="9.45" Top="9.45" Width="1030.05" Height="34.02">
           <TableColumn Name="Column1" Width="264.6"/>
@@ -113,7 +136,7 @@
             <TableCell Name="Cell5" Border.Lines="All" Text="TEL/CEL/RES/WHATSAPP" HorzAlign="Center" Font="Arial, 10pt, style=Bold" TextFill.Color="Brown"/>
           </TableRow>
           <TableRow Name="Row2" Height="17.01">
-            <TableCell Name="Cell61" Border.Lines="All" Text="[Classrooms.Children.ChildResponsible.ResponsiblesId]" HorzAlign="Center" Font="Arial, 9pt"/>
+            <TableCell Name="Cell61" Border.Lines="All" Text="[Classrooms.Children.ChildResponsible.Responsibles.Id]" HorzAlign="Center" Font="Arial, 9pt"/>
             <TableCell Name="Cell62" Border.Lines="All" Text="[Classrooms.Children.ChildResponsible.Responsibles.Cpf]" HorzAlign="Center" Font="Arial, 10pt"/>
             <TableCell Name="Cell63" Border.Lines="All" Text="[Classrooms.Children.ChildResponsible.Responsibles.FullName]" HorzAlign="Center" Font="Arial, 10pt"/>
             <TableCell Name="Cell64" Border.Lines="All" Text="[Classrooms.Children.ChildResponsible.Responsibles.KinshipType]" HorzAlign="Center" Font="Arial, 10pt"/>
@@ -150,9 +173,9 @@
           </TableObject>
         </ChildBand>
       </DataBand>
-      <GroupFooterBand Name="GroupFooter1" Top="211.78" Width="1047.06" Height="37.8"/>
+      <GroupFooterBand Name="GroupFooter1" Top="211.78" Width="1047.06" Height="9.45"/>
     </GroupHeaderBand>
-    <PageFooterBand Name="PageFooter1" Top="252.92" Width="1047.06" Height="18.9">
+    <PageFooterBand Name="PageFooter1" Top="224.57" Width="1047.06" Height="18.9">
       <TextObject Name="Text9" Left="9.45" Width="217.35" Height="18.9" Text="Página: [Page]/[TotalPages]" Font="Arial, 10pt, style=Bold" TextFill.Color="Brown"/>
     </PageFooterBand>
   </ReportPage>

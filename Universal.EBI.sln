@@ -59,8 +59,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4.7.ClassRoom", "4.7.ClassR
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Universal.EBI.Classrooms.API", "src\Services\Classroom\Universal.EBI.Classroom.API\Universal.EBI.Classrooms.API.csproj", "{EBA31504-D836-42C4-AEEA-9EC2EFFF10B0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Universal.EBI.Report.Dataset", "src\BuildingBlocks\Services\Universal.EBI.Report.Dataset\Universal.EBI.Report.Dataset.csproj", "{C06BF629-447E-47DF-9A68-D3AA8D4AE974}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -115,10 +113,6 @@ Global
 		{EBA31504-D836-42C4-AEEA-9EC2EFFF10B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EBA31504-D836-42C4-AEEA-9EC2EFFF10B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EBA31504-D836-42C4-AEEA-9EC2EFFF10B0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C06BF629-447E-47DF-9A68-D3AA8D4AE974}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C06BF629-447E-47DF-9A68-D3AA8D4AE974}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C06BF629-447E-47DF-9A68-D3AA8D4AE974}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C06BF629-447E-47DF-9A68-D3AA8D4AE974}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -148,7 +142,6 @@ Global
 		{97156C99-1372-456D-8746-C1277E920A1F} = {6C14AF35-E0AE-434C-9687-262BFF36B1F7}
 		{E93C512E-6031-4AAE-8B3C-D7B538A7E904} = {E9D8FCD0-E366-430A-A8D2-B30FDAE66E9B}
 		{EBA31504-D836-42C4-AEEA-9EC2EFFF10B0} = {E93C512E-6031-4AAE-8B3C-D7B538A7E904}
-		{C06BF629-447E-47DF-9A68-D3AA8D4AE974} = {2DCA83F5-418C-41B6-85C9-185B4907CB36}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1D5E8FEC-7466-45DD-8400-2AB4DBD8C907}

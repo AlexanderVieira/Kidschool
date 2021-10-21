@@ -4,9 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Universal.EBI.Core.DomainObjects;
+using Universal.EBI.Core.DomainObjects.Models;
+using Universal.EBI.Core.DomainObjects.Models.Enums;
 using Universal.EBI.Educators.API.Application.Queries.Interfaces;
 using Universal.EBI.Educators.API.Models;
-using Universal.EBI.Educators.API.Models.Enums;
 using Universal.EBI.Educators.API.Models.Interfaces;
 
 namespace Universal.EBI.Educators.API.Application.Queries
@@ -126,7 +127,7 @@ namespace Universal.EBI.Educators.API.Application.Queries
 
                                 },
                                 BirthDate = DateTime.Parse(dict["BIRTHDATE"].ToString()),
-                                Gender = (Gender)Enum.Parse(typeof(Gender), dict["GENDER"].ToString(), true),
+                                GenderType = (GenderType)Enum.Parse(typeof(GenderType), dict["GENDER"].ToString(), true),
                                 FunctionType = (FunctionType)Enum.Parse(typeof(FunctionType), dict["FUNCTIONTYPE"].ToString(), true),
                                 PhotoUrl = dict["PHOTOURL"].ToString(),
                                 Excluded = bool.Parse(dict["EXCLUDED"].ToString())
@@ -205,7 +206,7 @@ namespace Universal.EBI.Educators.API.Application.Queries
 
                             },
                             BirthDate = DateTime.Parse(dict["BIRTHDATE"].ToString()),
-                            Gender = (Gender)Enum.Parse(typeof(Gender), dict["GENDER"].ToString(), true),
+                            GenderType = (GenderType)Enum.Parse(typeof(GenderType), dict["GENDER"].ToString(), true),
                             FunctionType = (FunctionType)Enum.Parse(typeof(FunctionType), dict["FUNCTIONTYPE"].ToString(), true),
                             PhotoUrl = dict["PHOTOURL"].ToString(),
                             Excluded = bool.Parse(dict["EXCLUDED"].ToString())

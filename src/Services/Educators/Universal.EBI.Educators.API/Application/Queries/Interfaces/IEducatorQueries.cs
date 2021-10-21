@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Universal.EBI.Core.DomainObjects.Models;
 using Universal.EBI.Educators.API.Models;
 
 namespace Universal.EBI.Educators.API.Application.Queries.Interfaces

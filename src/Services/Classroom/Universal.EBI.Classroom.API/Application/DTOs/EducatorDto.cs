@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using Universal.EBI.Classrooms.API.Application.Commands;
-using Universal.EBI.Classrooms.API.Models;
-using Universal.EBI.Classrooms.API.Models.Enums;
 using Universal.EBI.Core.DomainObjects;
+using Universal.EBI.Core.DomainObjects.Models;
+using Universal.EBI.Core.DomainObjects.Models.Enums;
 
 namespace Universal.EBI.Classrooms.API.Application.DTOs
 {
     public class EducatorDto : PersonDto
     {   
         public string FunctionType { get; set; }        
-        public List<PhoneDto> Phones { get; set; }        
+        public List<PhoneDto> Phones { get; set; }
+        public AddressDto Address { get; set; }
+        public Guid ClassroomId { get; set; }
 
         public Educator ToConvertEducator(EducatorDto educatorDto)
         {
@@ -19,6 +21,7 @@ namespace Universal.EBI.Classrooms.API.Application.DTOs
                 Id = educatorDto.Id,
                 FirstName = educatorDto.FirstName,
                 LastName = educatorDto.LastName,
+                FullName = educatorDto.FullName,
                 Email = new Email(educatorDto.Email.Address),
                 Cpf = new Cpf(educatorDto.Cpf.Number),
                 Phones = new List<Phone>(),
@@ -27,7 +30,8 @@ namespace Universal.EBI.Classrooms.API.Application.DTOs
                 GenderType = (GenderType)Enum.Parse(typeof(GenderType), educatorDto.GenderType, true),
                 FunctionType = (FunctionType)Enum.Parse(typeof(FunctionType), educatorDto.FunctionType, true),                
                 PhotoUrl = educatorDto.PhotoUrl,
-                Excluded = educatorDto.Excluded
+                Excluded = educatorDto.Excluded,
+                ClassroomId = educatorDto.ClassroomId
             };
 
             educator.Address = new Address
@@ -40,7 +44,7 @@ namespace Universal.EBI.Classrooms.API.Application.DTOs
                 City = educatorDto.Address.City,
                 State = educatorDto.Address.State,
                 ZipCode = educatorDto.Address.ZipCode,
-                ForeingKeyId = educatorDto.Address.ForeingKeyId
+                EducatorId = educatorDto.Address.ForeingKeyId
             };
 
             foreach (var phone in educatorDto.Phones)
@@ -50,7 +54,7 @@ namespace Universal.EBI.Classrooms.API.Application.DTOs
                     Id = phone.Id,
                     Number = phone.Number,
                     PhoneType = (PhoneType)Enum.Parse(typeof(PhoneType), phone.PhoneType, true),                    
-                    ForeingKeyId = phone.ForeingKeyId
+                    EducatorId = phone.ForeingKeyId
                 });
             }
 
@@ -64,6 +68,7 @@ namespace Universal.EBI.Classrooms.API.Application.DTOs
                 Id = command.Educator.Id,
                 FirstName = command.Educator.FirstName,
                 LastName = command.Educator.LastName,
+                FullName = command.Educator.FullName,
                 Email = new Email(command.Educator.Email.Address),
                 Cpf = new Cpf(command.Educator.Cpf.Number),
                 Phones = new List<PhoneDto>(),
@@ -72,7 +77,10 @@ namespace Universal.EBI.Classrooms.API.Application.DTOs
                 GenderType = command.Educator.GenderType.ToString(), 
                 FunctionType = command.Educator.FunctionType.ToString(),
                 PhotoUrl = command.Educator.PhotoUrl,
-                Excluded = command.Educator.Excluded
+                Excluded = command.Educator.Excluded,
+                CreatedDate = command.CreatedDate,
+                CreatedBy = command.CreatedBy,
+                ClassroomId = command.Educator.ClassroomId
             };
 
             EducatorDto.Address = new AddressDto
@@ -145,7 +153,7 @@ namespace Universal.EBI.Classrooms.API.Application.DTOs
             }
 
             return EducatorDto;
-        }
+        }        
 
     }   
     

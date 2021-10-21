@@ -40,7 +40,7 @@ namespace Universal.EBI.BFF.Report.API.Controllers
 
         [HttpGet]
         [Route("reports/classroom/{id}")]
-        public async Task<IActionResult> GetEducatorById(Guid id)
+        public async Task<IActionResult> GetClassroomById(Guid id)
         {
             var classroom = await _classroomService.GetClassroomById(id);
             return classroom == null ? NotFound() : CustomResponse(classroom);

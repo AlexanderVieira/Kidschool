@@ -99,8 +99,9 @@ namespace Universal.EBI.Reports.API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("AgeGroupType")
-                        .HasColumnType("int");
+                    b.Property<string>("AgeGroupType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("datetime2");
@@ -113,7 +114,10 @@ namespace Universal.EBI.Reports.API.Migrations
                         .HasColumnType("varchar(11)")
                         .HasColumnName("Cpf");
 
-                    b.Property<DateTime?>("CreatedAt")
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("Excluded")
@@ -126,8 +130,9 @@ namespace Universal.EBI.Reports.API.Migrations
                     b.Property<string>("FullName")
                         .HasColumnType("varchar(100)");
 
-                    b.Property<int>("GenderType")
-                        .HasColumnType("int");
+                    b.Property<string>("GenderType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("HoraryOfEntry")
                         .HasColumnType("varchar(100)");
@@ -135,15 +140,18 @@ namespace Universal.EBI.Reports.API.Migrations
                     b.Property<string>("HoraryOfExit")
                         .HasColumnType("varchar(100)");
 
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<DateTime?>("LastModifiedDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("varchar(50)");
 
                     b.Property<string>("PhotoUrl")
                         .HasColumnType("varchar(100)");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -165,10 +173,20 @@ namespace Universal.EBI.Reports.API.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(50)");
 
-                    b.Property<int>("ClassroomType")
-                        .HasColumnType("int");
+                    b.Property<string>("ClassroomType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("CreatedAt")
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Lunch")
@@ -181,9 +199,6 @@ namespace Universal.EBI.Reports.API.Migrations
                     b.Property<string>("Region")
                         .IsRequired()
                         .HasColumnType("varchar(50)");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -207,7 +222,10 @@ namespace Universal.EBI.Reports.API.Migrations
                         .HasColumnType("varchar(11)")
                         .HasColumnName("Cpf");
 
-                    b.Property<DateTime?>("CreatedAt")
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("Excluded")
@@ -220,11 +238,19 @@ namespace Universal.EBI.Reports.API.Migrations
                     b.Property<string>("FullName")
                         .HasColumnType("varchar(100)");
 
-                    b.Property<int>("FunctionType")
-                        .HasColumnType("int");
+                    b.Property<string>("FunctionType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("GenderType")
-                        .HasColumnType("int");
+                    b.Property<string>("GenderType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<DateTime?>("LastModifiedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -232,9 +258,6 @@ namespace Universal.EBI.Reports.API.Migrations
 
                     b.Property<string>("PhotoUrl")
                         .HasColumnType("varchar(100)");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -261,8 +284,9 @@ namespace Universal.EBI.Reports.API.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(13)");
 
-                    b.Property<int>("PhoneType")
-                        .HasColumnType("int");
+                    b.Property<string>("PhoneType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("ResponsibleId")
                         .HasColumnType("uniqueidentifier");
@@ -292,7 +316,10 @@ namespace Universal.EBI.Reports.API.Migrations
                         .HasColumnType("varchar(11)")
                         .HasColumnName("Cpf");
 
-                    b.Property<DateTime?>("CreatedAt")
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("Excluded")
@@ -305,11 +332,19 @@ namespace Universal.EBI.Reports.API.Migrations
                     b.Property<string>("FullName")
                         .HasColumnType("varchar(100)");
 
-                    b.Property<int>("GenderType")
-                        .HasColumnType("int");
+                    b.Property<string>("GenderType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("KinshipType")
-                        .HasColumnType("int");
+                    b.Property<string>("KinshipType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<DateTime?>("LastModifiedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -317,9 +352,6 @@ namespace Universal.EBI.Reports.API.Migrations
 
                     b.Property<string>("PhotoUrl")
                         .HasColumnType("varchar(100)");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 

@@ -3,6 +3,7 @@ using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Universal.EBI.Core.DomainObjects.Models;
 using Universal.EBI.Responsibles.API.Application.Queries.Interfaces;
 using Universal.EBI.Responsibles.API.Models;
 using Universal.EBI.Responsibles.API.Models.Interfaces;
@@ -19,7 +20,7 @@ namespace Universal.EBI.Responsibles.API.Application.Queries
             _context = context;
         }
 
-        public async Task<PagedResult<Models.Responsible>> GetResponsibles(int pageSize, int pageIndex, string query = null)
+        public async Task<PagedResult<Responsible>> GetResponsibles(int pageSize, int pageIndex, string query = null)
         {
             
             query = string.IsNullOrEmpty(query) ? "" : query;
@@ -28,9 +29,9 @@ namespace Universal.EBI.Responsibles.API.Application.Queries
             var responsibles = await _context.Responsibles.Find(filter).ToListAsync();
 
             var total = responsibles.Count;
-            var pageResult = new PagedResult<Models.Responsible>
+            var pageResult = new PagedResult<Responsible>
             {
-                List = responsibles,
+                List = (IEnumerable<Responsible>)responsibles,
                 TotalResults = total,
                 PageIndex = pageIndex,
                 PageSize = pageSize,
@@ -40,7 +41,7 @@ namespace Universal.EBI.Responsibles.API.Application.Queries
             return pageResult;
         }
 
-        public async Task<Models.Responsible> GetResponsibleByCpf(string cpf)
+        public async Task<Responsible> GetResponsibleByCpf(string cpf)
         {
             return await _context
                             .Responsibles
@@ -49,7 +50,7 @@ namespace Universal.EBI.Responsibles.API.Application.Queries
 
         }
 
-        public async Task<Models.Responsible> GetResponsibleById(Guid id)
+        public async Task<Responsible> GetResponsibleById(Guid id)
         {
             return await _context
                             .Responsibles
@@ -57,7 +58,7 @@ namespace Universal.EBI.Responsibles.API.Application.Queries
                             .FirstOrDefaultAsync();
         }
 
-        public Task<IEnumerable<Models.Responsible>> GetResponsiblesByName(string name)
+        public Task<IEnumerable<Responsible>> GetResponsiblesByName(string name)
         {
             throw new NotImplementedException();
         }

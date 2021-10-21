@@ -1,5 +1,6 @@
 ﻿using FluentValidation.Results;
 using MediatR;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -33,9 +34,11 @@ namespace Universal.EBI.Classrooms.API.Application.Commands
                 Educator = new EducatorDto(),
                 Church = message.Church,
                 Region = message.Region,
-                ClassroomType = message.ClassroomType.ToString(),
+                ClassroomType = message.ClassroomType,
                 Actived = message.Actived,
                 MeetingTime = message.MeetingTime,
+                LastModifiedDate = message.LastModifiedDate,
+                LastModifiedBy = message.LastModifiedBy,
                 Childs = message.Childs.Length > 0 ? message.Childs.ToDictionary(c => c.Id.ToString()) : new Dictionary<string, ChildDto>()
             };
 
@@ -58,28 +61,34 @@ namespace Universal.EBI.Classrooms.API.Application.Commands
             existingClassroom.Educator = classroom.Educator;
             existingClassroom.ClassroomType = classroom.ClassroomType;
             existingClassroom.Actived = classroom.Actived;
+            existingClassroom.LastModifiedDate = classroom.LastModifiedDate;
+            existingClassroom.LastModifiedBy = classroom.LastModifiedBy;
 
-            for (int i = 0; i < classroom.Childs.ToList().Count; i++)
+            for (int i = 0; i < classroom.Children.ToList().Count; i++)
             {
-                existingClassroom.Childs.Add(classroom.Childs.ToList()[i]);
+                existingClassroom.Children.Add(classroom.Children.ToList()[i]);
             }            
 
             var success = await _classroomRepository.UpdateClassroom(existingClassroom);
-            //var createdClassroom = await _classroomQueries.GetClassroomById(classroom.Id);
-            //var success = createdClassroom != null;
 
-            classroom.AddEvent(new UpdatedClassroomEvent
+            if (success)
             {
-                AggregateId = existingClassroom.Id,
-                Educator = existingClassroom.Educator,
-                Church = existingClassroom.Church,
-                Region = existingClassroom.Region,
-                ClassroomType = (int)existingClassroom.ClassroomType,
-                Actived = existingClassroom.Actived,
-                MeetingTime = existingClassroom.MeetingTime,
-                Childs = existingClassroom.Childs.ToArray()
+                classroom.AddEvent(new UpdatedClassroomEvent
+                {
+                    AggregateId = existingClassroom.Id,
+                    Id = existingClassroom.Id,
+                    Educator = existingClassroom.Educator,
+                    Church = existingClassroom.Church,
+                    Region = existingClassroom.Region,
+                    ClassroomType = existingClassroom.ClassroomType.ToString(),
+                    Actived = existingClassroom.Actived,
+                    MeetingTime = existingClassroom.MeetingTime,
+                    LastModifiedDate = existingClassroom.LastModifiedDate.Value.ToShortDateString(),
+                    LastModifiedBy = existingClassroom.LastModifiedBy,
+                    Childs = existingClassroom.Children.ToArray()
 
-            });
+                });
+            }            
 
             return await PersistData(_classroomRepository.UnitOfWork, success);
         }

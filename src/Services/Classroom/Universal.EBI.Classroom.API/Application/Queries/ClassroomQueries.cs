@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Universal.EBI.Classrooms.API.Application.Queries.Interfaces;
 using Universal.EBI.Classrooms.API.Models;
 using Universal.EBI.Classrooms.API.Models.Interfaces;
+using Universal.EBI.Core.DomainObjects.Models;
 
 namespace Universal.EBI.Classrooms.API.Application.Queries
 {
@@ -19,7 +20,7 @@ namespace Universal.EBI.Classrooms.API.Application.Queries
             _context = context;
         }
 
-        public async Task<PagedResult<Models.Classroom>> GetClassrooms(int pageSize, int pageIndex, string query = null)
+        public async Task<PagedResult<Classroom>> GetClassrooms(int pageSize, int pageIndex, string query = null)
         {
             
             query = string.IsNullOrEmpty(query) ? "" : query;
@@ -28,9 +29,9 @@ namespace Universal.EBI.Classrooms.API.Application.Queries
             var Classrooms = await _context.Classrooms.Find(filter).ToListAsync();
 
             var total = Classrooms.Count;
-            var pageResult = new PagedResult<Models.Classroom>
+            var pageResult = new PagedResult<Classroom>
             {
-                List = Classrooms,
+                List = (IEnumerable<Classroom>)Classrooms,
                 TotalResults = total,
                 PageIndex = pageIndex,
                 PageSize = pageSize,
@@ -40,7 +41,7 @@ namespace Universal.EBI.Classrooms.API.Application.Queries
             return pageResult;
         }       
 
-        public async Task<Models.Classroom> GetClassroomById(Guid id)
+        public async Task<Classroom> GetClassroomById(Guid id)
         {
             return await _context
                             .Classrooms
@@ -48,7 +49,7 @@ namespace Universal.EBI.Classrooms.API.Application.Queries
                             .FirstOrDefaultAsync();
         }
 
-        public Task<IEnumerable<Models.Classroom>> GetClassroomsByName(string name)
+        public Task<IEnumerable<Classroom>> GetClassroomsByName(string name)
         {
             throw new NotImplementedException();
         }

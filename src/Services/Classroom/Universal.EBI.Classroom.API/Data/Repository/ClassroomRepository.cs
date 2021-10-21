@@ -3,7 +3,7 @@ using Universal.EBI.Classrooms.API.Models.Interfaces;
 using System.Threading.Tasks;
 using System;
 using Universal.EBI.Core.Data.Interfaces;
-using Universal.EBI.Classrooms.API.Models;
+using Universal.EBI.Core.DomainObjects.Models;
 
 namespace Universal.EBI.Classrooms.API.Data.Repository
 {
@@ -18,23 +18,23 @@ namespace Universal.EBI.Classrooms.API.Data.Repository
             _context = context;
         }
 
-        public async Task CreateClassroom(Classroom Classroom)
+        public async Task CreateClassroom(Classroom classroom)
         {
-            await _context.Classrooms.InsertOneAsync(Classroom);
+            await _context.Classrooms.InsertOneAsync(classroom);
         }
 
-        public async Task<bool> UpdateClassroom(Classroom Classroom)
+        public async Task<bool> UpdateClassroom(Classroom classroom)
         {
             var updateResult = await _context
                                         .Classrooms
-                                        .ReplaceOneAsync(filter: r => r.Id == Classroom.Id, replacement: Classroom);
+                                        .ReplaceOneAsync(filter: r => r.Id == classroom.Id, replacement: classroom);
 
             return updateResult.IsAcknowledged && updateResult.MatchedCount > 0;
         }
 
         public async Task<bool> DeleteClassroom(Guid id)
         {
-            FilterDefinition<Models.Classroom> filter = Builders<Classroom>.Filter.Eq(r => r.Id, id);
+            FilterDefinition<Classroom> filter = Builders<Classroom>.Filter.Eq(r => r.Id, id);
             DeleteResult deleteResult = await _context
                                                     .Classrooms
                                                     .DeleteOneAsync(filter);

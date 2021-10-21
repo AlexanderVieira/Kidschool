@@ -2,8 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Universal.EBI.Childs.API.Data;
-using Universal.EBI.Childs.API.Models;
-using Universal.EBI.Childs.API.Models.Interfaces;
+using Universal.EBI.Core.DomainObjects.Models;
 using Universal.EBI.Core.Mediator.Interfaces;
 
 namespace Universal.EBI.Childs.API.Extensions

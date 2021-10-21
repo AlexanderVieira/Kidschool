@@ -6,12 +6,14 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Universal.EBI.Childs.API.Application.Commands;
 using Universal.EBI.Childs.API.Application.Queries.Interfaces;
-using Universal.EBI.Childs.API.Integration;
 using Universal.EBI.Childs.API.Models;
 using Universal.EBI.Childs.API.Models.Interfaces;
-using Universal.EBI.Core.Integration.Responsible;
+using Universal.EBI.Core.DomainObjects.Exceptions;
+using Universal.EBI.Core.DomainObjects.Models;
 using Universal.EBI.Core.Mediator.Interfaces;
 using Universal.EBI.Core.Messages;
+using Universal.EBI.Core.Messages.Integration.Child;
+using Universal.EBI.Core.Messages.Integration.Responsible;
 using Universal.EBI.MessageBus.Interfaces;
 
 namespace Universal.EBI.Childs.API.Services
@@ -34,34 +36,33 @@ namespace Universal.EBI.Childs.API.Services
 
         private void SetSubscribers()
         {            
-            _bus.SubscribeAsync<RegisteredResponsibleIntegrationBaseEvent>("RegisteredResponsible", async message => await RegisteredResponsible(message));
+            _bus.SubscribeAsync<RegisteredResponsibleIntegrationEvent>("RegisteredResponsible", async message => await RegisteredResponsible(message));
         }
 
-        private async Task<bool> RegisteredResponsible(RegisteredResponsibleIntegrationBaseEvent message)
+        private async Task<bool> RegisteredResponsible(RegisteredResponsibleIntegrationEvent message)
         {
             using (var scope = _serviceProvider.CreateScope())
             {
                 var childQueries = scope.ServiceProvider.GetRequiredService<IChildQueries>();
-                var childRepository = scope.ServiceProvider.GetRequiredService<IChildRepository>();
-                //var childContext = scope.ServiceProvider.GetRequiredService<IChildContext>();
+                var childRepository = scope.ServiceProvider.GetRequiredService<IChildRepository>();               
 
                 Child childReceived = null;
                 bool success = false;
-                for (int i = 0; i < message.ChildIds.Length; i++)
+                for (int i = 0; i < message.Childs.Length; i++)
                 {
-                    childReceived = await childQueries.GetChildById(message.ChildIds[i]);
+                    childReceived = await childQueries.GetChildById(message.Childs[i].Id);
                     if (childReceived != null)
                     {                        
-                        childReceived.Responsibles.Add(new Responsible { Id = message.Id, ChildId = message.ChildIds[i] });
+                        childReceived.Responsibles.Add(new Responsible { Id = message.Id });
                         success = await childRepository.UpdateChild(childReceived);
                     }
                     
-                }                
+                }
 
-                //if (!await childRepository.UnitOfWork.Commit())
-                //{
-                //    throw new DomainException($"Problemas ao adicionar crianças na lista. ID: {message.Id}");
-                //}
+                if (!await childRepository.UnitOfWork.Commit())
+                {
+                    throw new DomainException($"Problemas ao adicionar crianças na lista. ID: {message.Id}");
+                }
 
                 return await Task.FromResult(success);
             }

@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Universal.EBI.Classrooms.API.Data;
-using Universal.EBI.Classrooms.API.Models;
+using Universal.EBI.Core.DomainObjects.Models;
 using Universal.EBI.Core.Mediator.Interfaces;
 
 namespace Universal.EBI.Classrooms.API.Extensions

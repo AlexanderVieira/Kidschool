@@ -7,6 +7,7 @@ using Universal.EBI.Classrooms.API.Application.Events;
 using Universal.EBI.Classrooms.API.Application.Queries.Interfaces;
 using Universal.EBI.Classrooms.API.Models;
 using Universal.EBI.Classrooms.API.Models.Interfaces;
+using Universal.EBI.Core.DomainObjects.Models;
 using Universal.EBI.Core.Messages;
 
 namespace Universal.EBI.Classrooms.API.Application.Commands
@@ -58,12 +59,12 @@ namespace Universal.EBI.Classrooms.API.Application.Commands
                 AddError("Criança não encontrada.");
                 return ValidationResult;
             }
-            var dictinary = existingClassroom.Childs.ToDictionary(c => c.Id.ToString());
+            var dictinary = existingClassroom.Children.ToDictionary(c => c.Id.ToString());
             foreach (var item in dictinary)
             {
                 if (dictinary.TryGetValue(message.ChildId.ToString(), out Child child))
                 {
-                    existingClassroom.Childs.Remove(child);
+                    existingClassroom.Children.Remove(child);
                 }
             }
 

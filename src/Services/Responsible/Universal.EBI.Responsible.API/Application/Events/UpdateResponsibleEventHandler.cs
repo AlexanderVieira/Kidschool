@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
-using Universal.EBI.Responsibles.API.Integration;
 using Universal.EBI.MessageBus.Interfaces;
 
 namespace Universal.EBI.Responsibles.API.Application.Events

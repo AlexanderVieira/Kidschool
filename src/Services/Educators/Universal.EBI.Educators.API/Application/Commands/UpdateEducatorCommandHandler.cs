@@ -4,10 +4,9 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Universal.EBI.Core.DomainObjects;
+using Universal.EBI.Core.DomainObjects.Models.Enums;
 using Universal.EBI.Core.Messages;
 using Universal.EBI.Educators.API.Application.Events;
-using Universal.EBI.Educators.API.Models;
-using Universal.EBI.Educators.API.Models.Enums;
 using Universal.EBI.Educators.API.Models.Interfaces;
 
 namespace Universal.EBI.Educators.API.Application.Commands
@@ -34,7 +33,7 @@ namespace Universal.EBI.Educators.API.Application.Commands
             existingEducator.Phones = message.Phones;
             existingEducator.Address = message.Address;
             existingEducator.BirthDate = DateTime.Parse(message.BirthDate);
-            existingEducator.Gender = (Gender)Enum.Parse(typeof(Gender), message.Gender, true);
+            existingEducator.GenderType = (GenderType)Enum.Parse(typeof(GenderType), message.Gender, true);
             existingEducator.FunctionType = (FunctionType)Enum.Parse(typeof(FunctionType), message.Function, true);
             existingEducator.PhotoUrl = message.PhotoUrl;
             existingEducator.Excluded = message.Excluded;

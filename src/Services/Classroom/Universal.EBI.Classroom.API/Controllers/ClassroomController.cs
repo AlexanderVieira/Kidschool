@@ -40,20 +40,29 @@ namespace Universal.EBI.Classrooms.API.Controllers
         [HttpPost("api/classroom/create")]        
         [ProducesResponseType((int)HttpStatusCode.OK)]
         public async Task<IActionResult> CreateClassroom([FromBody] RegisterClassroomCommand command)
-        {               
+        {
+            command.CreatedDate = DateTime.Now.ToString();
+            command.CreatedBy = "Admin";
             return CustomResponse(await _mediator.SendCommand(command));
         }        
 
         [HttpPut("api/Classroom/update")]
         public async Task<IActionResult> UpdateClassroom([FromBody] UpdateClassroomCommand command)
         {
+            command.LastModifiedDate = DateTime.UtcNow.ToShortDateString();
+            command.LastModifiedBy = "Admin";
             return CustomResponse(await _mediator.SendCommand(command));
         }
 
         [HttpDelete("api/classroom/delete/{id}")]
         public async Task<IActionResult> DeleteClassromm(Guid id)
         {
-            var command = new DeleteClassroomCommand { Id = id };
+            var command = new DeleteClassroomCommand 
+            {
+                Id = id,
+                LastModifiedDate = DateTime.UtcNow.ToShortDateString(),
+                LastModifiedBy = _user.Name
+            };
             return CustomResponse(await _mediator.SendCommand(command));
         }
 
@@ -66,13 +75,18 @@ namespace Universal.EBI.Classrooms.API.Controllers
                 return CustomResponse(command);
             }
 
+            command.LastModifiedDate = DateTime.UtcNow.ToShortDateString();
+            command.LastModifiedBy = _user.Name;
+
             return CustomResponse(await _mediator.SendCommand(command));                   
 
         }
 
         [HttpPost("api/classroom/child/delete")]
         public async Task<IActionResult> DeleteChildsClassromm([FromBody] DeleteChildClassroomCommand command)
-        {            
+        {
+            command.LastModifiedDate = DateTime.UtcNow.ToShortDateString();
+            command.LastModifiedBy = _user.Name;
             return CustomResponse(await _mediator.SendCommand(command));
         }
     }

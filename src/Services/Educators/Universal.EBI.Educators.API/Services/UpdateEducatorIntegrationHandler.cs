@@ -6,8 +6,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Universal.EBI.Core.Mediator.Interfaces;
 using Universal.EBI.Core.Messages;
+using Universal.EBI.Core.Messages.Integration.Educator;
 using Universal.EBI.Educators.API.Application.Commands;
-using Universal.EBI.Educators.API.Integration;
 using Universal.EBI.MessageBus.Interfaces;
 
 namespace Universal.EBI.Educators.API.Services
@@ -52,8 +52,8 @@ namespace Universal.EBI.Educators.API.Services
                 Phones = message.Phones,
                 Address = message.Address,
                 BirthDate = message.BirthDate,
-                Gender = message.Gender,
-                Function = message.Function,
+                Gender = message.GenderType,
+                Function = message.FunctionType,
                 PhotoUrl = message.PhotoUrl,
                 Excluded = message.Excluded
             };

@@ -5,9 +5,9 @@ using FluentValidation.Results;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Universal.EBI.Childs.API.Application.Commands;
-using Universal.EBI.Core.Integration.Child;
 using Universal.EBI.Core.Mediator.Interfaces;
 using Universal.EBI.Core.Messages;
+using Universal.EBI.Core.Messages.Integration.Child;
 using Universal.EBI.MessageBus.Interfaces;
 
 namespace Universal.EBI.Childs.API.Services

@@ -1,6 +1,6 @@
 ﻿using System;
 using Universal.EBI.Childs.API.Application.Validations;
-using Universal.EBI.Childs.API.Models;
+using Universal.EBI.Core.DomainObjects.Models;
 using Universal.EBI.Core.Messages;
 
 namespace Universal.EBI.Childs.API.Application.Commands

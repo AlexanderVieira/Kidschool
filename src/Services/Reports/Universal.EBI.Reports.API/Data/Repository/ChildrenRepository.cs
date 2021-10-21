@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Universal.EBI.Core.Data.Interfaces;
-using Universal.EBI.Reports.API.Models;
 using Universal.EBI.Reports.API.Models.Interfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -8,6 +7,7 @@ using System.Linq;
 using System;
 using System.Data.Common;
 using Universal.EBI.Core.DomainObjects.Interfaces;
+using Universal.EBI.Core.DomainObjects.Models;
 
 namespace Universal.EBI.Reports.API.Data.Repository
 {

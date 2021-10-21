@@ -1,11 +1,11 @@
 ﻿using System.Threading.Tasks;
 using System;
 using Universal.EBI.Core.Data.Interfaces;
-using Universal.EBI.Reports.API.Models;
 using Universal.EBI.Reports.API.Models.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Collections.Generic;
+using Universal.EBI.Core.DomainObjects.Models;
 
 namespace Universal.EBI.Reports.API.Data.Repository
 {
@@ -43,7 +43,7 @@ namespace Universal.EBI.Reports.API.Data.Repository
 
         public async Task<IEnumerable<Classroom>> GetClassroomByDate(DateTime inicialDate, DateTime finalDate)
         {
-            return await _context.Classrooms.Where(c => c.CreatedAt.Value.Date >= inicialDate && c.CreatedAt.Value.Date <= finalDate).ToListAsync();
+            return await _context.Classrooms.Where(c => c.CreatedDate.Date >= inicialDate && c.CreatedDate.Date <= finalDate).ToListAsync();
         }
         public void Dispose()
         {

@@ -1,7 +1,6 @@
 ﻿using System;
-using Universal.EBI.Core.Messages.Integration;
 
-namespace Universal.EBI.Core.Integration.Child
+namespace Universal.EBI.Core.Messages.Integration.Child
 {
     public class DeletedChildIntegrationEvent : IntegrationEvent
     {

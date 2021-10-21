@@ -8,10 +8,11 @@ using System.Threading.Tasks;
 using Universal.EBI.Childs.API.Application.Events;
 using Universal.EBI.Childs.API.Application.Queries.Interfaces;
 using Universal.EBI.Childs.API.Application.Validations;
-using Universal.EBI.Childs.API.Models;
 using Universal.EBI.Childs.API.Models.Interfaces;
-using Universal.EBI.Core.Integration.Child;
+using Universal.EBI.Core.DomainObjects.Models;
+using Universal.EBI.Core.DomainObjects.Models.Enums;
 using Universal.EBI.Core.Messages;
+using Universal.EBI.Core.Messages.Integration.Child;
 using Universal.EBI.Core.Utils;
 using Universal.EBI.MessageBus.Interfaces;
 
@@ -55,7 +56,7 @@ namespace Universal.EBI.Childs.API.Application.Commands
             var responsilblesLength = message.Responsibles.Length;
             for (int i = 0; i < responsilblesLength; i++)
             {                
-                child.Responsibles.Add(new Responsible { Id = message.Responsibles[i].Id, ChildId = child.Id });
+                child.Responsibles.Add(new Responsible { Id = message.Responsibles[i].Id });
             }
 
             var phonesLength = message.Phones.Length;
@@ -100,15 +101,14 @@ namespace Universal.EBI.Childs.API.Application.Commands
                 Responsibles = child.Responsibles.ToArray()
             });
 
-            var guidIds = new Guid[message.Responsibles.Length];       
+            //var guidIds = new Guid[message.Responsibles.Length];       
             
-            for (int i = 0; i < message.Responsibles.Length; i++)
-            {
-                guidIds[i] = message.Responsibles[i].Id;
-            }           
+            //for (int i = 0; i < message.Responsibles.Length; i++)
+            //{
+            //    guidIds[i] = message.Responsibles[i].Id;
+            //}           
 
-            await _bus.PublishAsync(new RegisteredChildIntegrationBaseEvent { Id = child.Id, ResponsibleIds = guidIds });
-            //await _bus.PublishAsync(new RegisteredResponsibleIntegrationBaseEvent { ChildId = child.Id });
+            await _bus.PublishAsync(new RegisteredChildIntegrationEvent { Id = child.Id });            
 
             return await PersistData(_childRepository.UnitOfWork, success);
         }

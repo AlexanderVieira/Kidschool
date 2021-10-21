@@ -1,6 +1,6 @@
 ﻿using System;
+using Universal.EBI.Core.DomainObjects.Models;
 using Universal.EBI.Core.Messages;
-using Universal.EBI.Educators.API.Models;
 
 namespace Universal.EBI.Educators.API.Application.Events
 {
@@ -18,15 +18,6 @@ namespace Universal.EBI.Educators.API.Application.Events
         public string Gender { get; set; }
         public string Function { get; set; }
         public bool Excluded { get; set; }
-
-        //public RegisteredEducatorEvent(Guid id, string firstName, string lastName, string email, string cpf)
-        //{
-        //    AggregateId = id;
-        //    Id = id;
-        //    FirstName = firstName;
-        //    LastName = LastName;
-        //    Email = email;
-        //    Cpf = cpf;
-        //}
+        
     }
 }

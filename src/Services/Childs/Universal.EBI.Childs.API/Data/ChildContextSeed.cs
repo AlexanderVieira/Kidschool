@@ -2,8 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Universal.EBI.Childs.API.Models;
-using Universal.EBI.Core.DomainObjects;
+using Universal.EBI.Core.DomainObjects.Models;
 
 namespace Universal.EBI.Childs.API.Data
 {

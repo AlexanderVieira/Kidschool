@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
-using Universal.EBI.Responsibles.API.Integration;
+using Universal.EBI.Core.Messages.Integration.Responsible;
 using Universal.EBI.MessageBus.Interfaces;
 
 namespace Universal.EBI.Responsibles.API.Application.Events
@@ -18,7 +18,10 @@ namespace Universal.EBI.Responsibles.API.Application.Events
         public Task Handle(DeletedResponsibleEvent notification, CancellationToken cancellationToken)
         {
             //return Task.CompletedTask;
-            return _bus.PublishAsync(new DeletedResponsibleIntegrationEvent(notification.Id));
+            return _bus.PublishAsync(new DeletedResponsibleIntegrationEvent 
+            { 
+                Id = notification.Id
+            });
         }
     }
 }

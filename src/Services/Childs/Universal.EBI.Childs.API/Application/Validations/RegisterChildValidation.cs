@@ -2,7 +2,7 @@
 using Universal.EBI.Childs.API.Application.Commands;
 using System;
 using Universal.EBI.Core.Utils;
-using Universal.EBI.Childs.API.Models;
+using Universal.EBI.Core.DomainObjects.Models;
 
 namespace Universal.EBI.Childs.API.Application.Validations
 {

@@ -1,5 +1,4 @@
 ﻿using MongoDB.Bson;
-using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
@@ -7,6 +6,7 @@ using System.Threading.Tasks;
 using Universal.EBI.Childs.API.Application.Queries.Interfaces;
 using Universal.EBI.Childs.API.Models;
 using Universal.EBI.Childs.API.Models.Interfaces;
+using Universal.EBI.Core.DomainObjects.Models;
 
 namespace Universal.EBI.Childs.API.Application.Queries
 {
@@ -31,7 +31,7 @@ namespace Universal.EBI.Childs.API.Application.Queries
             var total = childs.Count;
             var pageResult = new PagedResult<Child>
             {
-                List = childs,
+                List = (IEnumerable<Child>)childs,
                 TotalResults = total,
                 PageIndex = pageIndex,
                 PageSize = pageSize,

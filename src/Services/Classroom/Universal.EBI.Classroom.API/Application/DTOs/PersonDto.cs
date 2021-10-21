@@ -14,10 +14,11 @@ namespace Universal.EBI.Classrooms.API.Application.DTOs
         public Cpf Cpf { get; set; }
         public string PhotoUrl { get; set; }
         public string BirthDate { get; set; }
-        public DateTime? CreatedAt { get; set; }
-        public DateTime? UpdatedAt { get; set; }
         public string GenderType { get; set; }
-        public AddressDto Address { get; set; }
+        public string CreatedBy { get; set; }
+        public string CreatedDate { get; set; }
+        public string LastModifiedBy { get; set; }
+        public string LastModifiedDate { get; set; }
 
     }
 }

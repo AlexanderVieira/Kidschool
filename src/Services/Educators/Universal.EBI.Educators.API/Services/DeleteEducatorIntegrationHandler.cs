@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 using FluentValidation.Results;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Universal.EBI.Core.Integration.Educator;
 using Universal.EBI.Core.Mediator.Interfaces;
 using Universal.EBI.Core.Messages;
+using Universal.EBI.Core.Messages.Integration.Educator;
 using Universal.EBI.Educators.API.Application.Commands;
 using Universal.EBI.MessageBus.Interfaces;
 

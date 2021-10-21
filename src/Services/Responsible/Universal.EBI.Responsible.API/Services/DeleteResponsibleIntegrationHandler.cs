@@ -5,10 +5,10 @@ using FluentValidation.Results;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Universal.EBI.Responsibles.API.Application.Commands;
-using Universal.EBI.Responsibles.API.Integration;
 using Universal.EBI.Core.Mediator.Interfaces;
 using Universal.EBI.Core.Messages;
 using Universal.EBI.MessageBus.Interfaces;
+using Universal.EBI.Core.Messages.Integration.Responsible;
 
 namespace Universal.EBI.Responsibles.API.Services
 {

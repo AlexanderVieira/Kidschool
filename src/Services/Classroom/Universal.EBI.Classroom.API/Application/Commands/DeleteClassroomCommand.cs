@@ -6,6 +6,8 @@ namespace Universal.EBI.Classrooms.API.Application.Commands
     public class DeleteClassroomCommand : Command
     {
         public Guid Id { get; set; }
+        public string LastModifiedBy { get; set; }
+        public string LastModifiedDate { get; set; }
 
         public override bool IsValid()
         {

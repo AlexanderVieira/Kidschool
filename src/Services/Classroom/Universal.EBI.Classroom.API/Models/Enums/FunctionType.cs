@@ -2,7 +2,7 @@
 {
     public enum FunctionType
     {
-        Classroom = 1,
-        Auxiliary = 2
+        Responsible = 1,
+        Auxiliary = 2  
     }
 }
