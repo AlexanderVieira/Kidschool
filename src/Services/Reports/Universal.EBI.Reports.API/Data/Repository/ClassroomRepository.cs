@@ -41,9 +41,26 @@ namespace Universal.EBI.Reports.API.Data.Repository
             return await _context.Classrooms.FirstOrDefaultAsync(e => e.Id == id);
         }
 
-        public async Task<IEnumerable<Classroom>> GetClassroomByDate(DateTime inicialDate, DateTime finalDate)
+        public async Task<IEnumerable<Classroom>> GetClassroomByDate(DateTime inicialDate, DateTime finalDate)                                                                    
         {
-            return await _context.Classrooms.Where(c => c.CreatedDate.Date >= inicialDate && c.CreatedDate.Date <= finalDate).ToListAsync();
+            return await _context.Classrooms.Where(c => c.CreatedDate.Date >= inicialDate &&
+                                                        c.CreatedDate.Date <= finalDate).ToListAsync();
+        }
+
+        public async Task<IEnumerable<Classroom>> GetClassroomByRange(DateTime inicialDate, 
+                                                                     DateTime finalDate, 
+                                                                     string region, 
+                                                                     string church)
+        {
+            return await _context.Classrooms.Where(c => c.CreatedDate.Date >= inicialDate && 
+                                                        c.CreatedDate.Date <= finalDate && 
+                                                        c.Region.ToUpper() == region && 
+                                                        c.Church.ToUpper() == church).ToListAsync();
+        }
+        
+        public async Task<IEnumerable<Classroom>> GetClassroomByDaily(DateTime date)
+        {
+            return await _context.Classrooms.Where(c => c.CreatedDate.Date == date).ToListAsync();
         }
         public void Dispose()
         {

@@ -5,7 +5,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Universal.EBI.Classrooms.API.Application.Events;
 using Universal.EBI.Classrooms.API.Application.Queries.Interfaces;
-using Universal.EBI.Classrooms.API.Models;
 using Universal.EBI.Classrooms.API.Models.Interfaces;
 using Universal.EBI.Core.DomainObjects.Models;
 using Universal.EBI.Core.Messages;

@@ -14,22 +14,7 @@ namespace Universal.EBI.BFF.Report.API.Controllers
         public ClassroomController(IClassroomService classroomService)
         {
             _classroomService = classroomService;
-        }
-
-        //private readonly IResponsibleService _responsibleService;
-        //private readonly IChildService _childService;
-        //private readonly IEducatorService _educatorService;
-
-        //public ClassroomController(IClassroomService classroomService, 
-        //                           IResponsibleService responsibleService, 
-        //                           IChildService childService, 
-        //                           IEducatorService educatorService)
-        //{
-        //    _classroomService = classroomService;
-        //    _responsibleService = responsibleService;
-        //    _childService = childService;
-        //    _educatorService = educatorService;
-        //}
+        }        
 
         [HttpGet]
         [Route("reports/classrooms")]

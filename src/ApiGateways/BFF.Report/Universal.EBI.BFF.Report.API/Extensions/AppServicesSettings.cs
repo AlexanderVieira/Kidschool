@@ -6,6 +6,7 @@
         public string ResponsibleUrl { get; set; }
         public string ChildUrl { get; set; }
         public string ClassrommUrl { get; set; }
+        public string ReportUrl { get; set; } 
 
     }
 }

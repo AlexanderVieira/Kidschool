@@ -84,18 +84,18 @@ namespace Universal.EBI.Classrooms.API.Application.Commands
 
                 await _bus.PublishAsync(new RegisteredClassroomReportIntegrationEvent
                 {
-                    AggregateId = classroom.Id,
-                    Id = classroom.Id,
-                    Educator = classroom.Educator,
-                    Church = classroom.Church,
-                    Region = classroom.Region,
-                    Lunch = classroomDto.Lunch,
-                    ClassroomType = classroom.ClassroomType.ToString(),
-                    Actived = classroom.Actived,
-                    MeetingTime = classroom.MeetingTime,
-                    CreatedDate = classroom.CreatedDate.ToShortDateString(),
-                    CreatedBy = classroom.CreatedBy,
-                    Childs = classroom.Children.ToArray()
+                    AggregateId = createdClassroom.Id,
+                    Id = createdClassroom.Id,
+                    Educator = createdClassroom.Educator,
+                    Church = createdClassroom.Church,
+                    Region = createdClassroom.Region,
+                    Lunch = createdClassroom.Lunch,
+                    ClassroomType = createdClassroom.ClassroomType.ToString(),
+                    Actived = createdClassroom.Actived,
+                    MeetingTime = createdClassroom.MeetingTime,
+                    CreatedDate = createdClassroom.CreatedDate.ToShortDateString(),
+                    CreatedBy = createdClassroom.CreatedBy,
+                    Childs = createdClassroom.Children.ToArray()
 
                 });
             }            

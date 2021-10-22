@@ -12,7 +12,9 @@ namespace Universal.EBI.Reports.API.Models.Interfaces
         Task UpdateClassroom(Classroom Classroom);
         Task DeleteClassroom(Guid id);
         Task<Classroom> GetClassroomById(Guid id);
+        Task<IEnumerable<Classroom>> GetClassroomByDaily(DateTime date);
         Task<IEnumerable<Classroom>> GetClassroomByDate(DateTime inicialDate, DateTime finalDate);
+        Task<IEnumerable<Classroom>> GetClassroomByRange(DateTime inicialDate, DateTime finalDate, string region, string church);
 
     }
 }
