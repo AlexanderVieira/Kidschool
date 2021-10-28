@@ -1,0 +1,550 @@
+﻿@model Universal.EBI.MVC.Models.ClassroomViewModel
+@using Universal.EBI.MVC.Models
+
+@{
+    ViewData["Title"] = "Registro de Sala de Aula";
+}
+
+<div class="col-md-12 mt-md-5">
+    <div class="card">
+        <div class="card-body">
+            <form class="row g-4" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+                <div class="card-text">
+                    <div class="d-flex align-items-center justify-content-center">
+                        <div class="col-md-12">
+
+                            <div class="accordion" id="accordionExample">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingOne">
+                                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                            Sala de Aula
+                                        </button>
+                                    </h2>
+                                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                        <div class="accordion-body">
+                                            <div class="row col-md-12">
+                                                <div class="col-md-3">
+                                                    <div class="input-group form-outline">
+                                                        <input asp-for="Region" class="form-control" id="region" required />
+                                                        <label for="region" class="form-label">Região</label>
+                                                    </div>
+                                                    <div>
+                                                        <span asp-validation-for="Region" class="text-danger"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="input-group form-outline">
+                                                        <input asp-for="Church" class="form-control" id="church" required />
+                                                        <label for="church" class="form-label">Igreja</label>
+                                                    </div>
+                                                    <div>
+                                                        <span asp-validation-for="Church" class="text-danger"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="input-group form-outline">
+                                                        <input asp-for="Lunch" class="form-control" id="lunch" />
+                                                        <label for="lunch" class="form-label">Lanche</label>
+                                                    </div>
+                                                    <div>
+                                                        <span asp-validation-for="Lunch" class="text-danger"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <div class="form-group">
+                                                        <div class='input-group date' id='datepicker4'>
+                                                            <input asp-for="CreatedDate" class="form-control" />
+                                                            <span class="input-group-append">
+                                                                <span class="input-group-text bg-white d-block">
+                                                                    <i class="fa fa-calendar"></i>
+                                                                </span>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row col-md-12">
+                                                <div class="col-md-3 mt-md-4">
+                                                    <div class="input-group">
+                                                        <label class="input-group-text" for="inputGroupSelect04">Tipo de Sala</label>
+                                                        <select asp-for="ClassroomType" class="form-select" id="inputGroupSelect04">
+                                                            <option selected>Selecione...</option>
+                                                            <option value="1">Berçário</option>
+                                                            <option value="2">Maternal</option>
+                                                            <option value="3">Primário</option>
+                                                            <option value="4">Juniores</option>
+                                                            <option value="5">Mista</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-9 mt-md-4">
+                                                    <div class="p-md-1">
+                                                        <div class="col-md-1 form-check-inline">
+                                                            <label class="mb-2" for="flexRadioDefault">Horário</label>
+                                                        </div>
+                                                        <!-- Default radio -->
+                                                        <div class="form-check-inline col-md-2">
+                                                            <input type="radio" class="form-check-input" id="flexRadioDefault1" value="7:00H-AM" />
+                                                            <label class="form-check-label" for="flexRadioDefault1">7:00H-AM</label>
+                                                        </div>
+                                                        <div class="form-check-inline col-md-2">
+                                                            <input type="radio" class="form-check-input" id="flexRadioDefault2" value="10:00H-AM" />
+                                                            <label class="form-check-label" for="flexRadioDefault2">10:00H-AM</label>
+                                                        </div>
+                                                        <div class="form-check-inline col-md-2">
+                                                            <input type="radio" class="form-check-input" id="flexRadioDefault3" value="15:00H-AM" />
+                                                            <label class="form-check-label" for="flexRadioDefault3">15:00H-AM</label>
+                                                        </div>
+                                                        <div class="form-check-inline col-md-2">
+                                                            <input type="radio" class="form-check-input" id="flexRadioDefault4" value="19:30H-AM" />
+                                                            <label class="form-check-label" for="flexRadioDefault4">19:30H-AM</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingTwo">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                            Educador
+                                        </button>
+                                    </h2>
+                                    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                                        <div class="accordion-body">
+                                            <div class="col-md-12">
+                                                <div class="row col-md-12 mb-md-3">
+                                                    <div class="col-md-4">
+                                                        <div class="input-group form-outline">
+                                                            <input type="text" class="form-control" id="search" aria-describedby="inputGroupPrepend4" />
+                                                            <label for="search" class="form-label">Buscar por código</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <button class="btn btn-primary col-md-3 me-3" type="button">Buscar</button>
+                                                        <button class="btn btn-light col-md-3" type="button">Limpar</button>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row col-md-12 mb-md-3">
+                                                    <div class="col-md-4">
+                                                        <div class="input-group form-outline">
+                                                            <input type="text" class="form-control" id="search1" aria-describedby="inputGroupPrepend4" />
+                                                            <label for="search1" class="form-label">Buscar por nome</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <button class="btn btn-primary col-md-3 me-3" type="button">Buscar</button>
+                                                        <button class="btn btn-light col-md-3" type="button">Limpar</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <table id="example" class="table table-striped" style="width:100%">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>
+                                                                <strong>#ID</strong>
+                                                            </th>
+                                                            <th>
+                                                                <strong>Nome</strong>
+                                                            </th>
+                                                            <th>
+                                                                <strong>Data Nascimento</strong>
+                                                            </th>
+                                                            <th>
+                                                                <strong>Sexo</strong>
+                                                            </th>
+                                                            <th>
+                                                                <strong>Função</strong>
+                                                            </th>
+                                                            @*<th>
+                                                                @Html.DisplayNameFor(model => model.Id)
+                                                                </th>
+                                                                <th>
+                                                                @Html.DisplayNameFor(model => model.FirstName)
+                                                                </th>
+                                                                <th>
+                                                                @Html.DisplayNameFor(model => model.LastName)
+                                                                </th>
+                                                                <th>
+                                                                @Html.DisplayNameFor(model => model.FullName)
+                                                                </th>
+                                                                <th>
+                                                                @Html.DisplayNameFor(model => model.Excluded)
+                                                                </th>
+                                                                <th>
+                                                                @Html.DisplayNameFor(model => model.PhotoUrl)
+                                                                </th>
+                                                                <th>
+                                                                @Html.DisplayNameFor(model => model.BirthDate)
+                                                                </th>
+                                                                <th>
+                                                                @Html.DisplayNameFor(model => model.GenderType)
+                                                                </th>
+                                                                <th>
+                                                                @Html.DisplayNameFor(model => model.CreatedBy)
+                                                                </th>
+                                                                <th>
+                                                                @Html.DisplayNameFor(model => model.CreatedDate)
+                                                                </th>
+                                                                <th>
+                                                                @Html.DisplayNameFor(model => model.LastModifiedBy)
+                                                                </th>
+                                                                <th>
+                                                                @Html.DisplayNameFor(model => model.LastModifiedDate)
+                                                                </th>*@
+                                                            <th></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @if (ViewBag.Educators != null && ViewBag.Educators.Count > 0)
+                                                        {
+                                                            @for (int i = 0; i < ViewBag.Educators.Count; i++)
+                                                            {
+                                                                <tr>
+                                                                    <td>
+                                                                        ViewBag.Educators[i].Id;
+                                                                    </td>
+                                                                    <td>
+                                                                        ViewBag.Educators[i].FullName;
+                                                                    </td>
+                                                                    <td>
+                                                                        ViewBag.Educators[i].BirthDate;
+                                                                    </td>
+                                                                    <td>
+                                                                        ViewBag.Educators[i].GenderType;
+                                                                    </td>
+                                                                    <td>
+                                                                        ViewBag.Educators[i].FunctionType;
+                                                                    </td>
+                                                                    @*<td>
+                                                                        @Html.DisplayFor(modelItem => item.FirstName)
+                                                                        </td>
+                                                                        <td>
+                                                                        @Html.DisplayFor(modelItem => item.LastName)
+                                                                        </td>
+                                                                        <td>
+                                                                        @Html.DisplayFor(modelItem => item.FullName)
+                                                                        </td>
+                                                                        <td>
+                                                                        @Html.DisplayFor(modelItem => item.Excluded)
+                                                                        </td>
+                                                                        <td>
+                                                                        @Html.DisplayFor(modelItem => item.PhotoUrl)
+                                                                        </td>
+                                                                        <td>
+                                                                        @Html.DisplayFor(modelItem => item.BirthDate)
+                                                                        </td>
+                                                                        <td>
+                                                                        @Html.DisplayFor(modelItem => item.GenderType)
+                                                                        </td>
+                                                                    <td>
+                                                                        @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                                                                        @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                                                                        @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                                                                    </td>*@
+                                                                </tr>
+                                                            }
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+                                            @*<div class="d-flex align-items-center">
+                                                <div class="d-flex justify-content-center">
+                                                <partial name="_EducatorCollectionPartial.cshtml" />
+                                                </div>
+                                                </div>*@
+
+                                            <div class="row col-md-12 mt-md-3">
+                                                <div class="col-md-4">
+                                                    <div class="input-group form-outline">
+
+                                                        <input asp-for="Educator.FirstName" class="form-control" id="firstname" aria-describedby="inputGroupPrepend3" required />
+                                                        <label for="firstname" class="form-label">Primeiro nome</label>
+                                                    </div>
+                                                    <div>
+                                                        <span asp-validation-for="Educator.FirstName" class="text-danger"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-5">
+                                                    <div class="input-group form-outline">
+
+                                                        <input asp-for="Educator.LastName" class="form-control" id="lastname" required />
+                                                        <label for="lastname" class="form-label">Sobrenome</label>
+                                                    </div>
+                                                    <div>
+                                                        <span asp-validation-for="Educator.LastName" class="text-danger"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="input-group">
+                                                        <label class="input-group-text" for="inputGroupSelect05">Função</label>
+                                                        <select asp-for="Educator.FunctionType" class="form-select" id="inputGroupSelect05">
+                                                            <option selected>Selecione...</option>
+                                                            <option value="Responsible">Responsável</option>
+                                                            <option value="Auxiliary">Auxiliar</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingThree">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                            Criança
+                                        </button>
+                                    </h2>
+                                    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                                        <div class="accordion-body">
+                                            <strong>This is the third item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center justify-content-center">
+                    <button class="btn btn-primary col-md-4" type="submit">Enviar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!--<div class="d-flex align-items-center justify-content-center mt-md-5">
+    <div class="card col-md-12">
+        <h5 class="card-header bg-light">Nova Sala de Aula</h5>
+        <div class="card-body">
+            <h5 class="card-title d-flex align-items-center justify-content-center mb-5">Seja bem vindo!</h5>
+            <form class="row g-4" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+                <div class="col-md-4">
+                    <div class="input-group form-outline">
+                        <input asp-for="Region" class="form-control" id="region" required />
+                        <label for="region" class="form-label">Região</label>
+                    </div>
+                    <div>
+                        <span asp-validation-for="Region" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="input-group form-outline">
+                        <input asp-for="Church" class="form-control" id="church" required />
+                        <label for="church" class="form-label">Igreja</label>
+                    </div>
+                    <div>
+                        <span asp-validation-for="Church" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <div class='input-group date' id='datepicker4'>
+                            <input asp-for="CreatedDate" class="form-control" />
+                            <span class="input-group-append">
+                                <span class="input-group-text bg-white d-block">
+                                    <i class="fa fa-calendar"></i>
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="input-group form-outline">
+                        <input asp-for="Lunch" class="form-control" id="lunch" />
+                        <label for="lunch" class="form-label">Lanche</label>
+                    </div>
+                    <div>
+                        <span asp-validation-for="Lunch" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="input-group">
+                        <label class="input-group-text" for="inputGroupSelect04">Tipo de Sala</label>
+                        <select asp-for="ClassroomType" class="form-select" id="inputGroupSelect04">
+                            <option selected>Selecione...</option>
+                            <option value="1">Berçário</option>
+                            <option value="2">Maternal</option>
+                            <option value="3">Primário</option>
+                            <option value="4">Juniores</option>
+                            <option value="5">Mista</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <label class="form-check-label mb-2" for="flexRadioDefault">Horário</label>
+                    <div class="row">-->
+<!-- Default radio -->
+<!--<div class="form-check-inline col-md-3">
+                            <input type="radio" class="form-check-input" id="flexRadioDefault1" value="7:00H-AM" />
+                            <label class="form-check-label" for="flexRadioDefault1">7:00H-AM</label>
+                        </div>
+                        <div class="form-check-inline col-md-3">
+                            <input type="radio" class="form-check-input" id="flexRadioDefault2" value="10:00H-AM" />
+                            <label class="form-check-label" for="flexRadioDefault2">10:00H-AM</label>
+                        </div>
+                        <div class="form-check-inline col-md-3">
+                            <input type="radio" class="form-check-input" id="flexRadioDefault3" value="15:00H-AM" />
+                            <label class="form-check-label" for="flexRadioDefault3">15:00H-AM</label>
+                        </div>
+                        <div class="form-check-inline col-md-2">
+                            <input type="radio" class="form-check-input" id="flexRadioDefault4" value="19:30H-AM" />
+                            <label class="form-check-label" for="flexRadioDefault4">19:30H-AM</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="input-group form-outline">
+                        <span class="input-group-text" id="inputGroupPrepend3"><i class="fa fa-envelope"></i></span>
+                        <input asp-for="Educator.FirstName" class="form-control" id="firstname" aria-describedby="inputGroupPrepend3" required />
+                        <label for="firstname" class="form-label">Primeiro nome (Educador)</label>
+                    </div>
+                    <div>
+                        <span asp-validation-for="Educator.FirstName" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="input-group form-outline">
+                        <span class="input-group-text" id="inputGroupPrepend4"><i class="fa fa-id-card"></i></span>
+                        <input asp-for="Educator.LastName" class="form-control" id="lastname" required />
+                        <label for="lastname" class="form-label">Sobre nome (Educador)</label>
+                    </div>
+                    <div>
+                        <span asp-validation-for="Educator.LastName" class="text-danger"></span>
+                    </div>
+                </div>
+
+
+                <div class="col-md-4">
+                    <div class="input-group">
+                        <label class="input-group-text" for="inputGroupSelect05">Função</label>
+                        <select asp-for="Educator.FunctionType" class="form-select" id="inputGroupSelect05">
+                            <option selected>Selecione...</option>
+                            <option value="Responsible">Responsável</option>
+                            <option value="Auxiliary">Auxiliar</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                        <div class="form-outline">
+                            <input asp-for="PublicPlace" class="form-control" id="validationServer04" required />
+                            <label for="validationServer04" class="form-label">Logradouro</label>
+                        </div>
+                        <div>
+                            <span asp-validation-for="PublicPlace" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-outline">
+                            <input asp-for="Number" class="form-control" id="typeNumber" required />
+                            <label class="form-label" for="typeNumber">Número</label>
+                        </div>
+                        <div>
+                            <span asp-validation-for="Number" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-outline">
+                            <input asp-for="Complement" class="form-control" id="validationServer05" required />
+                            <label for="validationServer05" class="form-label">Complemento</label>
+                        </div>
+                        <div>
+                            <span asp-validation-for="Complement" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-outline">
+                            <input asp-for="District" class="form-control" id="validationServer06" required />
+                            <label for="validationServer06" class="form-label">Bairro</label>
+                        </div>
+                        <div>
+                            <span asp-validation-for="District" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-outline">
+                            <input asp-for="City" class="form-control" id="validationServer07" required />
+                            <label for="validationServer07" class="form-label">Cidade</label>
+                        </div>
+                        <div>
+                            <span asp-validation-for="City" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="input-group mb-3">
+                            <label class="input-group-text" for="inputGroupSelect03">Estados</label>
+                            <select asp-for="State" class="form-select" id="inputGroupSelect03">
+                                <option selected>Selecione...</option>
+                                <option value="SP">São Paulo</option>
+                                <option value="RJ">Rio de Janeiro</option>
+                                <option value="MG">Minas Gerais</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-outline">
+                            <input asp-for="Country" class="form-control" id="validationServer08" required />
+                            <label for="validationServer08" class="form-label">País</label>
+                        </div>
+                        <div>
+                            <span asp-validation-for="Country" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-outline">
+                            <input asp-for="ZipCode" class="form-control" id="validationServer09" required />
+                            <label for="validationServer09" class="form-label">CEP</label>
+                        </div>
+                        <div>
+                            <span asp-validation-for="ZipCode" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                <div class="d-flex align-items-center justify-content-center">
+                    <button class="btn btn-primary col-md-4" type="submit">Enviar</button>
+                </div>
+                <div class="d-flex align-items-center justify-content-center">
+                    <div class="form-group">
+                        Possui conta?
+                        <a asp-controller="Classroom" asp-action="ClassroomCreate"> Entre aqui.</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>-->
+
+<script>
+    $(function () {
+        $('#datepicker4').datepicker({ format: 'dd/mm/yyyy' });
+    });
+</script>
+
+<script>
+    $(function () {
+        var table = $('#example').DataTable({
+            lengthChange: false,
+            //buttons: [
+            //    {
+            //        extend: 'csv',
+            //        split: ['pdf', 'excel'],
+            //    }
+            //]
+        });
+
+        //table.buttons().container()
+        //    .appendTo('#example_wrapper .col-md-6:eq(0)');
+    });
+</script>
+
+<!-- MDB -->
+<script src="~/mdb5-ui-kit/js/mdb.min.js"></script>
+
+@section Scripts {
+<partial name="_ValidationScriptsPartial" />
+}

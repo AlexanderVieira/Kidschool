@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Globalization;
 using System.IO;
+using Universal.EBI.MVC.Extensions;
 
 namespace Universal.EBI.MVC.Configuration
 {
@@ -18,7 +19,7 @@ namespace Universal.EBI.MVC.Configuration
 
             services.AddDataProtection()
                .PersistKeysToFileSystem(new DirectoryInfo(@"/var/data_protection_keys/"))
-               .SetApplicationName("EshopEnterprise");
+               .SetApplicationName("Universal.EBI");
 
             services.Configure<ForwardedHeadersOptions>(options =>
             {
@@ -64,7 +65,7 @@ namespace Universal.EBI.MVC.Configuration
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Catalog}/{action=Index}/{id?}");
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

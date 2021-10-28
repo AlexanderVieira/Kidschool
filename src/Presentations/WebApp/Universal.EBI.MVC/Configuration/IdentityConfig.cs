@@ -11,7 +11,7 @@ namespace Universal.EBI.MVC.Configuration
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
                 {
-                    options.LoginPath = "/login";
+                    options.LoginPath = "/signin";
                     options.AccessDeniedPath = "/erro/403";
                 });
         }

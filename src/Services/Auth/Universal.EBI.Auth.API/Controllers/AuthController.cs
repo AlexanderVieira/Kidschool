@@ -1,9 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Universal.EBI.Auth.API.Models;
 using Universal.EBI.Auth.API.Services;
+using Universal.EBI.Core.DomainObjects.Models;
+using Universal.EBI.Core.DomainObjects.Models.Enums;
 using Universal.EBI.Core.Messages;
 using Universal.EBI.Core.Messages.Integration.Educator;
 using Universal.EBI.MessageBus.Interfaces;
@@ -15,12 +18,7 @@ namespace Universal.EBI.Auth.API.Controllers
     public class AuthController : BaseController
     {
         private readonly AuthService _authenticationService;
-        private readonly IMessageBus _bus;
-
-        //public AuthController(AuthService authenticationService)
-        //{
-        //    _authenticationService = authenticationService;            
-        //}
+        private readonly IMessageBus _bus;        
 
         public AuthController(AuthService authenticationService, IMessageBus bus)
         {
@@ -62,7 +60,7 @@ namespace Universal.EBI.Auth.API.Controllers
             return CustomResponse();
         }
 
-        [HttpPost("singin")]
+        [HttpPost("signin")]
         public async Task<ActionResult> Login(UserLogin userLogin)
         {
 
@@ -114,13 +112,42 @@ namespace Universal.EBI.Auth.API.Controllers
                 Id = Guid.Parse(user.Id),
                 FirstName = userRegister.FirstName,
                 LastName = userRegister.LastName,
+                FullName = $"{userRegister.FirstName} {userRegister.LastName}",
                 Email = userRegister.Email,
                 Cpf = userRegister.Cpf,
                 BirthDate = userRegister.BirthDate,
-                Function = userRegister.Function,
-                Gender = userRegister.Gender,
+                FunctionType = userRegister.FunctionType,
+                GenderType = userRegister.GenderType,
                 PhotoUrl = userRegister.PhotoUrl,
-                Excluded = userRegister.Excluded
+                Excluded = userRegister.Excluded,
+                Address = new Address
+                {
+                    Id = Guid.NewGuid(),
+                    PublicPlace = userRegister.PublicPlace,
+                    Number = userRegister.Number,
+                    Complement = userRegister.Complement,
+                    District = userRegister.District,
+                    City = userRegister.City,
+                    State = userRegister.State,
+                    Country = userRegister.Country,
+                    ZipCode = userRegister.ZipCode,
+                    EducatorId = null
+                },
+                Phones = new List<Phone> 
+                { 
+                    new Phone 
+                    { 
+                        Id = Guid.NewGuid(),
+                        Number = userRegister.PhoneNumber,
+                        PhoneType = (PhoneType)Enum.Parse(typeof(PhoneType), userRegister.PhoneType, true),
+                        EducatorId = null
+                    } 
+                }.ToArray(),
+                CreatedDate = null,
+                CreatedBy = null,
+                LastModifiedDate = null,
+                LastModifiedBy = null,
+                ClassroomId = null
             };
 
             try

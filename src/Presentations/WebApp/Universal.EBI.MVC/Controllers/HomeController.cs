@@ -1,37 +1,68 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 using Universal.EBI.MVC.Models;
 
 namespace Universal.EBI.MVC.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
-
+        [HttpGet]
+        [Route("")]
+        [Route("home")]
         public IActionResult Index()
         {
             return View();
         }
 
-        public IActionResult Privacy()
+        [HttpGet]        
+        [Route("calendar")]
+        public IActionResult Calendar()
         {
             return View();
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        [Route("sistema-indisponivel")]
+        public IActionResult SistemaIndisponivel()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            var modelErro = new ErrorViewModel
+            {
+                Message = "O sistema está temporariamente indisponível, isto pode ocorrer em momentos de sobrecarga de usuários.",
+                Title = "Sistema indisponível.",
+                ErroCode = 500
+            };
+
+            return View("Error", modelErro);
+        }
+
+        [Route("erro/{id:length(3,3)}")]
+        public IActionResult Error(int id)
+        {
+            var vmErro = new ErrorViewModel();
+
+            if (id == 500)
+            {
+                vmErro.Message = "Ocorreu um erro! Tente novamente mais tarde ou contate nosso suporte.";
+                vmErro.Title = "Ocorreu um erro!";
+                vmErro.ErroCode = id;
+            }
+            else if (id == 404)
+            {
+                vmErro.Message =
+                    "A página que está procurando não existe! <br />Em caso de dúvidas entre em contato com nosso suporte";
+                vmErro.Title = "Ops! Página não encontrada.";
+                vmErro.ErroCode = id;
+            }
+            else if (id == 403)
+            {
+                vmErro.Message = "Você não tem permissão para fazer isto.";
+                vmErro.Title = "Acesso Negado";
+                vmErro.ErroCode = id;
+            }
+            else
+            {
+                return StatusCode(404);
+            }
+
+            return View("Error", vmErro);
         }
     }
 }

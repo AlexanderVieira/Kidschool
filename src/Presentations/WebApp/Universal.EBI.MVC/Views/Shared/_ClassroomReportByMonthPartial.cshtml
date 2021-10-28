@@ -1,0 +1,49 @@
+﻿<!-- Modal -->
+<div class="modal fade"
+     id="staticBackdrop4"
+     data-mdb-backdrop="static"
+     data-mdb-keyboard="false"
+     tabindex="-1"
+     aria-labelledby="staticBackdropLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <form class="row g-4" asp-controller="ClassroomReport" asp-action="GetClassroomReportByMonth" method="get">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Relatório mensal</h5>
+                    <button type="button"
+                            class="btn-close"
+                            data-mdb-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h5 class="d-flex align-items-center justify-content-center mb-4">
+                        <span>Informe sua região e igreja</span>
+                    </h5>
+                    <div class="col-md-6 float-md-start mt-3">
+                        <div class="form-outline me-md-2">
+                            <input type="text" class="form-control" id="validationServer03" name="region" required />
+                            <label for="validationServer03" class="form-label">Região</label>
+                        </div>
+                        @*<div>
+                                <span asp-validation-for="FirstName" class="text-danger"></span>
+                            </div>*@
+                    </div>
+                    <div class="col-md-6 float-md-end mt-3">
+                        <div class="form-outline">
+                            <input type="text" class="form-control" id="validationServer04" name="church" required />
+                            <label for="validationServer04" class="form-label">Igreja</label>
+                        </div>
+                        @*<div>
+                                <span asp-validation-for="LastName" class="text-danger"></span>
+                            </div>*@
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Fechar</button>
+                    <button id="enviar" class="btn btn-primary" type="submit">Enviar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

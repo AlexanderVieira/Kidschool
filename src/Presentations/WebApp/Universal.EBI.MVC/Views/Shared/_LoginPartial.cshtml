@@ -1,0 +1,88 @@
+﻿@using Universal.EBI.WebAPI.Core.AspNetUser.Interfaces;
+@using Universal.EBI.MVC.Extensions;
+@inject IAspNetUser AppUser
+
+@if (AppUser.IsAuthenticated())
+{
+    <!--<div>
+        <div class="dropdown d-inline-block">-->
+
+    <!--<vc:customer-cart />-->
+
+    <!--<a href="#" class="icontext dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+        <img class="icon icon-sm rounded-circle" src="https://s.gravatar.com/avatar/@this.HashEmailForGravatar(AppUser.GetUserEmail())?d=mm&s=45">
+    </a>--> <!-- iconbox // -->
+    <!--<div class="dropdown-menu dropdown-menu-left" x-placement="bottom-end" style="position: absolute; will-change: transform; top: 12px; left: 91px; transform: translate3d(150px, 32px, 0px);">
+                <a class="dropdown-item" href="#">Meu Perfil</a>
+                <a class="dropdown-item" href="#">Meus Dados</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" asp-controller="auth" asp-action="Logout">Sair</a>
+            </div>
+        </div>
+    </div>-->
+
+    <div class="d-inline-block">
+        <!-- Icon -->
+        <a class="text-reset me-3" href="#">
+            <i class="fas fa-shopping-cart"></i>
+        </a>
+    </div>
+    <div class="d-inline-block">
+        <!-- Notifications -->
+        <a class="text-reset me-3 dropdown-toggle hidden-arrow"
+           href="#"
+           id="navbarDropdownMenuLink"
+           role="button"
+           data-mdb-toggle="dropdown"
+           aria-expanded="false">
+            <i class="fas fa-bell"></i>
+            <span class="badge rounded-pill badge-notification bg-danger">1</span>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end"
+            aria-labelledby="navbarDropdownMenuLink">
+            <li>
+                <a class="dropdown-item" href="#">Some news</a>
+            </li>
+            <li>
+                <a class="dropdown-item" href="#">Another news</a>
+            </li>
+            <li>
+                <a class="dropdown-item" href="#">Something else here</a>
+            </li>
+        </ul>
+    </div>
+    <div class="d-inline-block">
+        <!-- Avatar -->
+        <a class="dropdown-toggle d-flex align-items-center hidden-arrow"
+           href="#"
+           id="navbarDropdownMenuLink"
+           role="button"
+           data-mdb-toggle="dropdown"
+           aria-expanded="false">
+            <img src="https://mdbootstrap.com/img/new/avatars/2.jpg"
+                 class="rounded-circle"
+                 height="25"
+                 alt=""
+                 loading="lazy" />
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end"
+            aria-labelledby="navbarDropdownMenuLink">
+            <li>
+                <a class="dropdown-item" href="#">Meu perfil</a>
+            </li>
+            <li>
+                <a class="dropdown-item" href="#">Configurações</a>
+            </li>
+            <li>
+                <a class="dropdown-item" asp-controller="auth" asp-action="Logout">Sair</a>
+            </li>
+        </ul>
+    </div>
+}
+else
+{
+    <div class="d-flex align-items-center">
+        <a asp-controller="auth" asp-action="Login"><input type="button" class="btn btn-link px-3 me-2" value="Login" /></a>
+        <a asp-controller="auth" asp-action="Register"><input type="button" class="btn btn-primary me-3" value="Crie sua conta" /></a>
+    </div>
+}

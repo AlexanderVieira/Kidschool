@@ -24,13 +24,14 @@ namespace Universal.EBI.Educators.API.Application.Queries
         public async Task<Educator> GetEducatorByCpf(string cpf)
         {
             const string sql = @"SELECT 
-                               E.ID AS EDUCATORID, E.FIRSTNAME, E.LASTNAME, E.EMAIL, E.CPF, E.BIRTHDATE, E.GENDER, E.EXCLUDED, 
-                               E.PHOTOURL, E.FUNCTIONTYPE, P.ID AS PHONEID, P.NUMBER AS PHONENUMBER, P.PHONETYPE, P.EDUCATORID AS EDUCATOR_ID, 
-                               A.ID AS ADDRESSID, A.PUBLICPLACE, A.NUMBER, A.COMPLEMENT, A.DISTRICT, A.CITY, A.STATE, A.ZIPCODE
+                               E.ID AS EDUCATORID, E.FIRSTNAME, E.LASTNAME, E.FULLNAME, E.EMAIL, E.CPF, E.BIRTHDATE, E.GENDERTYPE, E.EXCLUDED, 
+                               E.PHOTOURL, E.FUNCTIONTYPE, E.CREATEDDATE, E.CREATEDBY, E.LASTMODIFIEDDATE, E.LASTMODIFIEDBY, E.CLASSROOMID,
+                               P.ID AS PHONEID, P.NUMBER AS PHONENUMBER, P.PHONETYPE, P.EDUCATORID AS EDUCATOR_ID, 
+                               A.ID AS ADDRESSID, A.PUBLICPLACE, A.NUMBER, A.COMPLEMENT, A.DISTRICT, A.CITY, A.STATE, A.COUNTRY, A.ZIPCODE
                                FROM EDUCATORS E
                                INNER JOIN PHONES P
                                ON E.ID = P.EDUCATORID
-                               INNER JOIN ADRESSES A
+                               INNER JOIN ADDRESSES A
                                ON E.ID = A.EDUCATORID
                                WHERE E.CPF = @cpf";
 
@@ -45,13 +46,14 @@ namespace Universal.EBI.Educators.API.Application.Queries
         public async Task<Educator> GetEducatorById(Guid id)
         {
             const string sql = @"SELECT 
-                               E.ID AS EDUCATORID, E.FIRSTNAME, E.LASTNAME, E.EMAIL, E.CPF, E.BIRTHDATE, E.GENDER, E.EXCLUDED, 
-                               E.PHOTOURL, E.FUNCTIONTYPE, P.ID AS PHONEID, P.NUMBER AS PHONENUMBER, P.PHONETYPE, P.EDUCATORID AS EDUCATOR_ID, 
-                               A.ID AS ADDRESSID, A.PUBLICPLACE, A.NUMBER, A.COMPLEMENT, A.DISTRICT, A.CITY, A.STATE, A.ZIPCODE
+                               E.ID AS EDUCATORID, E.FIRSTNAME, E.LASTNAME, E.FULLNAME, E.EMAIL, E.CPF, E.BIRTHDATE, E.GENDERTYPE, E.EXCLUDED, 
+                               E.PHOTOURL, E.FUNCTIONTYPE, E.CREATEDDATE, E.CREATEDBY, E.LASTMODIFIEDDATE, E.LASTMODIFIEDBY, E.CLASSROOMID,
+                               P.ID AS PHONEID, P.NUMBER AS PHONENUMBER, P.PHONETYPE, P.EDUCATORID AS EDUCATOR_ID, 
+                               A.ID AS ADDRESSID, A.PUBLICPLACE, A.NUMBER, A.COMPLEMENT, A.DISTRICT, A.CITY, A.STATE, A.COUNTRY, A.ZIPCODE
                                FROM EDUCATORS E
                                INNER JOIN PHONES P
                                ON E.ID = P.EDUCATORID
-                               INNER JOIN ADRESSES A
+                               INNER JOIN ADDRESSES A
                                ON E.ID = A.EDUCATORID
                                WHERE E.ID = @id";
 
@@ -70,15 +72,16 @@ namespace Universal.EBI.Educators.API.Application.Queries
         }
 
         public async Task<PagedResult<Educator>> GetEducators(int pageSize, int pageIndex, string query = null)
-        {            
+        { //E.CREATEDDATE, E.CREATEDBY, E.LASTMODIFIEDDATE, E.LASTMODIFIEDBY, E.CLASSROOMID,           
             string sql = @$"SELECT
-                         E.ID AS EDUCATORID, E.FIRSTNAME, E.LASTNAME, E.EMAIL, E.CPF, E.BIRTHDATE, E.GENDER, E.EXCLUDED, 
-                         E.PHOTOURL, E.FUNCTIONTYPE, P.ID AS PHONEID, P.NUMBER, P.PHONETYPE, P.EDUCATORID AS EDUCATOR_ID, 
-                         A.ID AS ADDRESSID, A.PUBLICPLACE, A.NUMBER, A.COMPLEMENT, A.DISTRICT, A.CITY, A.STATE, A.ZIPCODE
+                         E.ID AS EDUCATORID, E.FIRSTNAME, E.LASTNAME, E.FULLNAME, E.EMAIL, E.CPF, E.BIRTHDATE, E.GENDERTYPE, E.EXCLUDED, 
+                         E.PHOTOURL, E.FUNCTIONTYPE, E.CREATEDDATE, E.CREATEDBY, E.LASTMODIFIEDDATE, E.LASTMODIFIEDBY, E.CLASSROOMID,
+                         P.ID AS PHONEID, P.NUMBER AS PHONENUMBER, P.PHONETYPE, P.EDUCATORID AS EDUCATOR_ID, 
+                         A.ID AS ADDRESSID, A.PUBLICPLACE, A.NUMBER, A.COMPLEMENT, A.DISTRICT, A.CITY, A.STATE, A.COUNTRY, A.ZIPCODE
                          FROM EDUCATORS E
                          INNER JOIN PHONES P
                          ON E.ID = P.EDUCATORID
-                         INNER JOIN ADRESSES A
+                         INNER JOIN ADDRESSES A
                          ON E.ID = A.EDUCATORID
                          WHERE (@FirstName IS NULL OR FirstName LIKE '%' + @FirstName + '%')
                          ORDER BY [FirstName] ASC
@@ -95,43 +98,55 @@ namespace Universal.EBI.Educators.API.Application.Queries
                 var educatorDictionary = new Dictionary<string, Educator>();
                 IDictionary<string, object> dict;
                 var educators = new List<Educator>();
+                Educator educatorEntry = null;
 
                 if (result != null)
                 {
                     for (int i = 0; i < result.Count(); i++)
                     {
                         var aux = result.ToList();
-                        dict = aux[i] as IDictionary<string, object>;
+                        dict = aux[i] as IDictionary<string, object>;                        
 
-                        if (!educatorDictionary.TryGetValue(dict["EDUCATORID"].ToString(), out Educator educatorEntry))
+                        if (!educatorDictionary.TryGetValue(dict["EDUCATORID"].ToString(), out educatorEntry))
                         {
-                            educatorEntry = new Educator
+                            var newEducator = new Educator
                             {
                                 Id = Guid.Parse(dict["EDUCATORID"].ToString()),
                                 FirstName = dict["FIRSTNAME"].ToString(),
                                 LastName = dict["LASTNAME"].ToString(),
+                                FullName = dict["FULLNAME"].ToString(),
                                 Email = new Email(dict["EMAIL"].ToString()),
                                 Cpf = new Cpf(dict["CPF"].ToString()),
                                 Phones = new List<Phone>(),
-                                Address = new Address
-                                {
-                                    Id = Guid.Parse(dict["ADDRESSID"].ToString()),
-                                    PublicPlace = dict["PUBLICPLACE"].ToString(),
-                                    Number = dict["NUMBER"].ToString(),
-                                    Complement = dict["COMPLEMENT"].ToString(),
-                                    District = dict["DISTRICT"].ToString(),
-                                    City = dict["CITY"].ToString(),
-                                    State = dict["STATE"].ToString(),
-                                    ZipCode = dict["ZIPCODE"].ToString(),
-                                    EducatorId = Guid.Parse(dict["EDUCATOR_ID"].ToString())
-
-                                },
+                                Address = new Address(),
                                 BirthDate = DateTime.Parse(dict["BIRTHDATE"].ToString()),
-                                GenderType = (GenderType)Enum.Parse(typeof(GenderType), dict["GENDER"].ToString(), true),
+                                GenderType = (GenderType)Enum.Parse(typeof(GenderType), dict["GENDERTYPE"].ToString(), true),
                                 FunctionType = (FunctionType)Enum.Parse(typeof(FunctionType), dict["FUNCTIONTYPE"].ToString(), true),
-                                PhotoUrl = dict["PHOTOURL"].ToString(),
-                                Excluded = bool.Parse(dict["EXCLUDED"].ToString())
+                                PhotoUrl = dict["PHOTOURL"] == null ? null : dict["PHOTOURL"].ToString(),
+                                Excluded = bool.Parse(dict["EXCLUDED"].ToString()),
+                                CreatedDate = DateTime.Parse(dict["CREATEDDATE"].ToString()),
+                                CreatedBy = dict["CREATEDBY"].ToString(),
+                                LastModifiedDate = dict["LASTMODIFIEDDATE"] == null ? null : DateTime.Parse(dict["LASTMODIFIEDDATE"].ToString()),
+                                LastModifiedBy = dict["LASTMODIFIEDBY"] == null ? null : dict["LASTMODIFIEDBY"].ToString(),
+                                ClassroomId = dict["CLASSROOMID"] == null ? null : Guid.Parse(dict["CLASSROOMID"].ToString())
                             };
+
+                            newEducator.Address = new Address
+                            {
+                                Id = Guid.Parse(dict["ADDRESSID"].ToString()),
+                                PublicPlace = dict["PUBLICPLACE"].ToString(),
+                                Number = dict["NUMBER"].ToString(),
+                                Complement = dict["COMPLEMENT"].ToString(),
+                                District = dict["DISTRICT"].ToString(),
+                                City = dict["CITY"].ToString(),
+                                State = dict["STATE"].ToString(),
+                                ZipCode = dict["ZIPCODE"].ToString(),
+                                Country = dict["COUNTRY"].ToString(),
+                                EducatorId = Guid.Parse(dict["EDUCATOR_ID"].ToString())
+
+                            };
+
+                            educatorEntry = newEducator;
 
                             educatorDictionary.Add(educatorEntry.Id.ToString(), educatorEntry);
                             educators.Add(educatorEntry);
@@ -141,7 +156,7 @@ namespace Universal.EBI.Educators.API.Application.Queries
                         educatorEntry.Phones.Add(new Phone
                         {
                             Id = Guid.Parse(dict["PHONEID"].ToString()),
-                            Number = dict["NUMBER"].ToString(),
+                            Number = dict["PHONENUMBER"].ToString(),
                             PhoneType = (PhoneType)Enum.Parse(typeof(PhoneType), dict["PHONETYPE"].ToString(), true),
                             EducatorId = Guid.Parse(dict["EDUCATOR_ID"].ToString())
                         });
@@ -184,33 +199,44 @@ namespace Universal.EBI.Educators.API.Application.Queries
 
                     if (!educatorDictionary.TryGetValue(dict["EDUCATORID"].ToString(), out educatorEntry))
                     {
-                        educatorEntry = new Educator
+                        var newEducator = new Educator
                         {
                             Id = Guid.Parse(dict["EDUCATORID"].ToString()),
                             FirstName = dict["FIRSTNAME"].ToString(),
                             LastName = dict["LASTNAME"].ToString(),
+                            FullName = dict["FULLNAME"].ToString(),
                             Email = new Email(dict["EMAIL"].ToString()),
                             Cpf = new Cpf(dict["CPF"].ToString()),
                             Phones = new List<Phone>(),
-                            Address = new Address
-                            {
-                                Id = Guid.Parse(dict["ADDRESSID"].ToString()),
-                                PublicPlace = dict["PUBLICPLACE"].ToString(),
-                                Number = dict["NUMBER"].ToString(),
-                                Complement = dict["COMPLEMENT"].ToString(),
-                                District = dict["DISTRICT"].ToString(),
-                                City = dict["CITY"].ToString(),
-                                State = dict["STATE"].ToString(),
-                                ZipCode = dict["ZIPCODE"].ToString(),
-                                EducatorId = Guid.Parse(dict["EDUCATOR_ID"].ToString())
-
-                            },
+                            Address = new Address(),                            
                             BirthDate = DateTime.Parse(dict["BIRTHDATE"].ToString()),
-                            GenderType = (GenderType)Enum.Parse(typeof(GenderType), dict["GENDER"].ToString(), true),
+                            GenderType = (GenderType)Enum.Parse(typeof(GenderType), dict["GENDERTYPE"].ToString(), true),
                             FunctionType = (FunctionType)Enum.Parse(typeof(FunctionType), dict["FUNCTIONTYPE"].ToString(), true),
-                            PhotoUrl = dict["PHOTOURL"].ToString(),
-                            Excluded = bool.Parse(dict["EXCLUDED"].ToString())
+                            PhotoUrl = dict["PHOTOURL"] == null ? null : dict["PHOTOURL"].ToString(),
+                            Excluded = bool.Parse(dict["EXCLUDED"].ToString()),
+                            CreatedDate = DateTime.Parse(dict["CREATEDDATE"].ToString()),
+                            CreatedBy = dict["CREATEDBY"].ToString(),
+                            LastModifiedDate = dict["LASTMODIFIEDDATE"] == null ? null : DateTime.Parse(dict["LASTMODIFIEDDATE"].ToString()),
+                            LastModifiedBy = dict["LASTMODIFIEDBY"] == null ? null : dict["LASTMODIFIEDBY"].ToString(),
+                            ClassroomId = dict["CLASSROOMID"] == null ? null : Guid.Parse(dict["CLASSROOMID"].ToString())
                         };
+
+                        newEducator.Address = new Address
+                        {
+                            Id = Guid.Parse(dict["ADDRESSID"].ToString()),
+                            PublicPlace = dict["PUBLICPLACE"].ToString(),
+                            Number = dict["NUMBER"].ToString(),
+                            Complement = dict["COMPLEMENT"].ToString(),
+                            District = dict["DISTRICT"].ToString(),
+                            City = dict["CITY"].ToString(),
+                            State = dict["STATE"].ToString(),
+                            ZipCode = dict["ZIPCODE"].ToString(),
+                            Country = dict["COUNTRY"].ToString(),
+                            EducatorId = Guid.Parse(dict["EDUCATOR_ID"].ToString())
+
+                        };
+
+                        educatorEntry = newEducator;
 
                         educatorDictionary.Add(educatorEntry.Id.ToString(), educatorEntry);
 

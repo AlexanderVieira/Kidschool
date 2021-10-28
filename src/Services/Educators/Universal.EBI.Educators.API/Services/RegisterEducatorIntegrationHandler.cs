@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using FluentValidation.Results;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Universal.EBI.Core.DomainObjects.Models;
 using Universal.EBI.Core.Mediator.Interfaces;
 using Universal.EBI.Core.Messages;
 using Universal.EBI.Core.Messages.Integration.Educator;
@@ -48,16 +49,35 @@ namespace Universal.EBI.Educators.API.Services
                 Id = message.Id,
                 FirstName = message.FirstName,
                 LastName = message.LastName,
+                FullName = message.FullName,
                 Email = message.Email,
                 Cpf = message.Cpf,
                 Phones = message.Phones,
-                Address = message.Address,
+                Address = new Address 
+                {
+                    PublicPlace = message.Address.PublicPlace,
+                    Number = message.Address.Number,
+                    Complement = message.Address.Complement,
+                    District = message.Address.District,
+                    ZipCode = message.Address.ZipCode,
+                    City = message.Address.City,
+                    State = message.Address.State,
+                    Country = message.Address.Country,
+                    EducatorId = message.Address.EducatorId
+                },
                 BirthDate = message.BirthDate,
-                Gender = message.Gender,
-                Function = message.Function,
+                GenderType = message.GenderType,
+                FunctionType = message.FunctionType,
                 PhotoUrl = message.PhotoUrl,
-                Excluded = message.Excluded
+                Excluded = message.Excluded,
+                CreatedDate = message.CreatedDate,
+                CreatedBy = message.CreatedBy,
+                LastModifiedDate = message.LastModifiedDate,
+                LastModifiedBy = message.LastModifiedBy,
+                ClassroomId = message.ClassroomId
+
             };
+
             ValidationResult sucesso;
 
             using (var scope = _serviceProvider.CreateScope())

@@ -12,6 +12,7 @@ namespace Universal.EBI.Core.DomainObjects.Models
         public string ZipCode { get; set; }
         public string City { get; set; }
         public string State { get; set; }
+        public string Country { get; set; } 
         public Guid? ChildId { get; set; }
         public Guid? ResponsibleId { get; set; }
         public Guid? EducatorId { get; set; }       

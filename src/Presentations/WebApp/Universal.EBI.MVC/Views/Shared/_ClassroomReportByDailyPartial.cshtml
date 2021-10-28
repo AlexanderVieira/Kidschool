@@ -1,0 +1,61 @@
+﻿
+<!-- Modal -->
+<div class="modal fade"
+     id="staticBackdrop2"
+     data-mdb-backdrop="static"
+     data-mdb-keyboard="false"
+     tabindex="-1"
+     aria-labelledby="staticBackdropLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <form class="row g-4" asp-controller="ClassroomReport" asp-action="GetClassroomReportByDaily" method="get">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Relatório diário</h5>
+                    <button type="button"
+                            class="btn-close"
+                            data-mdb-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h5 class="d-flex align-items-center justify-content-center mb-2"><span>Informe o intervalo de datas desejado</span></h5>
+                    <div class="mt-md-4 d-flex align-items-center justify-content-center">
+                        <div class="form-group col-md-6">
+                            <label for="datepicker3" class="form-label">Data</label>
+                            <div class='input-group date' id='datepicker3'>
+                                <input type="text" class="form-control" name="date" />
+                                <span class="input-group-append">
+                                    <span class="input-group-text bg-white d-block">
+                                        <i class="fa fa-calendar"></i>
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>                    
+                    <div class="d-flex align-items-center justify-content-center mt-3">
+                        <div class="form-outline col-md-6">
+                            <input type="text" class="form-control" id="validationServer07" name="region" required />
+                            <label for="validationServer07" class="form-label">Região</label>
+                        </div>
+                        @*<div>
+                                <span asp-validation-for="FirstName" class="text-danger"></span>
+                            </div>*@
+                    </div>
+                    <div class="d-flex align-items-center justify-content-center mt-3">
+                        <div class="form-outline col-md-6">
+                            <input type="text" class="form-control" id="validationServer08" name="church" required />
+                            <label for="validationServer08" class="form-label">Igreja</label>
+                        </div>
+                        @*<div>
+                                <span asp-validation-for="LastName" class="text-danger"></span>
+                            </div>*@
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Fechar</button>
+                    <button id="enviar" class="btn btn-primary" type="submit">Enviar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

@@ -17,7 +17,7 @@ namespace Universal.EBI.Educators.API.Data.Mapping
 
             builder.Property(c => c.LastName)
                 .IsRequired()
-                .HasColumnType("varchar(50)");
+                .HasColumnType("varchar(50)");            
 
             builder.OwnsOne(c => c.Cpf, tf =>
             {
@@ -33,6 +33,7 @@ namespace Universal.EBI.Educators.API.Data.Mapping
             {
                 tf.Property(c => c.Address)
                 .IsRequired()
+                .HasConversion<string>(c => c.ToString(), c => new Email(c).Address)
                 .HasColumnName("Email")
                 .HasColumnType($"varchar({Email.ADDRESS_MAX_LENGTH})");
             });

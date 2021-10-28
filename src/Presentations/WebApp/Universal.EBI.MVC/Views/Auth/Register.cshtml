@@ -1,0 +1,219 @@
+﻿@model Universal.EBI.MVC.Models.UserRegister
+
+@{
+    ViewData["Title"] = "Registro de novo usuário";
+}
+
+<div class="d-flex align-items-center justify-content-center">
+    <vc:Summary></vc:Summary>
+</div>
+
+<div class="d-flex align-items-center justify-content-center mt-md-5">    
+    <div class="card col-md-8">
+        <h5 class="card-header bg-light">Registro</h5>
+        <div class="card-body">
+            <h5 class="card-title d-flex align-items-center justify-content-center mb-5">Seja bem vindo!</h5>
+            <form class="row g-4" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+                <div class="col-md-4">
+                    <div class="form-outline">
+                        <input asp-for="FirstName" class="form-control" id="validationServer01" required />
+                        <label for="validationServer01" class="form-label">Primeiro nome</label>
+                    </div>
+                    <div>
+                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="form-outline">
+                        <input asp-for="LastName" class="form-control" id="validationServer02" required />
+                        <label for="validationServer02" class="form-label">Sobrenome</label>
+                    </div>
+                    <div>
+                        <span asp-validation-for="LastName" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="input-group form-outline">
+                        <span class="input-group-text" id="inputGroupPrepend3"><i class="fa fa-envelope"></i></span>
+                        <input asp-for="Email" class="form-control" id="validationServerUsername" aria-describedby="inputGroupPrepend3" required />
+                        <label for="validationServerUsername" class="form-label">E-mail</label>
+                    </div>
+                    <div>
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="input-group form-outline">
+                        <span class="input-group-text" id="inputGroupPrepend4"><i class="fa fa-id-card"></i></span>
+                        <input asp-for="Cpf" class="form-control" id="validationServer03" required />
+                        <label for="validationServer03" class="form-label">CPF</label>
+                    </div>
+                    <div>
+                        <span asp-validation-for="Cpf" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <div class='input-group date' id='datepicker'>
+                            <input asp-for="BirthDate" class="form-control" />
+                            <span class="input-group-append">
+                                <span class="input-group-text bg-white d-block">
+                                    <i class="fa fa-calendar"></i>
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="input-group form-outline">
+                        <span class="input-group-text" id="inputGroupPrepend5"><i class="fa fa-phone"></i></span>
+                        <input asp-for="PhoneNumber" class="form-control" id="typePhone" />
+                        <label for="typePhone" class="form-label">Número telefone</label>
+                    </div>
+                    <div>
+                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="input-group">
+                        <label class="input-group-text" for="inputGroupSelect01">Tipos telefones</label>
+                        <select asp-for="PhoneType" class="form-select" id="inputGroupSelect01">
+                            <option selected>Selecione...</option>
+                            <option value="Residential">Residencial</option>
+                            <option value="Commercial">Comercial</option>
+                            <option value="CellPhone">Celular</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="input-group">
+                        <label class="input-group-text" for="inputGroupSelect02">Função</label>
+                        <select asp-for="FunctionType" class="form-select" id="inputGroupSelect02">
+                            <option selected>Selecione...</option>
+                            <option value="Responsible">Responsável</option>
+                            <option value="Auxiliary">Auxiliar</option>                            
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="input-group form-outline">
+                        <span class="input-group-text" id="inputGroupPrepend6"><i class="fa fa-lock"></i></span>
+                        <input type="password" asp-for="Password" class="form-control" id="typePassword" />
+                        <label class="form-label" for="typePassword">Senha</label>
+                    </div>
+                    <div>
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="input-group form-outline">
+                        <span class="input-group-text" id="inputGroupPrepend7"><i class="fa fa-lock"></i></span>
+                        <input type="password" asp-for="PasswordConfirmation" class="form-control" id="typePasswordConfirmation" />
+                        <label class="form-label" for="typePasswordConfirmation">Confirmação senha</label>
+                    </div>
+                    <div>
+                        <span asp-validation-for="PasswordConfirmation" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-outline">
+                        <input asp-for="PublicPlace" class="form-control" id="validationServer04" required />
+                        <label for="validationServer04" class="form-label">Logradouro</label>
+                    </div>
+                    <div>
+                        <span asp-validation-for="PublicPlace" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-outline">
+                        <input asp-for="Number" class="form-control" id="typeNumber" required />
+                        <label class="form-label" for="typeNumber">Número</label>
+                    </div>
+                    <div>
+                        <span asp-validation-for="Number" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-outline">
+                        <input asp-for="Complement" class="form-control" id="validationServer05" required />
+                        <label for="validationServer05" class="form-label">Complemento</label>
+                    </div>
+                    <div>
+                        <span asp-validation-for="Complement" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-outline">
+                        <input asp-for="District" class="form-control" id="validationServer06" required />
+                        <label for="validationServer06" class="form-label">Bairro</label>
+                    </div>
+                    <div>
+                        <span asp-validation-for="District" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-outline">
+                        <input asp-for="City" class="form-control" id="validationServer07" required />
+                        <label for="validationServer07" class="form-label">Cidade</label>
+                    </div>
+                    <div>
+                        <span asp-validation-for="City" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="input-group mb-3">
+                        <label class="input-group-text" for="inputGroupSelect03">Estados</label>
+                        <select asp-for="State" class="form-select" id="inputGroupSelect03">
+                            <option selected>Selecione...</option>
+                            <option value="SP">São Paulo</option>
+                            <option value="RJ">Rio de Janeiro</option>
+                            <option value="MG">Minas Gerais</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-outline">
+                        <input asp-for="Country" class="form-control" id="validationServer08" required />
+                        <label for="validationServer08" class="form-label">País</label>
+                    </div>
+                    <div>
+                        <span asp-validation-for="Country" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-outline">
+                        <input asp-for="ZipCode" class="form-control" id="validationServer09" required />
+                        <label for="validationServer09" class="form-label">CEP</label>
+                    </div>
+                    <div>
+                        <span asp-validation-for="ZipCode" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <!-- Default radio -->
+                    <div class="form-check-inline">
+                        <input type="radio" asp-for="GenderType" class="form-check-input" id="flexRadioDefault1" value="M" />
+                        <label class="form-check-label" for="flexRadioDefault2">Masculino</label>
+                    </div>
+                    <div class="form-check-inline">
+                        <input type="radio" asp-for="GenderType" class="form-check-input" id="flexRadioDefault2" value="F" />
+                        <label class="form-check-label" for="flexRadioDefault2">Feminino</label>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center justify-content-center">
+                    <button class="btn btn-primary col-md-4" type="submit">Enviar</button>
+                </div>
+                <div class="d-flex align-items-center justify-content-center">
+                    <div class="form-group">
+                        Possui conta?
+                        <a asp-controller="Auth" asp-action="Login"> Entre aqui.</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+    @section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+    }

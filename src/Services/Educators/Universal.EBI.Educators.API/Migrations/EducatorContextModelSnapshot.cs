@@ -19,24 +19,28 @@ namespace Universal.EBI.Educators.API.Migrations
                 .HasAnnotation("ProductVersion", "5.0.10")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Universal.EBI.Educators.API.Models.Address", b =>
+            modelBuilder.Entity("Universal.EBI.Core.DomainObjects.Models.Address", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("ChildId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("City")
-                        .IsRequired()
                         .HasColumnType("varchar(100)");
 
                     b.Property<string>("Complement")
-                        .HasColumnType("varchar(250)");
-
-                    b.Property<string>("District")
-                        .IsRequired()
                         .HasColumnType("varchar(100)");
 
-                    b.Property<Guid>("EducatorId")
+                    b.Property<string>("Country")
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("District")
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<Guid?>("EducatorId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Number")
@@ -47,9 +51,11 @@ namespace Universal.EBI.Educators.API.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(200)");
 
+                    b.Property<Guid?>("ResponsibleId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("State")
-                        .IsRequired()
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("varchar(100)");
 
                     b.Property<string>("ZipCode")
                         .IsRequired()
@@ -58,18 +64,70 @@ namespace Universal.EBI.Educators.API.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("EducatorId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[EducatorId] IS NOT NULL");
 
-                    b.ToTable("Adresses");
+                    b.ToTable("Addresses");
                 });
 
-            modelBuilder.Entity("Universal.EBI.Educators.API.Models.Educator", b =>
+            modelBuilder.Entity("Universal.EBI.Core.DomainObjects.Models.Classroom", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime?>("BirthDate")
+                    b.Property<bool>("Actived")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Church")
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("ClassroomType")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<DateTime?>("LastModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Lunch")
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("MeetingTime")
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("Region")
+                        .HasColumnType("varchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Classroom");
+                });
+
+            modelBuilder.Entity("Universal.EBI.Core.DomainObjects.Models.Educator", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("BirthDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("ClassroomId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("Excluded")
@@ -79,11 +137,22 @@ namespace Universal.EBI.Educators.API.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(50)");
 
-                    b.Property<int?>("FunctionType")
-                        .HasColumnType("int");
+                    b.Property<string>("FullName")
+                        .HasColumnType("varchar(100)");
 
-                    b.Property<int?>("Gender")
-                        .HasColumnType("int");
+                    b.Property<string>("FunctionType")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("GenderType")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<DateTime?>("LastModifiedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -94,24 +163,35 @@ namespace Universal.EBI.Educators.API.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ClassroomId")
+                        .IsUnique()
+                        .HasFilter("[ClassroomId] IS NOT NULL");
+
                     b.ToTable("Educators");
                 });
 
-            modelBuilder.Entity("Universal.EBI.Educators.API.Models.Phone", b =>
+            modelBuilder.Entity("Universal.EBI.Core.DomainObjects.Models.Phone", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("EducatorId")
+                    b.Property<Guid?>("ChildId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("EducatorId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Number")
                         .IsRequired()
                         .HasColumnType("varchar(13)");
 
-                    b.Property<int>("PhoneType")
-                        .HasColumnType("int");
+                    b.Property<string>("PhoneType")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<Guid?>("ResponsibleId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -120,18 +200,21 @@ namespace Universal.EBI.Educators.API.Migrations
                     b.ToTable("Phones");
                 });
 
-            modelBuilder.Entity("Universal.EBI.Educators.API.Models.Address", b =>
+            modelBuilder.Entity("Universal.EBI.Core.DomainObjects.Models.Address", b =>
                 {
-                    b.HasOne("Universal.EBI.Educators.API.Models.Educator", "Educator")
+                    b.HasOne("Universal.EBI.Core.DomainObjects.Models.Educator", "Educator")
                         .WithOne("Address")
-                        .HasForeignKey("Universal.EBI.Educators.API.Models.Address", "EducatorId")
-                        .IsRequired();
+                        .HasForeignKey("Universal.EBI.Core.DomainObjects.Models.Address", "EducatorId");
 
                     b.Navigation("Educator");
                 });
 
-            modelBuilder.Entity("Universal.EBI.Educators.API.Models.Educator", b =>
+            modelBuilder.Entity("Universal.EBI.Core.DomainObjects.Models.Educator", b =>
                 {
+                    b.HasOne("Universal.EBI.Core.DomainObjects.Models.Classroom", "Classroom")
+                        .WithOne("Educator")
+                        .HasForeignKey("Universal.EBI.Core.DomainObjects.Models.Educator", "ClassroomId");
+
                     b.OwnsOne("Universal.EBI.Core.DomainObjects.Cpf", "Cpf", b1 =>
                         {
                             b1.Property<Guid>("EducatorId")
@@ -142,6 +225,12 @@ namespace Universal.EBI.Educators.API.Migrations
                                 .HasMaxLength(11)
                                 .HasColumnType("varchar(11)")
                                 .HasColumnName("Cpf");
+
+                            b1.Property<int>("TempId1")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("TempId2")
+                                .HasColumnType("int");
 
                             b1.HasKey("EducatorId");
 
@@ -161,6 +250,12 @@ namespace Universal.EBI.Educators.API.Migrations
                                 .HasColumnType("varchar(254)")
                                 .HasColumnName("Email");
 
+                            b1.Property<int>("TempId1")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("TempId2")
+                                .HasColumnType("int");
+
                             b1.HasKey("EducatorId");
 
                             b1.ToTable("Educators");
@@ -169,22 +264,28 @@ namespace Universal.EBI.Educators.API.Migrations
                                 .HasForeignKey("EducatorId");
                         });
 
+                    b.Navigation("Classroom");
+
                     b.Navigation("Cpf");
 
                     b.Navigation("Email");
                 });
 
-            modelBuilder.Entity("Universal.EBI.Educators.API.Models.Phone", b =>
+            modelBuilder.Entity("Universal.EBI.Core.DomainObjects.Models.Phone", b =>
                 {
-                    b.HasOne("Universal.EBI.Educators.API.Models.Educator", "Educator")
+                    b.HasOne("Universal.EBI.Core.DomainObjects.Models.Educator", "Educator")
                         .WithMany("Phones")
-                        .HasForeignKey("EducatorId")
-                        .IsRequired();
+                        .HasForeignKey("EducatorId");
 
                     b.Navigation("Educator");
                 });
 
-            modelBuilder.Entity("Universal.EBI.Educators.API.Models.Educator", b =>
+            modelBuilder.Entity("Universal.EBI.Core.DomainObjects.Models.Classroom", b =>
+                {
+                    b.Navigation("Educator");
+                });
+
+            modelBuilder.Entity("Universal.EBI.Core.DomainObjects.Models.Educator", b =>
                 {
                     b.Navigation("Address");
 

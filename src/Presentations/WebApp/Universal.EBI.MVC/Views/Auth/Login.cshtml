@@ -1,0 +1,70 @@
+﻿@model Universal.EBI.MVC.Models.UserLogin
+
+@{
+    ViewData["Title"] = "Login de usuário";
+}
+<div class="container">
+    <div class="d-flex align-items-center justify-content-center mb-3">
+        <vc:Summary></vc:Summary>
+    </div>
+    <div class="d-flex align-items-center justify-content-center" style="height:850px">
+        <div class="card col-md-5">
+            <h5 class="card-header bg-light">Login</h5>
+            <div class="card-body">
+                <h5 class="card-title d-flex align-items-center justify-content-center mb-5">Seja bem vindo!</h5>
+                <form class="row g-4" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+                    <div class="col-md-12 mb-2">
+                        <div class="input-group form-outline">
+                            <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-user-secret"></i></span>
+                            <input asp-for="Email" class="form-control" id="validationServerUsername" aria-describedby="inputGroupPrepend1" />
+                            <label for="validationServerUsername" class="form-label">E-mail</label>
+                        </div>
+                        <div>
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="input-group form-outline">
+                            <span class="input-group-text" id="inputGroupPrepend2"><i class="fa fa-lock"></i></span>
+                            <input type="password" asp-for="Password" id="typePassword" class="form-control" />
+                            <label class="form-label" for="typePassword">Senha</label>
+                        </div>
+                        <div>
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <button class="btn btn-primary col-md-12" type="submit">Enviar</button>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="float-start">
+                            <div class="form-group">
+                                <a href="#" class="ForgetPwd" value="Login">Esqueceu a senha?</a>
+                            </div>
+                        </div>
+                        <div class="float-end">
+                            <div class="form-group">
+                                <a asp-controller="Auth" asp-action="Register">Registre-se aqui.</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <h5 class="d-flex align-items-center justify-content-center mb-5">Ou Login com</h5>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <button class="btn btn-light col-md-12" disabled>Google</button>
+                            </div>
+                            <div class="col-md-6">
+                                <button class="btn btn-light col-md-12" disabled>Microsoft</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<partial name="_ValidationScriptsPartial" />
+}

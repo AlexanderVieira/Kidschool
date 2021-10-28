@@ -24,7 +24,7 @@ namespace Universal.EBI.Educators.API.Data
         public DbSet<Address> Addresses { get; set; }
         public DbSet<Phone> Phones { get; set; }
 
-        public EducatorContext(IMediatorHandler mediatorHandler, IAspNetUser user)
+        public EducatorContext(IMediatorHandler mediatorHandler, IAspNetUser user, DbContextOptions<EducatorContext> options) : base(options)
         {
             _mediatorHandler = mediatorHandler;
             _user = user;
@@ -36,6 +36,8 @@ namespace Universal.EBI.Educators.API.Data
         {
             modelBuilder.Ignore<ValidationResult>();
             modelBuilder.Ignore<Event>();
+            modelBuilder.Ignore<Child>();
+            modelBuilder.Ignore<Responsible>();
 
             foreach (var property in modelBuilder.Model.GetEntityTypes().SelectMany(
                 e => e.GetProperties().Where(p => p.ClrType == typeof(string))))
@@ -53,6 +55,7 @@ namespace Universal.EBI.Educators.API.Data
                         var type = typeof(EnumToStringConverter<>).MakeGenericType(property.ClrType);
                         var converter = Activator.CreateInstance(type, new ConverterMappingHints()) as ValueConverter;
 
+                        property.SetColumnType("varchar(50)");
                         property.SetValueConverter(converter);
                     }
                 }
@@ -61,19 +64,19 @@ namespace Universal.EBI.Educators.API.Data
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(EducatorContext).Assembly);
         }
 
-        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
-            foreach (var entry in ChangeTracker.Entries<Person>())
+            foreach (var entry in ChangeTracker.Entries<Educator>())
             {
                 switch (entry.State)
                 {
                     case EntityState.Added:
                         entry.Entity.CreatedDate = DateTime.Now;
-                        entry.Entity.CreatedBy = _user?.Name;
+                        entry.Entity.CreatedBy = "Admin";
                         break;
                     case EntityState.Modified:
                         entry.Entity.LastModifiedDate = DateTime.Now;
-                        entry.Entity.LastModifiedBy = _user?.Name;
+                        entry.Entity.LastModifiedBy = "Admin";
                         break;
                 }
             }

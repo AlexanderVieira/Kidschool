@@ -2,9 +2,6 @@
 using Universal.EBI.MVC.Services;
 using Universal.EBI.MVC.Services.Handlers;
 using Universal.EBI.MVC.Services.Interfaces;
-using ESE.WebAPI.Core.AspNetUser;
-using ESE.WebAPI.Core.AspNetUser.Interfaces;
-using ESE.WebAPI.Core.Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.DataAnnotations;
 using Microsoft.Extensions.Configuration;
@@ -16,6 +13,7 @@ using System;
 using System.Net.Http;
 using Universal.EBI.WebAPI.Core.AspNetUser.Interfaces;
 using Universal.EBI.WebAPI.Core.AspNetUser;
+using Universal.EBI.WebAPI.Core.Extensions;
 
 namespace Universal.EBI.MVC.Configuration
 {
@@ -38,40 +36,29 @@ namespace Universal.EBI.MVC.Configuration
                 .AddTransientHttpErrorPolicy(
                     p => p.CircuitBreakerAsync(5, TimeSpan.FromSeconds(30)));
 
-            services.AddHttpClient<ICatalogService, CatalogService>()
+            services.AddHttpClient<IReportService, ReportService>()
                 .AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>()               
                 .AddPolicyHandler(PollyExtensions.TryWait())
                 .AllowSelfSignedCertificate()
                 .AddTransientHttpErrorPolicy(
                     p => p.CircuitBreakerAsync(5, TimeSpan.FromSeconds(30)));
 
-            services.AddHttpClient<IClientService, ClientService>()
+            services.AddHttpClient<IReportBffService, ReportBffService>()
                 .AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>()
                 .AddPolicyHandler(PollyExtensions.TryWait())
                 .AllowSelfSignedCertificate()
                 .AddTransientHttpErrorPolicy(
                     p => p.CircuitBreakerAsync(5, TimeSpan.FromSeconds(30)));
 
-            services.AddHttpClient<IPorchasesBffService, PorchasesBffService>()
+            services.AddHttpClient<IClassroomReportService, ClassroomReportService>()
                 .AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>()
-                .AddPolicyHandler(PollyExtensions.TryWait())
                 .AllowSelfSignedCertificate()
+                .AddPolicyHandler(PollyExtensions.TryWait())
                 .AddTransientHttpErrorPolicy(
                     p => p.CircuitBreakerAsync(5, TimeSpan.FromSeconds(30)));
-
-            #endregion            
-
-            #region Refit
-
-            //services.AddHttpClient("Refit",
-            //        options =>
-            //        {
-            //            options.BaseAddress = new Uri(configuration.GetSection("CatalogoUrl").Value);
-            //        })
-            //    .AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>()
-            //    .AddTypedClient(Refit.RestService.For<ICatalogoServiceRefit>);
 
             #endregion
+
         }
     }
 
