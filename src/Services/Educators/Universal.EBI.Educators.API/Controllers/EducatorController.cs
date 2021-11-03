@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Universal.EBI.Core.DomainObjects.Models;
 using Universal.EBI.Core.Mediator.Interfaces;
 using Universal.EBI.Educators.API.Application.Commands;
+using Universal.EBI.Educators.API.Application.Dtos;
 using Universal.EBI.Educators.API.Application.Queries.Interfaces;
 using Universal.EBI.Educators.API.Models;
 using Universal.EBI.WebAPI.Core.AspNetUser.Interfaces;
@@ -26,10 +29,38 @@ namespace Universal.EBI.Educators.API.Controllers
         }
 
         [HttpGet("api/educators")]
-        public async Task<IActionResult> GetEducators([FromQuery] int ps = 8, [FromQuery] int page = 1, [FromQuery] string q = null)
+        public async Task<PagedResult<EducatorClassroomDto>> GetEducators([FromQuery] int ps = 8, [FromQuery] int page = 1, [FromQuery] string q = null)
         {
-            var educator = await _educatorQueries.GetEducators(ps, page, q);
-            return educator == null ? NotFound() : CustomResponse(educator);
+            var pagedResult =  await _educatorQueries.GetEducators(ps, page, q);
+            var pagedResultDto = new PagedResult<EducatorClassroomDto>();
+
+            for (int i = 0; i < pagedResult.List.ToList().Count; i++)
+            {
+                var item = pagedResult.List.ToList()[i];
+                pagedResultDto = new PagedResult<EducatorClassroomDto>
+                {
+                    List = new List<EducatorClassroomDto> 
+                    { 
+                        new EducatorClassroomDto 
+                        { 
+                            Id = item.Id, 
+                            FirstName = item.FirstName, 
+                            LastName = item.LastName, 
+                            BirthDate = item.BirthDate.Date.ToShortDateString(), 
+                            GenderType = item.GenderType.ToString(), 
+                            FunctionType = item.FunctionType.ToString()
+                        } 
+                    },
+                    PageIndex = pagedResult.PageIndex,
+                    PageSize = pagedResult.PageSize,
+                    Query = pagedResult.Query,
+                    TotalResults = pagedResult.TotalResults
+                };
+                
+            }
+            
+            return pagedResultDto;
+            
         }
         
         [HttpGet("api/educator/{id}")]

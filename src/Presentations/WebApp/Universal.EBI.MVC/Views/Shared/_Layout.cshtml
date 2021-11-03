@@ -143,7 +143,7 @@
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Meu Painel</a>
+                            <a class="nav-link" asp-controller="Home" asp-action="Calendar">Calendário</a>
                         </li>
                     </ul>
                     <!-- Left links -->
@@ -244,6 +244,14 @@
         $(function () {
             $('#datepicker3').datepicker({ format: 'dd/mm/yyyy' });
         });
+
+         $(function () {
+            $('#datepicker4').datepicker({ format: 'dd/mm/yyyy' });
+        });
+
+        //$(function () {
+        //    $('#datepicker5').datepicker({ format: 'dd/mm/yyyy' });
+        //});
 
     </script>
 

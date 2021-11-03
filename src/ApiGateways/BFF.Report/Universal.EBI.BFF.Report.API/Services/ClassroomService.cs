@@ -31,7 +31,7 @@ namespace Universal.EBI.BFF.Report.API.Services
             return await DeserializeResponseObject<ClassroomDto>(response);
         }
 
-        public async Task<PagedResultDto<ClassroomDto>> GetClassrooms(int pageSize, int pageIndex, string query = null)
+        public async Task<PagedResult<ClassroomDto>> GetClassrooms(int pageSize, int pageIndex, string query = null)
         {
             var response = await _httpClient.GetAsync($"/api/classrooms?ps={pageSize}&page={pageIndex}&q={query}");
 
@@ -39,7 +39,7 @@ namespace Universal.EBI.BFF.Report.API.Services
 
             HandlerResponseErrors(response);
 
-            return await DeserializeResponseObject<PagedResultDto<ClassroomDto>>(response);
+            return await DeserializeResponseObject<PagedResult<ClassroomDto>>(response);
         }
 
         public async Task<ResponseResult> AddChildsClassroom(ClassroomDto classroom)

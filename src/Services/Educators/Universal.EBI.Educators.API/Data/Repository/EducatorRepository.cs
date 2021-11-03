@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Universal.EBI.Core.Data.Interfaces;
-using Universal.EBI.Educators.API.Models;
 using Universal.EBI.Educators.API.Models.Interfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;

@@ -18,7 +18,7 @@ namespace Universal.EBI.BFF.Report.API.Controllers
 
         [HttpGet]
         [Route("reports/classrooms")]
-        public async Task<PagedResultDto<ClassroomDto>> GetClassrooms([FromQuery] int ps = 8, [FromQuery] int page = 1, [FromQuery] string q = null)
+        public async Task<PagedResult<ClassroomDto>> GetClassrooms([FromQuery] int ps = 8, [FromQuery] int page = 1, [FromQuery] string q = null)
         {
             return await _classroomService.GetClassrooms(ps, page, q);
         }
