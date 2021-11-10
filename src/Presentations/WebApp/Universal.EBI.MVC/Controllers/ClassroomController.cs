@@ -25,9 +25,14 @@ namespace Universal.EBI.MVC.Controllers
         }
 
         // GET: ClassroomController/Details/5
-        public ActionResult Details(EducatorClassroomTransportViewModel vmClassroomEducator)
+        [HttpGet]
+        //[Route("Classroom/Details/{id}")]
+        public ActionResult Details(Guid id)
         {
-            return View(vmClassroomEducator);
+            //Recuparar classroom por Id
+            var vmEducatorClassroom = new EducatorClassroomTransportViewModel();
+            vmEducatorClassroom.ClassroomId = id;
+            return View(vmEducatorClassroom);
         }
 
         // GET: ClassroomController/Create
@@ -54,10 +59,10 @@ namespace Universal.EBI.MVC.Controllers
             try
             {
                 vmClassroom.Id = Guid.NewGuid(); 
-                vmClassroom.Educator.Id = Guid.NewGuid();
+                //vmClassroom.Educator.Id = Guid.NewGuid();
                 var vmClassroomEducator = new EducatorClassroomTransportViewModel
                 {
-                    ClassroomId = Guid.NewGuid(),
+                    ClassroomId = vmClassroom.Id,
                     Region = vmClassroom.Region,
                     Church = vmClassroom.Church,
                     Lunch = vmClassroom.Lunch,
@@ -74,7 +79,7 @@ namespace Universal.EBI.MVC.Controllers
                     EducatorFunctionType = vmClassroom.Educator.FunctionType
                 };
 
-                return RedirectToAction(nameof(Details), vmClassroomEducator);
+                return RedirectToAction(nameof(Details), new { id = vmClassroomEducator.ClassroomId });
             }
             catch
             {
@@ -83,13 +88,24 @@ namespace Universal.EBI.MVC.Controllers
         }
 
         // GET: ClassroomController/Edit/5
-        public ActionResult Edit(ClassroomViewModel vmClassroom)
-        {            
+        [HttpGet]
+        //[Route("Classroom/Edit/{id}")]
+        public ActionResult Edit(Guid id)
+        {
+            var vmClassroom = new ClassroomViewModel();
             var vmChildren = new List<ChildViewModel>();
             ViewBag.Children = vmChildren;
             var vmResponsibles = new List<ResponsibleViewModel>();
-            ViewBag.Responsibles = vmResponsibles;
+            ViewBag.Responsibles = vmResponsibles;            
             var vmEducator = new EducatorViewModel { Id = Guid.NewGuid() };
+            vmClassroom.Id = id;
+            //vmClassroom.Region = vmEducatorClassroom.Region;
+            //vmClassroom.Church = vmEducatorClassroom.Church;
+            //vmClassroom.Lunch = vmEducatorClassroom.Lunch;
+            //vmClassroom.CreatedDate = vmEducatorClassroom.CreatedDate;
+            //vmClassroom.ClassroomType = vmEducatorClassroom.ClassroomType;
+            //vmClassroom.Actived = vmEducatorClassroom.Actived;            
+            //vmClassroom.MeetingTime = vmEducatorClassroom.MeetingTime;
             vmClassroom.Childs = new List<ChildViewModel>();
             vmClassroom.Childs.Add(new ChildViewModel { Id = Guid.NewGuid() });
             vmClassroom.Childs[0].Responsibles = new List<ResponsibleViewModel>();
@@ -102,11 +118,11 @@ namespace Universal.EBI.MVC.Controllers
         // POST: ClassroomController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Guid id, IFormCollection collection)
+        public ActionResult Edit(Guid id, ClassroomViewModel vmClassroom)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Details), vmClassroom.Id);
             }
             catch
             {

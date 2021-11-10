@@ -7,7 +7,8 @@ using Universal.EBI.Core.DomainObjects.Models.Enums;
 namespace Universal.EBI.Core.DomainObjects.Models
 {
     public class Child : Person, IAggregateRoot
-    {        
+    {
+        public Guid Id { get; set; }
         public string HoraryOfEntry { get; set; }
         public string HoraryOfExit { get; set; }
         public AgeGroupType AgeGroupType { get; set; }         

@@ -1,8 +1,6 @@
 ﻿using System;
-using Universal.EBI.BFF.Report.API.Models.Enums;
-using Universal.EBI.Core.DomainObjects;
 
-namespace Universal.EBI.BFF.Report.API.Models
+namespace Universal.EBI.Childs.API.Application.DTOs
 {
     public class PersonDto
     {
@@ -15,7 +13,7 @@ namespace Universal.EBI.BFF.Report.API.Models
         public string Cpf { get; set; }
         public string PhotoUrl { get; set; }
         public string BirthDate { get; set; }
-        public string GenderType { get; set; }
+        public string GenderType { get; set; }        
         public AddressDto Address { get; set; }
     }
 }

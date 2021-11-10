@@ -4,7 +4,7 @@ namespace Universal.EBI.BFF.Report.API.Models
 {
     public class EducatorDto : PersonDto
     {
-        public int FunctionType { get; set; }
+        public string FunctionType { get; set; }
         public List<PhoneDto> Phones { get; set; }
     }
 }

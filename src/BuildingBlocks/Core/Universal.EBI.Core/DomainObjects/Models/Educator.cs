@@ -7,6 +7,7 @@ namespace Universal.EBI.Core.DomainObjects.Models
 {
     public class Educator : Person, IAggregateRoot
     {
+        public Guid Id { get; set; }
         public FunctionType FunctionType { get; set; }
         public Guid? ClassroomId { get; set; }
         public virtual Address Address { get; set; }        

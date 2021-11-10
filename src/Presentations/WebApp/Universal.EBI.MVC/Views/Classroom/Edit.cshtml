@@ -1,6 +1,8 @@
-﻿@model Universal.EBI.MVC.Models.ClassroomViewModel
+﻿@using Universal.EBI.MVC.Extensions
+@model Universal.EBI.MVC.Models.ClassroomViewModel
 
 @{
+    var modelPaged = TempDataExtension.Get<PagedResult<ChildViewModel>>(TempData, "Children");
     ViewData["Title"] = "Edit";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -11,7 +13,49 @@
 </div>
 
 <hr />
-<div class="col-md-12 mt-md-5">
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <form class="g-4" asp-controller="Child" asp-action="GetChildren" method="get">
+                    <div class="row text-center">
+                        <div class="col-md-9">
+                            <div class="input-group form-outline">
+                                <input type="text" class="form-control" id="q" name="q" aria-describedby="inputGroupPrepend4" />
+                                <label for="q" class="form-label">Buscar Criança por nome</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <button class="btn btn-primary" type="submit">Buscar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <form class="g-4" asp-controller="Child" asp-action="GetChild" method="get">
+                    <div class="row text-center">
+                        <div class="col-md-9">
+                            <div class="input-group form-outline">
+                                <input type="text" class="form-control" id="search" aria-describedby="inputGroupPrepend5" />
+                                <label for="search" class="form-label">Buscar Criança por código</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <button class="btn btn-primary" type="button">Buscar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-12 mt-md-3">
     <div class="card col-md-12">
         <form class="row g-4" asp-action="Edit" method="post">
             <div class="card-body">
@@ -57,7 +101,7 @@
                                                 </div>
                                                 <div class="col-md-2">
                                                     <div class="form-group">
-                                                        <div class='input-group date' id='datepicker3'>
+                                                        <div class='input-group date' id='datepicker2'>
                                                             <input asp-for="CreatedDate" class="form-control" />
                                                             <span class="input-group-append">
                                                                 <span class="input-group-text bg-white d-block">
@@ -71,8 +115,8 @@
                                             <div class="row col-md-12">
                                                 <div class="col-md-3 mt-md-4">
                                                     <div class="input-group">
-                                                        <label class="input-group-text" for="inputGroupSelect04">Tipo de Sala</label>
-                                                        <select asp-for="ClassroomType" class="form-select" id="inputGroupSelect04">
+                                                        <label class="input-group-text" for="inputGroupSelect05">Tipo de Sala</label>
+                                                        <select asp-for="ClassroomType" class="form-select" id="inputGroupSelect05">
                                                             <option selected>Selecione...</option>
                                                             <option value="1">Berçário</option>
                                                             <option value="2">Maternal</option>
@@ -81,7 +125,7 @@
                                                             <option value="5">Mista</option>
                                                         </select>
                                                     </div>
-                                                </div>                                               
+                                                </div>
                                                 <div class="col-md-9 mt-md-4">
                                                     <div class="p-md-2">
                                                         <div class="form-check form-check-inline">
@@ -128,8 +172,8 @@
                                                 <div class="col-md-4">
                                                     <div class="input-group form-outline">
 
-                                                        <input asp-for="Educator.FirstName" class="form-control" id="firstname" aria-describedby="inputGroupPrepend3" required />
-                                                        <label for="firstname" class="form-label">Primeiro nome</label>
+                                                        <input asp-for="Educator.FirstName" class="form-control" id="educatorFirstname" aria-describedby="inputGroupPrepend6" required />
+                                                        <label for="educatorFirstname" class="form-label">Primeiro nome</label>
                                                     </div>
                                                     <div>
                                                         <span asp-validation-for="Educator.FirstName" class="text-danger"></span>
@@ -138,8 +182,8 @@
                                                 <div class="col-md-5">
                                                     <div class="input-group form-outline">
 
-                                                        <input asp-for="Educator.LastName" class="form-control" id="lastname" required />
-                                                        <label for="lastname" class="form-label">Sobrenome</label>
+                                                        <input asp-for="Educator.LastName" class="form-control" id="educatorLastname" required />
+                                                        <label for="educatorLastname" class="form-label">Sobrenome</label>
                                                     </div>
                                                     <div>
                                                         <span asp-validation-for="Educator.LastName" class="text-danger"></span>
@@ -147,8 +191,8 @@
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="input-group">
-                                                        <label class="input-group-text" for="inputGroupSelect05">Função</label>
-                                                        <select asp-for="Educator.FunctionType" class="form-select" id="inputGroupSelect05">
+                                                        <label class="input-group-text" for="inputGroupSelect06">Função</label>
+                                                        <select asp-for="Educator.FunctionType" class="form-select" id="inputGroupSelect06">
                                                             <option selected>Selecione...</option>
                                                             <option value="1">Responsável</option>
                                                             <option value="2">Auxiliar</option>
@@ -167,38 +211,12 @@
                                         </button>
                                     </h2>
                                     <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
-                                        <div class="accordion-body">
+                                        <div class="accordion-body">                                           
                                             <div class="col-md-12">
-                                                <div class="row col-md-12 mb-md-3">
-                                                    <div class="col-md-4">
-                                                        <div class="input-group form-outline">
-                                                            <input type="text" class="form-control" id="search" aria-describedby="inputGroupPrepend4" />
-                                                            <label for="search" class="form-label">Buscar por código</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-8">
-                                                        <button class="btn btn-primary col-md-3 me-3" type="button">Buscar</button>
-                                                        <button class="btn btn-light col-md-3" type="button">Limpar</button>
-                                                    </div>
-                                                </div>
-
-                                                <div class="row col-md-12 mb-md-3">
-                                                    <div class="col-md-4">
-                                                        <div class="input-group form-outline">
-                                                            <input type="text" class="form-control" id="search1" aria-describedby="inputGroupPrepend4" />
-                                                            <label for="search1" class="form-label">Buscar por nome</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-8">
-                                                        <button class="btn btn-primary col-md-3 me-3" type="button">Buscar</button>
-                                                        <button class="btn btn-light col-md-3" type="button">Limpar</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-12">
-                                                <table id="example1" class="table table-striped" style="width:100%">
-                                                    <thead>
+                                                <table id="tblChildren" class="table table-striped table-hover" style="width:100%">
+                                                    <thead class="table-dark">
                                                         <tr>
+                                                            <th></th>
                                                             <th>
                                                                 <strong>#ID</strong>
                                                             </th>
@@ -229,49 +247,68 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        @if (ViewBag.Children != null && ViewBag.Children.Count > 0)
+                                                        @if (modelPaged != null && modelPaged.List.ToList().Count > 0)
                                                         {
-                                                            @for (int i = 0; i < ViewBag.Children.Count; i++)
+                                                            @foreach (var child in modelPaged.List.ToList().OrderBy(e => e.FirstName))
                                                             {
                                                                 <tr>
+                                                                    <th scope="row">
+                                                                        <div class="form-check">
+                                                                            <input class="form-check-input"
+                                                                           type="radio"
+                                                                           value=""
+                                                                           id="flexCheckDefault"
+                                                                           name="flexCheckDefault"
+                                                                           onclick="seedFields()" />
+                                                                        </div>
+                                                                    </th>
                                                                     <td>
-                                                                        ViewBag.Children[i].Id;
+                                                                        @child.Id
                                                                     </td>
                                                                     @*<td>
-                                                                        ViewBag.Children[i].FirstName;
+                                                                        child.FirstName
                                                                         </td>
                                                                         <td>
-                                                                        ViewBag.Children[i].LastName;
+                                                                        child.LastName
                                                                         </td>*@
                                                                     <td>
-                                                                        ViewBag.Children[i].FullName;
+                                                                        @child.FullName
                                                                     </td>
                                                                     <td>
-                                                                        ViewBag.Children[i].BirthDate;
+                                                                        @child.BirthDate
                                                                     </td>
                                                                     <td>
-                                                                        ViewBag.Children[i].GenderType;
+                                                                        @child.GenderType
                                                                     </td>
                                                                     <td>
-                                                                        ViewBag.Children[i].AgeGroupType;
+                                                                        @child.AgeGroupType
                                                                     </td>
                                                                     @* <td>
-                                                                        ViewBag.Children[i].HoraryOfEntry;
+                                                                        child.HoraryOfEntry
                                                                         </td>
                                                                         <td>
-                                                                        ViewBag.Children[i].HoraryOfExit;
+                                                                        child.HoraryOfExit
                                                                         </td>*@
                                                                 </tr>
                                                             }
                                                         }
                                                     </tbody>
                                                 </table>
+                                                @if (modelPaged == null || modelPaged.List.ToList().Count == 0)
+                                                {
+                                                    <div class="table-light text-center p-md-2">
+                                                        <strong>Não existem dados para exibição.</strong>
+                                                    </div>
+                                                }
                                             </div>
+
+                                            <vc:paginacao model-paged="@modelPaged"></vc:paginacao>
+
                                             <div class="row col-md-12 mt-md-3">
                                                 <div class="col-md-4 mv-md-3">
                                                     <div class="input-group form-outline">
-                                                        <input asp-for="@Model.Childs[0].FirstName" class="form-control" id="firstname" aria-describedby="inputGroupPrepend3" />
-                                                        <label for="firstname" class="form-label">Primeiro nome</label>
+                                                        <input asp-for="@Model.Childs[0].FirstName" class="form-control" id="childFirstname" aria-describedby="inputGroupPrepend7" />
+                                                        <label for="childFirstname" class="form-label">Primeiro nome</label>
                                                     </div>
                                                     <div>
                                                         <span asp-validation-for="@Model.Childs[0].FirstName" class="text-danger"></span>
@@ -279,8 +316,8 @@
                                                 </div>
                                                 <div class="col-md-5 mb-md-3">
                                                     <div class="input-group form-outline">
-                                                        <input asp-for="@Model.Childs[0].LastName" class="form-control" id="lastname" />
-                                                        <label for="lastname" class="form-label">Sobrenome</label>
+                                                        <input asp-for="@Model.Childs[0].LastName" class="form-control" id="childLastname" />
+                                                        <label for="childLastname" class="form-label">Sobrenome</label>
                                                     </div>
                                                     <div>
                                                         <span asp-validation-for="@Model.Childs[0].LastName" class="text-danger"></span>
@@ -300,8 +337,8 @@
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="input-group">
-                                                        <label class="input-group-text" for="inputGroupSelect05">Sexo</label>
-                                                        <select asp-for="@Model.Childs[0].GenderType" class="form-select" id="inputGroupSelect05">
+                                                        <label class="input-group-text" for="inputGroupSelect07">Sexo</label>
+                                                        <select asp-for="@Model.Childs[0].GenderType" class="form-select" id="inputGroupSelect07">
                                                             <option selected>Selecione...</option>
                                                             <option value="M">Masculino</option>
                                                             <option value="F">Feminino</option>
@@ -310,8 +347,8 @@
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="input-group">
-                                                        <label class="input-group-text" for="inputGroupSelect05">Faixa Etária</label>
-                                                        <select asp-for="@Model.Childs[0].AgeGroupType" class="form-select" id="inputGroupSelect05">
+                                                        <label class="input-group-text" for="inputGroupSelect08">Faixa Etária</label>
+                                                        <select asp-for="@Model.Childs[0].AgeGroupType" class="form-select" id="inputGroupSelect08">
                                                             <option selected>Selecione...</option>
                                                             <option value="Nursery">Berçário</option>
                                                             <option value="Maternal">Maternal</option>
@@ -322,7 +359,7 @@
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="input-group form-outline">
-                                                        <input asp-for="@Model.Childs[0].HoraryOfEntry" class="form-control" id="horaryEntry" aria-describedby="inputGroupPrepend3" />
+                                                        <input asp-for="@Model.Childs[0].HoraryOfEntry" class="form-control" id="horaryEntry" aria-describedby="inputGroupPrepend8" />
                                                         <label for="horaryEntry" class="form-label">Horário de entrada</label>
                                                     </div>
                                                     <div>
@@ -387,41 +424,49 @@
                                                             {
                                                                 <tr>
                                                                     <td>
-                                                                        ViewBag.Responsibles[i].Id;
+                                                                        ViewBag.Responsibles[i].Id
                                                                     </td>
                                                                     @*<td>
-                                                                        ViewBag.Children[i].FirstName;
+                                                                        ViewBag.Children[i].FirstName
                                                                         </td>
                                                                         <td>
-                                                                        ViewBag.Children[i].LastName;
+                                                                        ViewBag.Children[i].LastName
                                                                         </td>*@
                                                                     <td>
-                                                                        ViewBag.Responsibles[i].Cpf.Number;
+                                                                        ViewBag.Responsibles[i].Cpf.Number
                                                                     </td>
                                                                     <td>
-                                                                        ViewBag.Responsibles[i].FullName;
+                                                                        ViewBag.Responsibles[i].FullName
                                                                     </td>
                                                                     <td>
-                                                                        ViewBag.Responsibles[i].BirthDate;
+                                                                        ViewBag.Responsibles[i].BirthDate
                                                                     </td>
                                                                     <td>
-                                                                        ViewBag.Responsibles[i].GenderType;
+                                                                        ViewBag.Responsibles[i].GenderType
                                                                     </td>
                                                                     <td>
-                                                                        ViewBag.Responsibles[i].KinshipType;
+                                                                        ViewBag.Responsibles[i].KinshipType
                                                                     </td>
                                                                 </tr>
                                                             }
                                                         }
                                                     </tbody>
                                                 </table>
+                                                @if (modelPaged == null || modelPaged.List.ToList().Count == 0)
+                                                {
+                                                    <div class="table-light text-center p-md-2">
+                                                        <strong>Não existem dados para exibição.</strong>
+                                                    </div>
+                                                }
                                             </div>
+
+                                            <vc:paginacao model-paged="@modelPaged"></vc:paginacao>
 
                                             <div class="row col-md-12 mt-md-3">
                                                 <div class="col-md-4 mv-md-3">
                                                     <div class="input-group form-outline">
-                                                        <input asp-for="@Model.Childs[0].Responsibles[0].FirstName" class="form-control" id="firstname" aria-describedby="inputGroupPrepend3" />
-                                                        <label for="firstname" class="form-label">Primeiro nome</label>
+                                                        <input asp-for="@Model.Childs[0].Responsibles[0].FirstName" class="form-control" id="responsibleFirstname" aria-describedby="inputGroupPrepend9" />
+                                                        <label for="responsibleFirstname" class="form-label">Primeiro nome</label>
                                                     </div>
                                                     <div>
                                                         <span asp-validation-for="@Model.Childs[0].Responsibles[0].FirstName" class="text-danger"></span>
@@ -429,8 +474,8 @@
                                                 </div>
                                                 <div class="col-md-5 mb-md-3">
                                                     <div class="input-group form-outline">
-                                                        <input asp-for="@Model.Childs[0].Responsibles[0].LastName" class="form-control" id="lastname" />
-                                                        <label for="lastname" class="form-label">Sobrenome</label>
+                                                        <input asp-for="@Model.Childs[0].Responsibles[0].LastName" class="form-control" id="responsibleLastname" />
+                                                        <label for="responsibleLastname" class="form-label">Sobrenome</label>
                                                     </div>
                                                     <div>
                                                         <span asp-validation-for="@Model.Childs[0].Responsibles[0].LastName" class="text-danger"></span>
@@ -450,8 +495,8 @@
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="input-group">
-                                                        <label class="input-group-text" for="inputGroupSelect05">Sexo</label>
-                                                        <select asp-for="@Model.Childs[0].Responsibles[0].GenderType" class="form-select" id="inputGroupSelect05">
+                                                        <label class="input-group-text" for="inputGroupSelect09">Sexo</label>
+                                                        <select asp-for="@Model.Childs[0].Responsibles[0].GenderType" class="form-select" id="inputGroupSelect09">
                                                             <option selected>Selecione...</option>
                                                             <option value="M">Masculino</option>
                                                             <option value="F">Feminino</option>
@@ -460,8 +505,8 @@
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="input-group">
-                                                        <label class="input-group-text" for="inputGroupSelect05">Parentesco</label>
-                                                        <select asp-for="@Model.Childs[0].AgeGroupType" class="form-select" id="inputGroupSelect05">
+                                                        <label class="input-group-text" for="inputGroupSelect10">Parentesco</label>
+                                                        <select asp-for="@Model.Childs[0].AgeGroupType" class="form-select" id="inputGroupSelect10">
                                                             <option selected>Selecione...</option>
                                                             <option value="Dad">Pai</option>
                                                             <option value="Mom">Mãe</option>
@@ -476,7 +521,7 @@
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="input-group form-outline">
-                                                        <input asp-for="@Model.Childs[0].Responsibles[0].Phones[0].Number" class="form-control" id="firstname" aria-describedby="inputGroupPrepend3" />
+                                                        <input asp-for="@Model.Childs[0].Responsibles[0].Phones[0].Number" class="form-control" id="firstname" aria-describedby="inputGroupPrepend10" />
                                                         <label for="firstname" class="form-label">Telefone</label>
                                                     </div>
                                                     <div>
@@ -485,8 +530,8 @@
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="input-group">
-                                                        <label class="input-group-text" for="inputGroupSelect01">Tipos telefones</label>
-                                                        <select asp-for="@Model.Childs[0].Responsibles[0].Phones[0].PhoneType" class="form-select" id="inputGroupSelect01">
+                                                        <label class="input-group-text" for="inputGroupSelect11">Tipos telefones</label>
+                                                        <select asp-for="@Model.Childs[0].Responsibles[0].Phones[0].PhoneType" class="form-select" id="inputGroupSelect11">
                                                             <option selected>Selecione...</option>
                                                             <option value="Residential">Residencial</option>
                                                             <option value="Commercial">Comercial</option>
@@ -497,7 +542,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div> 
+                                </div>
 
                             </div>
                         </div>
@@ -513,49 +558,79 @@
 
 @*<script>
     $(function () {
-        $('#datepicker4').datepicker({ format: 'dd/mm/yyyy' });
+    $('#datepicker3').datepicker({ format: 'dd/mm/yyyy' });
     });
 
     $(function () {
-        $('#datepicker5').datepicker({ format: 'dd/mm/yyyy' });
+    $('#datepicker4').datepicker({ format: 'dd/mm/yyyy' });
     });
 
     $(function () {
-        $('#datepicker6').datepicker({ format: 'dd/mm/yyyy' });
+    $('#datepicker5').datepicker({ format: 'dd/mm/yyyy' });
     });
 
-</script>*@
+    </script>*@
+
+@*<script>
+    $(function () {
+    var table = $('#example').DataTable({
+    lengthChange: false,
+    buttons: [
+    {
+    extend: 'csv',
+    split: ['pdf', 'excel'],
+    }
+    ]
+    });
+
+    table.buttons().container()
+    .appendTo('#example_wrapper .col-md-6:eq(0)');
+    });
+
+    $(function () {
+    var table = $('#example1').DataTable({
+    lengthChange: false,
+
+    });
+    });
+
+    $(function () {
+    var table = $('#example2').DataTable({
+    lengthChange: false,
+
+    });
+    });
+
+    </script>*@
 
 <script>
-    //$(function () {
-    //    var table = $('#example').DataTable({
-    //        lengthChange: false,
-    //        buttons: [
-    //            {
-    //                extend: 'csv',
-    //                split: ['pdf', 'excel'],
-    //            }
-    //        ]
-    //    });
+    function seedFields(){
 
-    //    table.buttons().container()
-    //        .appendTo('#example_wrapper .col-md-6:eq(0)');
-    //});
+        $('#tblChildren tr').each(function() {
 
-    $(function () {
-        var table = $('#example1').DataTable({
-            lengthChange: false,
+            var childFirstname = $(this).find("td").eq(1).text();
+            console.log(childFirstname)
+            childFirstname = $.trim(childFirstname);
+            $('#childFirstname').val(childFirstname);
+            $('#childFirstname').addClass("active");
 
+            var birthDate = $(this).find("td").eq(2).text();
+            birthDate = $.trim(birthDate);
+            $('#datepicker4').val(birthDate);
+            //$('#lastname').addClass("active");
+
+            var genderType = $(this).find("td").eq(3).text();
+            genderType = $.trim(genderType);
+            $('#inputGroupSelect07').val(genderType);
+
+            var ageGroupType = $(this).find("td").eq(4).text();
+            ageGroupType = $.trim(ageGroupType);
+            $('#inputGroupSelect08').val(ageGroupType);
+
+            //alert(firstname + ' ' + lastname + ' ' + functionType);
         });
-    });
 
-    $(function () {
-        var table = $('#example2').DataTable({
-            lengthChange: false,
-
-        });
-    });
-
+    }
 </script>
 
 <!-- MDB -->

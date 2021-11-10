@@ -18,6 +18,40 @@ namespace Universal.EBI.MVC.Services
             _httpClient = httpClient;
             _httpClient.BaseAddress = new Uri(settings.Value.ReportBffUrl);
         }
+
+        public async Task<ChildViewModel> GetChildByCpf(string cpf)
+        {
+            var response = await _httpClient.GetAsync($"/reports/child/{cpf}");
+
+            if (response.StatusCode == HttpStatusCode.NotFound) return null;
+
+            HandlerResponseErrors(response);
+
+            return await DeserializeResponseObject<ChildViewModel>(response);
+        }
+
+        public async Task<ChildViewModel> GetChildById(Guid id)
+        {
+            var response = await _httpClient.GetAsync($"/reports/child/{id}");
+
+            if (response.StatusCode == HttpStatusCode.NotFound) return null;
+
+            HandlerResponseErrors(response);
+
+            return await DeserializeResponseObject<ChildViewModel>(response);
+        }
+
+        public async Task<PagedResult<ChildViewModel>> GetChildren(int pageSize, int pageIndex, string query = null)
+        {
+            var response = await _httpClient.GetAsync($"reports/children?ps={pageSize}&page={pageIndex}&q={query}");
+
+            if (response.StatusCode == HttpStatusCode.NotFound) return null;
+
+            HandlerResponseErrors(response);
+
+            return await DeserializeResponseObject<PagedResult<ChildViewModel>>(response);
+        }
+
         public async Task<EducatorViewModel> GetEducatorByCpf(string cpf)
         {
             var response = await _httpClient.GetAsync($"/reports/educator/{cpf}");

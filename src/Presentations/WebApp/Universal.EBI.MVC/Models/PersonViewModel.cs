@@ -10,8 +10,8 @@ namespace Universal.EBI.MVC.Models
         public string LastName { get; set; }
         public string FullName { get; set; }
         public bool Excluded { get; set; }
-        public Email Email { get; set; }
-        public Cpf Cpf { get; set; }
+        public string Email { get; set; }
+        public string Cpf { get; set; }
         public string PhotoUrl { get; set; }
         public string BirthDate { get; set; }
         public string GenderType { get; set; }

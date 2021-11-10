@@ -12,6 +12,7 @@ namespace Universal.EBI.BFF.Report.API.Models
         public string ZipCode { get; set; }
         public string City { get; set; }
         public string State { get; set; }
+        public string Country { get; set; }
         public Guid? ForeingKeyId { get; set; }
     }
 }

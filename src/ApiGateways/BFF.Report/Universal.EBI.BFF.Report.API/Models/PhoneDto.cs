@@ -6,7 +6,7 @@ namespace Universal.EBI.BFF.Report.API.Models
     {
         public Guid Id { get; set; }
         public string Number { get; set; }
-        public int PhoneType { get; set; }
+        public string PhoneType { get; set; }
         public Guid? ForeingKeyId { get; set; }
     }
 }

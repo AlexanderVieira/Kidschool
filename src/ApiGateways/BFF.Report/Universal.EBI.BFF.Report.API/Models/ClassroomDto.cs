@@ -7,7 +7,7 @@ namespace Universal.EBI.BFF.Report.API.Models
         public Guid Id { get; set; }
         public string Region { get; set; }
         public string Church { get; set; }
-        public int ClassroomType { get; set; }
+        public string ClassroomType { get; set; }
         public string MeetingTime { get; set; }
         public EducatorDto Educator { get; set; }
         public ChildDto[] Childs { get; set; }

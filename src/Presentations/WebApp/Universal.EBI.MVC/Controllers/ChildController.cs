@@ -1,18 +1,36 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Threading.Tasks;
+using Universal.EBI.MVC.Extensions;
+using Universal.EBI.MVC.Models;
+using Universal.EBI.MVC.Services.Interfaces;
 
 namespace Universal.EBI.MVC.Controllers
 {
-    public class ChildController : Controller
+    public class ChildController : BaseController
     {
-        // GET: ChildController
-        public ActionResult Index()
+        private readonly IReportBffService _bffService;
+
+        public ChildController(IReportBffService bffService)
         {
-            return View();
+            _bffService = bffService;
+        }
+
+        // GET: ChildController
+        [HttpGet]
+        [Route("children")]
+        public async Task<IActionResult> GetChildren([FromQuery] int ps = 8, [FromQuery] int page = 1, [FromQuery] string q = null)
+        {
+            var pagedResultChildren = await _bffService.GetChildren(ps, page, q);
+            ViewBag.Search = q;
+            pagedResultChildren.ReferenceAction = "Edit";
+            TempDataExtension.Put(TempData, "Children", pagedResultChildren);
+            return RedirectToAction("Edit", "Classroom");
+            //return View(children);
         }
 
         // GET: ChildController/Details/5
-        public ActionResult Details(int id)
+        public ActionResult Details(Guid id)
         {
             return View();
         }
@@ -26,11 +44,11 @@ namespace Universal.EBI.MVC.Controllers
         // POST: ChildController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(ChildViewModel vmChild)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Details));
             }
             catch
             {
@@ -39,7 +57,7 @@ namespace Universal.EBI.MVC.Controllers
         }
 
         // GET: ChildController/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit(Guid id)
         {
             return View();
         }
@@ -47,11 +65,11 @@ namespace Universal.EBI.MVC.Controllers
         // POST: ChildController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(Guid id, ChildViewModel vmChild)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Details));
             }
             catch
             {
@@ -68,11 +86,11 @@ namespace Universal.EBI.MVC.Controllers
         // POST: ChildController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(int id, ChildViewModel vmChild)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(GetChildren));
             }
             catch
             {

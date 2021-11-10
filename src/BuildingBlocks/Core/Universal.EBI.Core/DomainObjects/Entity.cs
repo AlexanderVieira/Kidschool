@@ -18,7 +18,7 @@ namespace Universal.EBI.Core.DomainObjects
 
         public void AddEvent(Event myEvent)
         {
-            _notifications = _notifications ?? new List<Event>();
+            _notifications ??= new List<Event>();
             _notifications.Add(myEvent);
         }
 

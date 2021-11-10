@@ -32,7 +32,7 @@ namespace Universal.EBI.BFF.Report.API.Controllers
             return educator == null ? NotFound() : CustomResponse(educator);
         }
 
-        [HttpGet("reports/educator/{cpf:length(11)}", Name = "GetEducatorByCpf")]
+        [HttpGet("reports/educator/{cpf:length(11)}")]
         public async Task<ActionResult<EducatorDto>> GetEducatorByCpf(string cpf)
         {
             var educator = await _educatorService.GetEducatorByCpf(cpf);

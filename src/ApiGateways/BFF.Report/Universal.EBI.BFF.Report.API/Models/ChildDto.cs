@@ -6,7 +6,7 @@ namespace Universal.EBI.BFF.Report.API.Models
     {
         public string StartTimeMeeting { get; set; }
         public string EndTimeMeeting { get; set; }
-        public int AgeGroupType { get; set; }
+        public string AgeGroupType { get; set; }
         public List<PhoneDto> Phones { get; set; }
         public List<ResponsibleDto> Responsibles { get; set; }
     }

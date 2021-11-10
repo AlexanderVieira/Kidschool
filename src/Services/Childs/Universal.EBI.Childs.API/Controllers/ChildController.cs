@@ -9,8 +9,8 @@ using Universal.EBI.Childs.API.Models;
 using Universal.EBI.WebAPI.Core.AspNetUser.Interfaces;
 using Universal.EBI.WebAPI.Core.Controllers;
 using Universal.EBI.Childs.API.Application.DTOs;
-using Universal.EBI.Core.Messages.Integration;
-using Universal.EBI.Core.Messages;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace Universal.EBI.Childs.API.Controllers
 {
@@ -28,10 +28,97 @@ namespace Universal.EBI.Childs.API.Controllers
         }
 
         [HttpGet("api/childs")]
-        public async Task<IActionResult> GetChilds([FromQuery] int ps = 8, [FromQuery] int page = 1, [FromQuery] string q = null)
+        public async Task<PagedResult<ChildDto>> GetChilds([FromQuery] int ps = 8, [FromQuery] int page = 1, [FromQuery] string q = null)
         {
-            var child = await _childQueries.GetChilds(ps, page, q);
-            return child == null ? NotFound() : CustomResponse(child);
+            var pagedResult = await _childQueries.GetChilds(ps, page, q);
+            //var pagedResultDto = new PagedResult<ChildDto>();
+            var childrenDto = new List<ChildDto>();
+            ResponsibleDto responsibleDto;
+            var pagedResultDto = new PagedResult<ChildDto>
+            {
+                List = new List<ChildDto>(),
+                PageIndex = pagedResult.PageIndex,
+                PageSize = pagedResult.PageSize,
+                Query = pagedResult.Query,
+                TotalResults = pagedResult.TotalResults
+            };
+            
+            for (int i = 0; i < pagedResult.List.ToList().Count; i++)
+            {
+                var item = pagedResult.List.ToList()[i];
+                var responsibles = item.Responsibles.ToList();
+                var childDto = new ChildDto
+                {
+                    Id = item.Id,
+                    FirstName = item.FirstName,
+                    LastName = item.LastName,
+                    FullName = item.FullName,
+                    BirthDate = item.BirthDate.Date.ToShortDateString(),
+                    GenderType = item.GenderType.ToString(),
+                    AgeGroupType = item.AgeGroupType.ToString(),
+                    Cpf = item.Cpf != null ? item.Cpf.Number : null,
+                    Email = item.Email != null ? item.Email.Address : null,
+                    Excluded = item.Excluded,
+                    Address = new AddressDto(),
+                    Phones = new List<PhoneDto>(),
+                    PhotoUrl = item.PhotoUrl,
+                    Responsibles = new List<ResponsibleDto>()
+
+                };
+
+                for (int j = 0; j < responsibles.Count; j++)
+                {
+                    responsibleDto = new ResponsibleDto
+                    {
+                        Id = responsibles[j].Id,
+                        FirstName = responsibles[j].FirstName,
+                        LastName = responsibles[j].LastName,
+                        FullName = responsibles[j].FullName,
+                        BirthDate = responsibles[j].BirthDate.ToShortDateString(),
+                        Cpf = responsibles[j].Cpf.Number,
+                        Email = responsibles[j].Email.Address,
+                        GenderType = responsibles[j].GenderType.ToString(),
+                        KinshipType = responsibles[j].KinshipType.ToString(),
+                        Excluded = responsibles[j].Excluded,
+                        PhotoUrl = responsibles[j].PhotoUrl,
+                        Address = new AddressDto
+                        {
+                            Id = responsibles[j].Address.Id,
+                            PublicPlace = responsibles[j].Address.PublicPlace,
+                            Number = responsibles[j].Address.Number,
+                            Complement = responsibles[j].Address.Complement,
+                            District = responsibles[j].Address.District,
+                            City = responsibles[j].Address.City,
+                            State = responsibles[j].Address.State,
+                            Country = responsibles[j].Address.Country,
+                            ZipCode = responsibles[j].Address.ZipCode
+                        },
+                        Phones = new List<PhoneDto>()
+                    };
+
+                    var phones = responsibles[j].Phones.ToList();
+                    for (int k = 0; k < phones.Count; k++)
+                    {
+                        var phoneDto = new PhoneDto
+                        {
+                            Id = phones[k].Id,
+                            Number = phones[k].Number,
+                            PhoneType = phones[k].PhoneType.ToString()
+                        };
+                        responsibleDto.Phones.Add(phoneDto);
+                    }
+
+                    childDto.Responsibles.Add(responsibleDto);
+
+                }
+
+                childrenDto.Add(childDto);
+
+            }
+
+            pagedResultDto.List = childrenDto;
+
+            return pagedResultDto;
         }
 
         [HttpGet("api/child/{id}")]

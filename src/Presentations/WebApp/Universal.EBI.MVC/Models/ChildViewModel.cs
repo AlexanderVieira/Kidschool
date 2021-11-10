@@ -24,8 +24,8 @@ namespace Universal.EBI.MVC.Models
                 FirstName = child.FirstName,
                 LastName = child.LastName,
                 FullName = $"{child.FirstName} {child.LastName}",
-                Email = ValidationUtils.ValidateRequestEmail(child.Email.Address),
-                Cpf = ValidationUtils.ValidateRequestCpf(child.Cpf.Number),
+                Email = child.Email.Address, //ValidationUtils.ValidateRequestEmail(child.Email.Address),
+                Cpf = child.Cpf.Number, //ValidationUtils.ValidateRequestCpf(child.Cpf.Number),
                 Phones = new List<PhoneViewModel>(),
                 Address = new AddressViewModel(), 
                 BirthDate = child.BirthDate.ToShortDateString(), 
@@ -74,8 +74,8 @@ namespace Universal.EBI.MVC.Models
                     FirstName = responsible.FirstName,
                     LastName = responsible.LastName,
                     FullName = $"{responsible.FirstName} {responsible.LastName}",
-                    Email = ValidationUtils.ValidateRequestEmail(responsible.Email.Address),
-                    Cpf = ValidationUtils.ValidateRequestCpf(responsible.Cpf.Number),
+                    Email = responsible.Email.Address, //ValidationUtils.ValidateRequestEmail(responsible.Email.Address),
+                    Cpf = responsible.Cpf.Number, //ValidationUtils.ValidateRequestCpf(responsible.Cpf.Number),
                     Phones = new List<PhoneViewModel>(),
                     Address = new AddressViewModel(),                    
                     BirthDate = responsible.BirthDate.ToShortDateString(), //DateTime.Parse(responsible.BirthDate).Date,
@@ -95,6 +95,7 @@ namespace Universal.EBI.MVC.Models
                     District = responsible.Address.District,
                     City = responsible.Address.City,
                     State = responsible.Address.State,
+                    Country = responsible.Address.Country,
                     ZipCode = responsible.Address.ZipCode,
                     ForeingKeyId = responsible.Address.ResponsibleId
                 };
@@ -124,8 +125,8 @@ namespace Universal.EBI.MVC.Models
                 FirstName = childDto.FirstName,
                 LastName = childDto.LastName,
                 FullName = $"{childDto.FirstName} {childDto.LastName}",
-                Email = ValidationUtils.ValidateRequestEmail(childDto.Email.Address),
-                Cpf = ValidationUtils.ValidateRequestCpf(childDto.Cpf.Number),
+                Email = ValidationUtils.ValidateRequestEmail(childDto.Email),
+                Cpf = ValidationUtils.ValidateRequestCpf(childDto.Cpf),
                 Phones = new List<Phone>(),
                 Address = new Address(),
                 BirthDate = DateTime.Parse(childDto.BirthDate).Date,
@@ -173,8 +174,8 @@ namespace Universal.EBI.MVC.Models
                     FirstName = responsibleDto.FirstName,
                     LastName = responsibleDto.LastName,
                     FullName = $"{responsibleDto.FirstName} {responsibleDto.LastName}",
-                    Email = ValidationUtils.ValidateRequestEmail(responsibleDto.Email.Address),
-                    Cpf = ValidationUtils.ValidateRequestCpf(responsibleDto.Cpf.Number),
+                    Email = ValidationUtils.ValidateRequestEmail(responsibleDto.Email),
+                    Cpf = ValidationUtils.ValidateRequestCpf(responsibleDto.Cpf),
                     Phones = new List<Phone> 
                     {
                           new Phone
@@ -203,6 +204,7 @@ namespace Universal.EBI.MVC.Models
                     District = responsibleDto.Address.District,
                     City = responsibleDto.Address.City,
                     State = responsibleDto.Address.State,
+                    Country = responsibleDto.Address.Country,
                     ZipCode = responsibleDto.Address.ZipCode,
                     ResponsibleId = responsibleDto.Address.ForeingKeyId
                 };
