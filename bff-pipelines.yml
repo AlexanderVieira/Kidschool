@@ -1,0 +1,50 @@
+# ASP.NET Core
+# Build and test ASP.NET Core projects targeting .NET Core.
+# Add steps that run tests, create a NuGet package, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+name : NetCore-bffApi-CI
+trigger:
+  branches:
+    include:
+      - feature/webmvc
+  paths:
+    include:
+      - Universal.EBI.BFF.Report.API/*
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  buildConfiguration: 'Release'
+
+steps:
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'restore'
+    projects: '**/Universal.EBI.BFF.Report.API.csproj'
+  displayName: 'Restore Nuget Packages'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+    projects: '**/Universal.EBI.BFF.Report.API.csproj'
+    arguments: '--no-restore'
+  displayName: 'Build projects'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'test'
+    projects: '**/*Test.csproj'
+    arguments: '--no-restore --no-build'
+  displayName: 'Run Tests'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'publish'
+    publishWebProjects: false
+    projects: '**/Universal.EBI.BFF.Report.API.csproj'
+    arguments: '--configuration $(buildConfiguration) --no-restore'
+    modifyOutputPath: false
+  displayName: 'Publish bffApi'
+  condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
