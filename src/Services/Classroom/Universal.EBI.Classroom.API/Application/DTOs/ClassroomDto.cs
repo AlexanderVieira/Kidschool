@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Universal.EBI.Core.DomainObjects.Models;
+using Universal.EBI.Classrooms.API.Models;
 using Universal.EBI.Core.DomainObjects.Models.Enums;
 
 namespace Universal.EBI.Classrooms.API.Application.DTOs
@@ -28,7 +28,7 @@ namespace Universal.EBI.Classrooms.API.Application.DTOs
         }
 
         public Classroom ToConvertClassroom(ClassroomDto classroomDto)
-        {
+         {
             var classroom = new Classroom
             {
                 Id = classroomDto.Id,
@@ -41,7 +41,7 @@ namespace Universal.EBI.Classrooms.API.Application.DTOs
                 MeetingTime = classroomDto.MeetingTime,
                 CreatedDate = DateTime.Parse(classroomDto.CreatedDate),
                 CreatedBy = classroomDto.CreatedBy,
-                Children = new List<Child>() 
+                Children = new List<Core.DomainObjects.Models.Child> () 
             };
 
             var educator = classroomDto.Educator.ToConvertEducator(classroomDto.Educator);

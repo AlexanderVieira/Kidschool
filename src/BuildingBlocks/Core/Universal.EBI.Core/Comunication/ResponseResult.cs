@@ -18,9 +18,9 @@ namespace Universal.EBI.Core.Comunication
     {
         public ResponseErrorMessages()
         {
-            Mensagens = new List<string>();
+            Messages = new List<string>();
         }
 
-        public List<string> Mensagens { get; set; }
+        public List<string> Messages { get; set; }
     }
 }

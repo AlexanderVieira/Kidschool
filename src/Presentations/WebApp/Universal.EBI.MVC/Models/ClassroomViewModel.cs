@@ -11,7 +11,7 @@ namespace Universal.EBI.MVC.Models
         public string Lunch { get; set; }
         public string ClassroomType { get; set; }      
         public string MeetingTime { get; set; }        
-        public EducatorViewModel Educator { get; set; }
+        public EducatorClassroomViewModel Educator { get; set; }
         public List<ChildViewModel> Childs { get; set; }
         public bool Actived { get; set; }
         public string CreatedBy { get; set; }
@@ -22,40 +22,7 @@ namespace Universal.EBI.MVC.Models
         public ClassroomViewModel()
         {
             Childs = new List<ChildViewModel>();
-        }
-
-        //public Classroom ToConvertClassroom(ClassroomViewModel classroomDto)
-        //{
-        //    var classroom = new Classroom
-        //    {
-        //        Id = classroomDto.Id,
-        //        Educator = new Educator(),
-        //        Church = classroomDto.Church,
-        //        Region = classroomDto.Region,
-        //        Lunch = classroomDto.Lunch,
-        //        ClassroomType = (ClassroomType)Enum.Parse(typeof(ClassroomType), classroomDto.ClassroomType, true),                
-        //        Actived = classroomDto.Actived,
-        //        MeetingTime = classroomDto.MeetingTime,
-        //        CreatedDate = DateTime.Parse(classroomDto.CreatedDate),
-        //        CreatedBy = classroomDto.CreatedBy,
-        //        Children = new List<Child>() 
-        //    };
-
-        //    var educator = classroomDto.Educator.ToConvertEducator(classroomDto.Educator);
-        //    classroom.Educator = educator;
-
-        //    foreach (var item in classroomDto.Childs)
-        //    {
-        //        if (classroomDto.Childs.TryGetValue(item.Key.ToString(), out ChildViewModel childDto))
-        //        {
-        //            var child = childDto.ToConvertChild(childDto);
-        //            classroom.Children.Add(child);                    
-        //        }
-        //    }
-        //    classroom.Children.ToArray();
-        //    return classroom;
-
-        //}
+        }        
         
     }
 }

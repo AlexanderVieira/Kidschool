@@ -3,6 +3,7 @@ using System;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Universal.EBI.Core.Comunication;
 using Universal.EBI.MVC.Extensions;
 using Universal.EBI.MVC.Models;
 using Universal.EBI.MVC.Services.Interfaces;
@@ -83,6 +84,17 @@ namespace Universal.EBI.MVC.Services
             HandlerResponseErrors(response);
 
             return await DeserializeResponseObject<PagedResult<EducatorClassroomViewModel>>(response);
+        }
+
+        public async Task<ResponseResult> CreateClassroom(ClassroomViewModel classroom)
+        {
+            var classroomContent = GetContent(classroom);
+
+            var response = await _httpClient.PostAsync("reports/classroom/create", classroomContent);
+
+            if (!HandlerResponseErrors(response)) return await DeserializeResponseObject<ResponseResult>(response);
+
+            return ReturnOk();
         }
     }
 }

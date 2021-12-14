@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using Universal.EBI.Core.Comunication;
 
 namespace Universal.EBI.MVC.Models
 {

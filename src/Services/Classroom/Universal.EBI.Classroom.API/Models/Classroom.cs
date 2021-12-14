@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Universal.EBI.Classrooms.API.Models.Enums;
 using Universal.EBI.Core.DomainObjects.Interfaces;
+using Universal.EBI.Core.DomainObjects.Models;
+using Universal.EBI.Core.DomainObjects.Models.Enums;
 using Universal.EBI.Core.Messages;
 
 namespace Universal.EBI.Classrooms.API.Models
@@ -11,25 +12,22 @@ namespace Universal.EBI.Classrooms.API.Models
         public Guid Id { get; set; }
         public string Region { get; set; }
         public string Church { get; set; }
-        public ClassroomType ClassroomType { get; set; }      
+        public ClassroomType ClassroomType { get; set; }
+        public string Lunch { get; set; }
         public string MeetingTime { get; set; }
-        
-        private DateTime? _createdAt;
-        public DateTime? CreatedAt
-        {
-            get { return _createdAt; }
-            set { _createdAt = (value == null ? DateTime.UtcNow : value); }
-        }
-        public DateTime? UpdatedAt { get; set; }
-        public Educator Educator { get; set; }
-        public ICollection<Child> Childs { get; set; }
-        public bool Actived { get; set; }        
-        public ICollection<Event> Notifications { get; set; }        
+        public virtual Educator Educator { get; set; }
+        public virtual ICollection<Child> Children { get; set; }
+        public bool Actived { get; set; }
+        public string CreatedBy { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public string LastModifiedBy { get; set; }
+        public DateTime? LastModifiedDate { get; set; }
+
+        public ICollection<Event> Notifications { get; set; }
 
         public Classroom()
         {
-            Childs = new HashSet<Child>();            
-            Notifications = new HashSet<Event>();            
+            Notifications = new HashSet<Event>();
         }
 
         public void AddEvent(Event myEvent)

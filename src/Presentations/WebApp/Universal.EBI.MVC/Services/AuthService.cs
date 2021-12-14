@@ -11,6 +11,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Universal.EBI.WebAPI.Core.AspNetUser.Interfaces;
 using Universal.EBI.MVC.Models;
+using Universal.EBI.Core.Comunication;
 
 namespace Universal.EBI.MVC.Services
 {

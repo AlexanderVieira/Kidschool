@@ -3,7 +3,7 @@ using Universal.EBI.Classrooms.API.Models.Interfaces;
 using System.Threading.Tasks;
 using System;
 using Universal.EBI.Core.Data.Interfaces;
-using Universal.EBI.Core.DomainObjects.Models;
+using Universal.EBI.Classrooms.API.Models;
 
 namespace Universal.EBI.Classrooms.API.Data.Repository
 {

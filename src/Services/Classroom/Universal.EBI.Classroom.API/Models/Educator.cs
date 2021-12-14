@@ -1,18 +1,17 @@
-﻿using System.Collections.Generic;
-using Universal.EBI.Classrooms.API.Models.Enums;
+﻿using System;
+using Universal.EBI.Core.DomainObjects.Models.Enums;
 
 namespace Universal.EBI.Classrooms.API.Models
 {
-    public class Educator : Person
-    {   
-        public FunctionType FunctionType { get; set; }        
-        public ICollection<Phone> Phones { get; set; }        
-        
-        public Educator()
-        {
-            Phones = new HashSet<Phone>();
-        }        
-        
+    public class Educator
+    {
+        public Guid Id { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public FunctionType FunctionType { get; set; }
+        public string PhotoUrl { get; set; }        
+        public Guid ClassroomId { get; set; }
+
     }   
     
 }

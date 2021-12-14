@@ -51,7 +51,7 @@ namespace Universal.EBI.Classrooms.API.Application.Commands
             
             var classroom = classroomDto.ToConvertClassroom(classroomDto);           
 
-            var existingClassroom = await _classroomQueries.GetClassroomById(classroom.Id);
+            var existingClassroom = await _classroomQueries.GetClassroomsByDateAndMeetingTime(classroom.CreatedDate, classroom.MeetingTime);
 
             if (existingClassroom != null)
             {
@@ -77,7 +77,7 @@ namespace Universal.EBI.Classrooms.API.Application.Commands
                     Actived = classroomDto.Actived,
                     MeetingTime = classroomDto.MeetingTime,
                     CreatedDate = classroomDto.CreatedDate,
-                    CreatedBy = classroomDto.CreatedBy,
+                    CreatedBy = classroomDto.CreatedBy,  
                     Childs = classroomDto.Childs.Values.ToArray()
 
                 });
@@ -86,7 +86,7 @@ namespace Universal.EBI.Classrooms.API.Application.Commands
                 {
                     AggregateId = createdClassroom.Id,
                     Id = createdClassroom.Id,
-                    Educator = createdClassroom.Educator,
+                    //Educator = createdClassroom.Educator,
                     Church = createdClassroom.Church,
                     Region = createdClassroom.Region,
                     Lunch = createdClassroom.Lunch,

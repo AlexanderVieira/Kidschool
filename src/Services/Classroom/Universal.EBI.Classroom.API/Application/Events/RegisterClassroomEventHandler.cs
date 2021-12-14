@@ -45,40 +45,40 @@ namespace Universal.EBI.Classrooms.API.Application.Events
                 Id = educatorDto.Id,
                 FirstName = educatorDto.FirstName,
                 LastName = educatorDto.LastName,
-                Email = new Email(educatorDto.Email.Address),
-                Cpf = new Cpf(educatorDto.Cpf.Number),
-                Phones = new List<Phone>(),
-                Address = new Address(),
-                BirthDate = DateTime.Parse(educatorDto.BirthDate).Date,
-                GenderType = (GenderType)Enum.Parse(typeof(GenderType), educatorDto.GenderType, true),
+                //Email = new Email(educatorDto.Email.Address),
+                //Cpf = new Cpf(educatorDto.Cpf.Number),
+                //Phones = new List<Phone>(),
+                //Address = new Address(),
+                //BirthDate = DateTime.Parse(educatorDto.BirthDate).Date,
+                //GenderType = (GenderType)Enum.Parse(typeof(GenderType), educatorDto.GenderType, true),
                 FunctionType = (FunctionType)Enum.Parse(typeof(FunctionType), educatorDto.FunctionType, true),
                 PhotoUrl = educatorDto.PhotoUrl,
-                Excluded = educatorDto.Excluded
+                //Excluded = educatorDto.Excluded
             };
 
-            educator.Address = new Address
-            {
-                Id = educatorDto.Address.Id,
-                PublicPlace = educatorDto.Address.PublicPlace,
-                Number = educatorDto.Address.Number,
-                Complement = educatorDto.Address.Complement,
-                District = educatorDto.Address.District,
-                City = educatorDto.Address.City,
-                State = educatorDto.Address.State,
-                ZipCode = educatorDto.Address.ZipCode,
-                EducatorId = educatorDto.Address.ForeingKeyId
-            };
+            //educator.Address = new Address
+            //{
+            //    Id = educatorDto.Address.Id,
+            //    PublicPlace = educatorDto.Address.PublicPlace,
+            //    Number = educatorDto.Address.Number,
+            //    Complement = educatorDto.Address.Complement,
+            //    District = educatorDto.Address.District,
+            //    City = educatorDto.Address.City,
+            //    State = educatorDto.Address.State,
+            //    ZipCode = educatorDto.Address.ZipCode,
+            //    EducatorId = educatorDto.Address.ForeingKeyId
+            //};
 
-            foreach (var phone in educatorDto.Phones)
-            {
-                educator.Phones.Add(new Phone
-                {
-                    Id = phone.Id,
-                    Number = phone.Number,
-                    PhoneType = (PhoneType)Enum.Parse(typeof(PhoneType), phone.PhoneType, true),
-                    EducatorId = phone.ForeingKeyId
-                });
-            }
+            //foreach (var phone in educatorDto.Phones)
+            //{
+            //    educator.Phones.Add(new Phone
+            //    {
+            //        Id = phone.Id,
+            //        Number = phone.Number,
+            //        PhoneType = (PhoneType)Enum.Parse(typeof(PhoneType), phone.PhoneType, true),
+            //        EducatorId = phone.ForeingKeyId
+            //    });
+            //}
 
             return educator;
         }

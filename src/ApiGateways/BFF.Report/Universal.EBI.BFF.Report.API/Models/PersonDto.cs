@@ -1,6 +1,4 @@
 ﻿using System;
-using Universal.EBI.BFF.Report.API.Models.Enums;
-using Universal.EBI.Core.DomainObjects;
 
 namespace Universal.EBI.BFF.Report.API.Models
 {

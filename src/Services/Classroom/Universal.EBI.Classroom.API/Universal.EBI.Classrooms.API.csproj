@@ -15,8 +15,6 @@
   <ItemGroup>
     <Compile Remove="Models\Address.cs" />
     <Compile Remove="Models\Child.cs" />
-    <Compile Remove="Models\Classroom.cs" />
-    <Compile Remove="Models\Educator.cs" />
     <Compile Remove="Models\Person.cs" />
     <Compile Remove="Models\Phone.cs" />
     <Compile Remove="Models\Responsible.cs" />

@@ -41,8 +41,8 @@ namespace Universal.EBI.Classrooms.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         public async Task<IActionResult> CreateClassroom([FromBody] RegisterClassroomCommand command)
         {
-            command.CreatedDate = DateTime.Now.ToString();
-            command.CreatedBy = "Admin";
+            //command.CreatedDate = DateTime.Now.ToString();
+            //command.CreatedBy = "Admin";
             return CustomResponse(await _mediator.SendCommand(command));
         }        
 

@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Universal.EBI.Classrooms.API.Application.Queries.Interfaces;
 using Universal.EBI.Classrooms.API.Models;
 using Universal.EBI.Classrooms.API.Models.Interfaces;
-using Universal.EBI.Core.DomainObjects.Models;
 
 namespace Universal.EBI.Classrooms.API.Application.Queries
 {
@@ -49,9 +48,12 @@ namespace Universal.EBI.Classrooms.API.Application.Queries
                             .FirstOrDefaultAsync();
         }
 
-        public Task<IEnumerable<Classroom>> GetClassroomsByName(string name)
+        public async Task<Classroom> GetClassroomsByDateAndMeetingTime(DateTime date, string meetingTime)
         {
-            throw new NotImplementedException();
+            return await _context
+                            .Classrooms
+                            .Find(c => c.CreatedDate.Date == date.Date && c.MeetingTime == meetingTime)
+                            .FirstOrDefaultAsync();
         }
     }
        

@@ -56,9 +56,9 @@ namespace Universal.EBI.WebAPI.Core.Controllers
 
         protected bool ResponseHasErrors(ResponseResult response)
         {
-            if (response == null || !response.Errors.Mensagens.Any()) return false;
+            if (response == null || !response.Errors.Messages.Any()) return false;
 
-            foreach (var message in response.Errors.Mensagens)
+            foreach (var message in response.Errors.Messages)
             {
                 AddProcessingErrors(message);
             }

@@ -1,6 +1,6 @@
-﻿using Universal.EBI.MVC.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Linq;
+using Universal.EBI.Core.Comunication;
 
 namespace Universal.EBI.MVC.Controllers
 {

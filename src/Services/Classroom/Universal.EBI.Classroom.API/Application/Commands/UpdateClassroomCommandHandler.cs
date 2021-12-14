@@ -83,7 +83,7 @@ namespace Universal.EBI.Classrooms.API.Application.Commands
                 {
                     AggregateId = existingClassroom.Id,
                     Id = existingClassroom.Id,
-                    Educator = existingClassroom.Educator,
+                    //Educator = existingClassroom.Educator,
                     Church = existingClassroom.Church,
                     Region = existingClassroom.Region,
                     Lunch = existingClassroom.Lunch,
@@ -100,7 +100,7 @@ namespace Universal.EBI.Classrooms.API.Application.Commands
                 {
                     AggregateId = existingClassroom.Id,
                     Id = existingClassroom.Id,
-                    Educator = existingClassroom.Educator,
+                    //Educator = existingClassroom.Educator,
                     Church = existingClassroom.Church,
                     Region = existingClassroom.Region,
                     Lunch = existingClassroom.Lunch,

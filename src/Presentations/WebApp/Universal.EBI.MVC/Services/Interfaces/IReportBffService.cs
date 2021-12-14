@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Universal.EBI.Core.Comunication;
 using Universal.EBI.MVC.Models;
 
 namespace Universal.EBI.MVC.Services.Interfaces
@@ -12,5 +13,6 @@ namespace Universal.EBI.MVC.Services.Interfaces
         Task<PagedResult<ChildViewModel>> GetChildren(int pageSize, int pageIndex, string query = null);
         Task<ChildViewModel> GetChildByCpf(string cpf);
         Task<ChildViewModel> GetChildById(Guid id);
+        Task<ResponseResult> CreateClassroom(ClassroomViewModel classroom);
     }
 }

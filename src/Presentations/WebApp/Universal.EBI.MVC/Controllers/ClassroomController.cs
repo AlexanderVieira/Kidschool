@@ -47,47 +47,26 @@ namespace Universal.EBI.MVC.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("Classroom/Create")]
-        public ActionResult Create(ClassroomViewModel vmClassroom)
-        {
-            var vmEducators = new List<EducatorViewModel>();
-            ViewBag.Educators = vmEducators;
-            var vmChildren = new List<ChildViewModel>();
-            ViewBag.Children = vmChildren;
-            var vmResponsibles = new List<ResponsibleViewModel>();
-            ViewBag.Responsibles = vmResponsibles;
-
+        public async Task<IActionResult> Create(ClassroomViewModel vmClassroom)
+        {            
             try
             {
-                vmClassroom.Id = Guid.NewGuid(); 
-                //vmClassroom.Educator.Id = Guid.NewGuid();
-                var vmClassroomEducator = new EducatorClassroomTransportViewModel
-                {
-                    ClassroomId = vmClassroom.Id,
-                    Region = vmClassroom.Region,
-                    Church = vmClassroom.Church,
-                    Lunch = vmClassroom.Lunch,
-                    CreatedDate = vmClassroom.CreatedDate,
-                    Actived = vmClassroom.Actived,
-                    ClassroomType = vmClassroom.ClassroomType,
-                    MeetingTime = vmClassroom.MeetingTime,
-                    CreatedBy = vmClassroom.CreatedBy,
-                    LastModifiedDate = vmClassroom.LastModifiedDate,
-                    LastModifiedBy = vmClassroom.LastModifiedBy,
-                    EducatorId = vmClassroom.Educator.Id,
-                    EducatorFirstName = vmClassroom.Educator.FirstName,
-                    EducatorLastName = vmClassroom.Educator.LastName,
-                    EducatorFunctionType = vmClassroom.Educator.FunctionType
-                };
+                vmClassroom.Id = Guid.NewGuid();
+                vmClassroom.CreatedDate = $"{vmClassroom.CreatedDate} {DateTime.Now.ToShortTimeString()}";
+                vmClassroom.CreatedBy = "CurrentUser";
 
-                return RedirectToAction(nameof(Details), new { id = vmClassroomEducator.ClassroomId });
+                if (!ModelState.IsValid) return View(vmClassroom);
+                
+                var response = await _bffService.CreateClassroom(vmClassroom);
+                if (HasResponseErrors(response)) return View(vmClassroom);
+                return RedirectToAction(nameof(Details), new { id = vmClassroom.Id });
             }
             catch
             {
                 return View(vmClassroom);
             }
         }
-
-        // GET: ClassroomController/Edit/5
+        
         [HttpGet]
         //[Route("Classroom/Edit/{id}")]
         public ActionResult Edit(Guid id)
@@ -97,7 +76,7 @@ namespace Universal.EBI.MVC.Controllers
             ViewBag.Children = vmChildren;
             var vmResponsibles = new List<ResponsibleViewModel>();
             ViewBag.Responsibles = vmResponsibles;            
-            var vmEducator = new EducatorViewModel { Id = Guid.NewGuid() };
+            var vmEducator = new EducatorClassroomViewModel { Id = Guid.NewGuid() };
             vmClassroom.Id = id;
             //vmClassroom.Region = vmEducatorClassroom.Region;
             //vmClassroom.Church = vmEducatorClassroom.Church;
