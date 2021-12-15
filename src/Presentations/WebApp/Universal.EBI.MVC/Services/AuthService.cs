@@ -22,8 +22,9 @@ namespace Universal.EBI.MVC.Services
         private readonly IAuthenticationService _authService;
 
         public AuthService(HttpClient httpClient, IAspNetUser user, IAuthenticationService authService, IOptions<AppSettings> settings)
-        {
-            httpClient.BaseAddress = new Uri(settings.Value.AuthUrl);
+        {        
+            //httpClient.BaseAddress = new Uri(settings.Value.AuthUrl);
+            httpClient.BaseAddress = new Uri("https://ebiauthapi.azurewebsites.net/:5101");
             _httpClient = httpClient;
             _user = user;
             _authService = authService;
