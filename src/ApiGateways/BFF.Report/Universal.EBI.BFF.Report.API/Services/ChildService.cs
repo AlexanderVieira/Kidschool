@@ -16,7 +16,7 @@ namespace Universal.EBI.BFF.Report.API.Services
         public ChildService(HttpClient httpClient, IOptions<AppServicesSettings> settings)
         {
             _httpClient = httpClient;
-            _httpClient.BaseAddress = new Uri(settings.Value.ChildUrl);
+            _httpClient.BaseAddress = new Uri("https://localhost:5501");
         }
         public async Task<ChildDto> GetChildByCpf(string cpf)
         {

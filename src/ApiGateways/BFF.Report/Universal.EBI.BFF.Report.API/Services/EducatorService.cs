@@ -16,7 +16,7 @@ namespace Universal.EBI.BFF.Report.API.Services
         public EducatorService(HttpClient httpClient, IOptions<AppServicesSettings> settings)
         {
             _httpClient = httpClient;
-            _httpClient.BaseAddress = new Uri(settings.Value.EducatorUrl);
+            _httpClient.BaseAddress = new Uri("https://localhost:5301");
         }
         public async Task<EducatorDto> GetEducatorByCpf(string cpf)
         {

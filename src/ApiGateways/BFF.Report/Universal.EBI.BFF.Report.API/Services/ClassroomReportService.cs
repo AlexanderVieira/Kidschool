@@ -16,7 +16,7 @@ namespace Universal.EBI.BFF.Report.API.Services
         public ClassroomReportService(HttpClient httpClient, IOptions<AppServicesSettings> settings)
         {
             _httpClient = httpClient;
-            _httpClient.BaseAddress = new Uri(settings.Value.ReportUrl);
+            _httpClient.BaseAddress = new Uri("https://localhost:5601");
         }
 
         public async Task<FileContentResult> GetClassroomByDate(string inicialDate, string finalDate)
