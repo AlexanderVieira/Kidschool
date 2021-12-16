@@ -15,7 +15,6 @@ namespace Universal.EBI.BFF.Report.API.Configuration
     {
         public static void RegisterServices(this IServiceCollection services)
         {   
-            //api
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IAspNetUser, AspNetUser>();
 
