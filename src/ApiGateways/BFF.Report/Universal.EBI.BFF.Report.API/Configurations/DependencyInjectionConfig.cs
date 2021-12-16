@@ -14,8 +14,7 @@ namespace Universal.EBI.BFF.Report.API.Configuration
     public static class DependencyInjectionConfig
     {
         public static void RegisterServices(this IServiceCollection services)
-        {            
-            // API
+        {   
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IAspNetUser, AspNetUser>();
 
