@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="~/css/classroom.css" />
     <link href="~/font-awesome/css/all.min.css" type="text/css" rel="stylesheet">
-    <link href="~/assets/css/main.css" rel="stylesheet" />    
+    <link href="~/assets/css/main.css" rel="stylesheet" />
 
     <!-- MDB icon -->
     <link rel="icon" href="~/mdb5-ui-kit/img/mdb-favicon.ico" type="image/x-icon" />
@@ -53,34 +53,7 @@
 
 </head>
 <body>
-    
-        @*<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Universal.EBI.MVC</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-            aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="col-lg-3 col-4 navbar-collapse collapse d-sm-inline-flex justify-content-between">
-            <ul class="navbar-nav flex-grow-1">
-            <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-            </li>
-            <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-            </li>
-            </ul>
-            </div>
-            </div>
-            <div class="col-lg-9 col-sm-7 col-8 order-2 order-lg-3">
-            <div class="d-flex justify-content-end">
-            <div>
-            <partial name="_LoginPartial" />
-            </div>
-            </div>
-            </div>
-            </nav>*@
-
+    <header>
         <!-- Navbar -->
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <!-- Container wrapper -->
@@ -156,7 +129,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Right elements -->
 
                 <div class="d-flex align-items-center">
@@ -188,26 +161,22 @@
             <!-- Container wrapper -->
         </nav>
         <!-- Navbar -->
-
-    
+    </header>
     <div class="container">
         <main role="main" class="pb-3" id="content">
             @RenderBody()
         </main>
     </div>
-
     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2021 - Universal.EBI.MVC - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
 
-
-
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-   @* <script src="~/lib/bootstrap/dist/js/bootstrap-datetimepicker.js"></script>
-    <script src="~/lib/bootstrap/dist/js/locales/bootstrap-datetimepicker.pt-BR.js"></script>*@
+    @* <script src="~/lib/bootstrap/dist/js/bootstrap-datetimepicker.js"></script>
+        <script src="~/lib/bootstrap/dist/js/locales/bootstrap-datetimepicker.pt-BR.js"></script>*@
 
     <script src="~/assets/js/main.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.min.js"></script>
@@ -233,7 +202,7 @@
     <script src="~/mdb5-ui-kit/js/mdb.min.js"></script>
 
     <script>
-       
+
         $(function () {
             $('#datepicker').datepicker({ format: 'dd/mm/yyyy' });
         });
@@ -250,13 +219,13 @@
             $('#datepicker3').datepicker({ format: 'dd/mm/yyyy' });
         });
 
-         $(function () {
+        $(function () {
             $('#datepicker4').datepicker({ format: 'dd/mm/yyyy' });
         });
 
-        //$(function () {
-        //    $('#datepicker5').datepicker({ format: 'dd/mm/yyyy' });
-        //});
+                        //$(function () {
+                        //    $('#datepicker5').datepicker({ format: 'dd/mm/yyyy' });
+                        //});
 
     </script>
 
