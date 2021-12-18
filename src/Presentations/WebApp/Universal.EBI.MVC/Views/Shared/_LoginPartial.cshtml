@@ -21,13 +21,13 @@
         </div>
     </div>-->
 
-    <div class="d-inline-block">
+    <div class="nav navbar-nav navbar-right">
         <!-- Icon -->
         <a class="text-reset me-3" href="#">
             <i class="fas fa-shopping-cart"></i>
         </a>
     </div>
-    <div class="d-inline-block">
+    <div class="nav navbar-nav navbar-right">
         <!-- Notifications -->
         <a class="text-reset me-3 dropdown-toggle hidden-arrow"
            href="#"
@@ -51,7 +51,7 @@
             </li>
         </ul>
     </div>
-    <div class="d-inline-block">
+    <div class="nav navbar-nav navbar-right">
         <!-- Avatar -->
         <a class="dropdown-toggle d-flex align-items-center hidden-arrow"
            href="#"
@@ -81,8 +81,8 @@
 }
 else
 {
-    <div class="d-flex align-items-center">
-        <a asp-controller="auth" asp-action="Login"><input type="button" class="btn btn-link px-3 me-2" value="Login" /></a>
-        <a asp-controller="auth" asp-action="Register"><input type="button" class="btn btn-primary me-3" value="Crie sua conta" /></a>
-    </div>
+    <ul class="nav navbar-nav navbar-right">
+        <li><a asp-controller="auth" asp-action="Login"><input type="button" class="btn btn-secundary btn-sm me-2" value="Login" /></a></li>
+        <li><a asp-controller="auth" asp-action="Register"><input type="button" class="btn btn-primary btn-sm me-3" value="Crie sua conta" /></a></li>
+    </ul>
 }
