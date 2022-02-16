@@ -52,7 +52,8 @@ namespace Universal.EBI.MVC.Controllers
             try
             {
                 vmClassroom.Id = Guid.NewGuid();
-                vmClassroom.CreatedDate = $"{vmClassroom.CreatedDate} {DateTime.Now.ToShortTimeString()}";
+                //vmClassroom.CreatedDate = $"{vmClassroom.CreatedDate} {DateTime.Now.ToShortTimeString()}";
+                vmClassroom.CreatedDate = DateTime.Now.ToString();
                 vmClassroom.CreatedBy = "CurrentUser";
 
                 if (!ModelState.IsValid) return View(vmClassroom);

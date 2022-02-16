@@ -9,7 +9,7 @@
 }
 
 <div class="row col-md-12 mt-md-3">
-    <div class="col-md-6"><h5>Criar Sala de Aula</h5></div>
+    <div class="col-md-6"><h5>@ViewData["Title"]</h5></div>
     <div class="col-md-6 text-end"><a asp-action="Index">Back to List</a></div>
 </div>
 
@@ -58,7 +58,7 @@
 
 <div class="col-md-12 mt-md-3">
     <div class="card col-md-12">
-        <form class="row g-4" asp-action="Create" method="post">
+        <form class="row g-4" asp-controller="Classroom" asp-action="Create" method="post">
             <div class="card-body">
                 <div class="card-text">
                     <div>
@@ -100,7 +100,7 @@
                                                         <span asp-validation-for="Lunch" class="text-danger"></span>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-2">
+                                                @*<div class="col-md-2">
                                                     <div class="form-group">
                                                         <div class='input-group date' id='datepicker'>
                                                             <input asp-for="CreatedDate" class="form-control" />
@@ -111,7 +111,7 @@
                                                             </span>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                </div>*@
                                             </div>
                                             <div class="row col-md-12">
                                                 <div class="col-md-3 mt-md-4">
