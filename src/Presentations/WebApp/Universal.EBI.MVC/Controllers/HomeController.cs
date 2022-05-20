@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using Universal.EBI.MVC.Models;
 
 namespace Universal.EBI.MVC.Controllers
@@ -18,7 +19,7 @@ namespace Universal.EBI.MVC.Controllers
         public IActionResult Calendar()
         {
             return View();
-        }
+        }             
 
         [Route("sistema-indisponivel")]
         public IActionResult SistemaIndisponivel()

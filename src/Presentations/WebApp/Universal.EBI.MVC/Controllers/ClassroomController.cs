@@ -18,13 +18,12 @@ namespace Universal.EBI.MVC.Controllers
             _bffService = bffService;
         }
 
-        // GET: ClassroomController
         public ActionResult Index()
         {
             return View();
         }
 
-        // GET: ClassroomController/Details/5
+
         [HttpGet]
         //[Route("Classroom/Details/{id}")]
         public ActionResult Details(Guid id)
@@ -35,29 +34,27 @@ namespace Universal.EBI.MVC.Controllers
             return View(vmEducatorClassroom);
         }
 
-        // GET: ClassroomController/Create
+
         [HttpGet]
-        [Route("Classroom/Create")]
+        [Route("classroom/create")]
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: ClassroomController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Route("Classroom/Create")]
+        [Route("classroom/create")]
         public async Task<IActionResult> Create(ClassroomViewModel vmClassroom)
-        {            
+        {
             try
             {
-                vmClassroom.Id = Guid.NewGuid();
-                //vmClassroom.CreatedDate = $"{vmClassroom.CreatedDate} {DateTime.Now.ToShortTimeString()}";
+                vmClassroom.Id = Guid.NewGuid();                
                 vmClassroom.CreatedDate = DateTime.Now.ToString();
                 vmClassroom.CreatedBy = "CurrentUser";
 
                 if (!ModelState.IsValid) return View(vmClassroom);
-                
+
                 var response = await _bffService.CreateClassroom(vmClassroom);
                 if (HasResponseErrors(response)) return View(vmClassroom);
                 return RedirectToAction(nameof(Details), new { id = vmClassroom.Id });
@@ -67,7 +64,7 @@ namespace Universal.EBI.MVC.Controllers
                 return View(vmClassroom);
             }
         }
-        
+
         [HttpGet]
         //[Route("Classroom/Edit/{id}")]
         public ActionResult Edit(Guid id)
@@ -76,7 +73,7 @@ namespace Universal.EBI.MVC.Controllers
             var vmChildren = new List<ChildViewModel>();
             ViewBag.Children = vmChildren;
             var vmResponsibles = new List<ResponsibleViewModel>();
-            ViewBag.Responsibles = vmResponsibles;            
+            ViewBag.Responsibles = vmResponsibles;
             var vmEducator = new EducatorClassroomViewModel { Id = Guid.NewGuid() };
             vmClassroom.Id = id;
             //vmClassroom.Region = vmEducatorClassroom.Region;
@@ -95,7 +92,6 @@ namespace Universal.EBI.MVC.Controllers
             return View(vmClassroom);
         }
 
-        // POST: ClassroomController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(Guid id, ClassroomViewModel vmClassroom)
@@ -110,13 +106,11 @@ namespace Universal.EBI.MVC.Controllers
             }
         }
 
-        // GET: ClassroomController/Delete/5
         public ActionResult Delete(Guid id)
         {
             return View();
         }
 
-        // POST: ClassroomController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(Guid id, IFormCollection collection)
@@ -132,7 +126,7 @@ namespace Universal.EBI.MVC.Controllers
         }
 
         [HttpGet]
-        [Route("Classroom/Educadores")]
+        [Route("classroom/educadores")]
         public async Task<IActionResult> GetEducators([FromQuery] int ps = 8, [FromQuery] int page = 1, [FromQuery] string q = null)
         {
             var pagedResultEducator = await _bffService.GetEducators(ps, page, q);
@@ -140,7 +134,60 @@ namespace Universal.EBI.MVC.Controllers
             //pagedResultEducator.ReferenceAction = "Create";
             //TempData["Educators"] = pagedResultEducator;
             TempDataExtension.Put(TempData, "Educators", pagedResultEducator);
-            return RedirectToAction("Create","Classroom");
+            return RedirectToAction("Create", "Classroom");
+        }
+
+        [HttpGet]
+        [Route("classroom/events")]
+        public IActionResult GetCalendarEvents()
+        {
+            //List<EventScheduleViewModel> events = _bffService.GetCalendarEvents(start, end);
+            List<EventScheduleViewModel> events = new List<EventScheduleViewModel>();
+            events.Add(
+                new EventScheduleViewModel
+                {
+                    Id = Guid.NewGuid(),
+                    Title = "Reunião",
+                    Description = "Dia do Reencontro com Deus",
+                    Start = "2022-05-01 07:00",
+                    End = "2022-05-01 07:00",
+                    AllDay = false
+                });
+            return Json(events);
+        }
+
+        [HttpPost]
+        [Route("classroom/update-event")]
+        public IActionResult UpdateEvent([FromBody] EventScheduleViewModel evt)
+        {
+            string message = string.Empty;
+
+            //message = _bffService.UpdateEvent(evt);
+
+            return Json(new { message });
+        }
+
+        [HttpPost]
+        [Route("classroom/add-event")]
+        public IActionResult AddEvent([FromBody] EventScheduleViewModel evt)
+        {
+            string message = string.Empty;
+            int eventId = 0;
+
+            //message = _bffService.AddEvent(evt, out eventId);
+
+            return Json(new { message, eventId });
+        }
+
+        [HttpPost]
+        [Route("classroom/delete-event")]
+        public IActionResult DeleteEvent([FromBody] EventScheduleViewModel evt)
+        {
+            string message = string.Empty;
+
+            //message = _bffService.DeleteEvent(evt.Id);
+
+            return Json(new { message });
         }
     }
 }

@@ -1,7 +1,8 @@
-﻿@model Universal.EBI.MVC.Models.ClassroomViewModel 
+﻿@model Universal.EBI.MVC.Models.ClassroomViewModel
 @{
     ViewData["Title"] = "Calendário";
 }
+
 <div class="container mt-3">
     <div class="d-flex align-items-center justify-content-center">
         <div class="card col-md-9">
@@ -12,37 +13,54 @@
     </div>
 </div>
 
-<div id="createEvent" class="modal" tabindex="-1">
-    <div class="modal-dialog">
+
+<div class="modal fade" id="eventModal" role="dialog" aria-labelledby="eventModalLabel">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Horário da Reunião</h5>
-                <button type="button"
-                        class="btn-close"
-                        data-mdb-dismiss="modal"
-                        aria-label="Close"></button>
+                <h4 class="modal-title" id="eventModalLabel">Event</h4>
+                <button type="button" class="close" data-mdb-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body">
-                <label class="form-label select-label">Horários</label>
-                @*<select class="form-select" aria-label="Default select example">
-                    <option selected>Selecione...</option>
-                    <option value="07:00h">07:00h</option>
-                    <option value="10:00h">10:00h</option>
-                    <option value="15:00h">15:00h</option>
-                    <option value="19:30h">19:30h</option>
-                    </select>*@
-
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" asp-for="MeetingTime" id="inlineRadio1" value="7:00H">
-                    <label class="form-check-label" for="inlineRadio1">7:00H</label>
-                </div>
-
+                <form id="eventForm">
+                    <div class="form-group row">
+                        <label for="" class="col-sm-3 col-form-label">Title</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="EventTitle">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="" class="col-sm-3 col-form-label">Start Time</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="StartTime">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="" class="col-sm-3 col-form-label">End Time</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="EndTime" onchange="changeEndTime(event)">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="" class="col-sm-3 col-form-label">Description</label>
+                        <div class="col-sm-9">
+                            <textarea class="form-control" id="Description" rows="5"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-3 offset-sm-9">
+                            <label><input type="checkbox" id="AllDay" onchange="changeAllDay(event)" /> All Day</label>
+                        </div>
+                    </div>
+                    <input type="hidden" id="isNewEvent" />
+                </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">
-                    Fechar
-                </button>
-                <button id="btnCreateEvent" type="button" class="btn btn-primary" onclick="confirm()">Confirmar</button>
+                <button type="button" class="btn btn-danger" id="deleteEvent" onclick="deleteEvent()">Delete</button>
+                <div>
+                    <button type="button" class="btn btn-default" data-mdb-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="eventModalSave" onclick="eventModalSave()">Save Changes</button>
+                </div>
             </div>
         </div>
     </div>
@@ -63,150 +81,359 @@
                     <h5 class="text-center"><strong>Tem certeza que deseja criar sala de aula?</strong></h5>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">
-                        Fechar
-                    </button>
+                    <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Fechar</button>
                     <button type="submit" class="btn btn-primary">Confirmar</button>
+                    @*@Html.ActionLink("Confirmar", "Create", "Classroom", new { Id = Model.ClassroomId }, new { @class = "btn btn-primary col-md-4" })*@
                 </div>
             </div>
         </div>
     </form>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
 <script>
-    var title;
-    document.addEventListener('DOMContentLoaded', function () {
 
-        var calendarEl = document.getElementById('calendar');
-        
-
-        var calendar = new FullCalendar.Calendar(calendarEl, {
-            headerToolbar: {
-                left: 'prev,next today',
-                center: 'title',
-                right: 'dayGridMonth,timeGridWeek,timeGridDay'
-            },
-            initialDate: '2020-09-12',
-            navLinks: true, // can click day/week names to navigate views
-            selectable: true,
-            selectMirror: true,
-            select: function (arg) {
-
-                $('#createEvent').modal('show');
-
-                //$('select').change(function() {
-                //    console.log($(this).val())
-                //    value = '';
-                //    var value = $(this).val();
-                //    if(value){
-                //        calendar.addEvent({
-                //            title: value,
-                //            start: arg.start,
-                //            //end: arg.end,
-                //            //allDay: arg.allDay
-                //        })
-                //        calendar.unselect()
-                //    }
-
-                //});
-
-                var title = prompt('Event Title:');                
-                if (title) {
-                    calendar.addEvent({
-                        title: title,
-                        start: arg.start,
-                        end: arg.end,
-                        allDay: arg.allDay
-                    })                    
-                }
-                calendar.unselect()
-            },
-            eventClick: function (arg) {
-
-                $('#showFormCreateClassroom').modal('show');
-
-                //if (confirm('Are you sure you want to delete this event?')) {
-                //    //arg.event.remove()
-                //    $.ajax({
-                //       type: 'GET',
-                //       url: 'Url.Content("~/Classroom/Create")',
-                //       success: function (view) {
-                //          $('#content').html(view);
-                //       }
-                //    });
-                //}
-            },
-            editable: true,
-            dayMaxEvents: true, // allow "more" link when too many events
-            events: [
-                {
-                    title: 'All Day Event',
-                    start: '2020-09-01'
-                },
-                {
-                    title: 'Long Event',
-                    start: '2020-09-07',
-                    end: '2020-09-10'
-                },
-                {
-                    groupId: 999,
-                    title: 'Repeating Event',
-                    start: '2020-09-09T16:00:00'
-                },
-                {
-                    groupId: 999,
-                    title: 'Repeating Event',
-                    start: '2020-09-16T16:00:00'
-                },
-                {
-                    title: 'Conference',
-                    start: '2020-09-11',
-                    end: '2020-09-13'
-                },
-                {
-                    title: 'Meeting',
-                    start: '2020-09-12T10:30:00',
-                    end: '2020-09-12T12:30:00'
-                },
-                {
-                    title: 'Lunch',
-                    start: '2020-09-12T12:00:00'
-                },
-                {
-                    title: 'Meeting',
-                    start: '2020-09-12T14:30:00'
-                },
-                {
-                    title: 'Happy Hour',
-                    start: '2020-09-12T17:30:00'
-                },
-                {
-                    title: 'Dinner',
-                    start: '2020-09-12T20:00:00'
-                },
-                {
-                    title: 'Birthday Party',
-                    start: '2020-09-13T07:00:00'
-                },
-                {
-                    title: 'Click for Google',
-                    url: 'https://localhost:5001/classroom/create',
-                    start: '2020-09-28'
-                }
-            ]
+        //$('#createEvent').modal('show');
+        //$('#showFormCreateClassroom').modal('show');
+        var calendar;
+        var title;
+        let currentEvent;
+        const formatDate = date => date === null ? '' : moment(date).format("YYYY-MM-DD h:mm A"); //.format("YYYY-MM-DD[T]HH:mm:ss");
+        const fpStartTime = flatpickr("#StartTime", {       
+            enableTime: true,
+            //dateFormat: "Y-m-d h:i K"
+            time_24hr: true
+        });
+        const fpEndTime = flatpickr("#EndTime", {
+            enableTime: true,
+            //dateFormat: "Y-m-d h:i K"
+            time_24hr: true
         });
 
-        calendar.render();
-    });
+        document.addEventListener('DOMContentLoaded', function () {
 
-    function confirm() {
-        //title = $('#inlineRadio1').val();
-        //console.log(title)
-        $('#createEvent').modal('hide');
-    }
+            var calendarEl = document.getElementById('calendar');
 
-    function confirmShowForm(){
-        $('#showFormCreateClassroom').modal('hide');
-    }
+            calendar = new FullCalendar.Calendar(calendarEl, {                
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                initialDate: '2022-05-01',
+                navLinks: true, // can click day/week names to navigate views
+                selectable: true,
+                selectMirror: true,
+                editable: true,
+                dayMaxEvents: true, // allow "more" link when too many events
+                select: function (event){
+                    addEvent(event.startStr, event.endStr);                                                   
+                    calendar.unselect();
+                },
+                eventClick: function(event, element){
+                    updateEvent(event,element);
+                },
+                events: getEvents,                
+                eventDidMount: function(info) {
+                    $(info.el).tooltip({ 
+                      title: info.event.extendedProps.description,
+                      placement: "top",
+                      trigger: "hover",
+                      container: "body"
+                    });
+                }
+
+            //    events: [
+            //    {
+            //        title: 'All Day Event',
+            //        start: '2022-05-01'
+            //    },
+            //    {
+            //        title: 'Long Event',
+            //        start: '2022-05-07',
+            //        end: '2022-05-10'
+            //    },
+            //    {
+            //        groupId: 999,
+            //        title: 'Repeating Event',
+            //        start: '2022-05-09T16:00:00'
+            //    },
+            //    {
+            //        groupId: 999,
+            //        title: 'Repeating Event',
+            //        start: '2022-05-17T16:00:00'
+            //    },
+            //    {
+            //        title: 'Conference',
+            //        start: '2022-05-11',
+            //        end: '2022-05-13'
+            //    },
+            //    {
+            //        title: 'Meeting',
+            //        start: '2022-05-12T10:30:00',
+            //        end: '2022-05-12T12:30:00'
+            //    },
+            //    {
+            //        title: 'Lunch',
+            //        start: '2022-05-14T12:00:00'
+            //    },
+            //    {
+            //        title: 'Meeting',
+            //        start: '2022-05-08T14:30:00'
+            //    },
+            //    {
+            //        title: 'Happy Hour',
+            //        start: '2022-09-10T17:30:00'
+            //    },
+            //    {
+            //        title: 'Dinner',
+            //        start: '2022-05-05T20:00:00'
+            //    },
+            //    {
+            //        title: 'Birthday Party',
+            //        start: '2022-05-01T07:00:00'
+            //    },
+            //    {
+            //        title: 'Click for Google',
+            //        url: 'https://localhost:5001/classroom/create',
+            //        start: '2022-05-28'
+            //    }
+            //]
+
+            });
+
+            calendar.render();
+        });
+
+        function updateEvent(event, element) {
+            console.log($('.fc-event-time').text());
+            console.log(event); 
+            currentEvent = event;
+            if ($(this).data("qtip")) $(this).qtip("hide");    
+            $('#eventModalLabel').html('Edit Event');
+            $('#eventModalSave').html('Update Event');
+            $('#EventTitle').val($('.fc-event-title').text());
+            $('#Description').val(event.description);
+            $('#isNewEvent').val(false);
+
+            const start = formatDate(event.start);
+            const end = formatDate(event.end);
+
+            fpStartTime.setDate(start);
+            fpEndTime.setDate(end);            
+
+            $('#StartTime').val(event.start);
+            $('#EndTime').val(event.end);
+
+            if (event.allDay) {
+                $('#AllDay').prop('checked', 'checked');
+            } else {
+                $('#AllDay')[0].checked = false;
+            }
+
+            $('#eventModal').modal('show');
+        }
+
+        function addEvent(start, end) {
+            $('#eventForm')[0].reset();
+            $('#eventModalLabel').html('Add Event');
+            $('#eventModalSave').html('Create Event');
+            $('#isNewEvent').val(true);                        
+            
+            start = formatDate(start);
+            end = formatDate(end);           
+            fpStartTime.setDate(start);
+            fpEndTime.setDate(end);           
+            
+            $('#eventModal').modal('show');             
+        }
+        
+        function eventModalSave(){
+            const title = $('#EventTitle').val();
+            const description = $('#Description').val();
+            const startTime = moment($('#StartTime').val()); 
+            const endTime = moment($('#EndTime').val());
+            const isAllDay = $('#AllDay').is(":checked");
+            const isNewEvent = $('#isNewEvent').val() === 'true' ? true : false;                     
+            
+            if (startTime > endTime) {
+                alert('Start Time cannot be greater than End Time');
+                return;
+            } else if ((!startTime.isValid() || !endTime.isValid()) && !isAllDay) {
+                alert('Please enter both Start Time and End Time');
+                return;
+            }            
+
+            const event = {
+                title,
+                description,
+                isAllDay,
+                startTime: $('#StartTime').val(),
+                endTime: $('#EndTime').val()
+            };                       
+
+            if (isNewEvent) {                
+                sendAddEvent(event);
+            } else {
+                sendUpdateEvent(event);
+            }
+        }
+
+        function getEvents(){ 
+            return axios.get('/classroom/events')
+                .then(function (response) {
+                  console.log(response.data);
+                  //console.log(response.status);
+                  //console.log(response.statusText);
+                  //console.log(response.headers);
+                  //console.log(response.config);      
+                  return response.data;
+            });          
+        }             
+
+        function sendAddEvent(event) {
+            axios({
+                method: 'post',
+                url: '/classroom/add-event',
+                data: {
+                    "Title": event.title,
+                    "Description": event.description,
+                    "Start": event.startTime,
+                    "End": event.endTime,
+                    "AllDay": event.isAllDay
+                }
+            })
+            .then(res => {
+                const { message, eventId } = res.data;                            
+                if (message === '') {
+                    const newEvent = {
+                        start: event.startTime,
+                        end: event.endTime,
+                        allDay: event.isAllDay,
+                        title: event.title,
+                        description: event.description,
+                        eventId
+                    };
+                    
+                    addEventCalendar(newEvent)
+                    
+                    $('#calendar').fullCalendar('renderEvent', newEvent);
+                    $('#calendar').fullCalendar('unselect');
+                    $('#eventModal').modal('hide');
+                    $('#showFormCreateClassroom').modal('show');
+                } else {
+                    alert(`Something went wrong: ${message}`);
+                }
+            })
+            .catch(err => alert(`Something went wrong: ${err}`));
+        }
+
+         function createClassroom() {
+             console.log("Create");
+            axios.get('/classroom/create')
+                .then(function (response) {
+                  console.log(response);
+                  //console.log(response.status);
+                  //console.log(response.statusText);
+                  //console.log(response.headers);
+                  //console.log(response.config); 
+                  confirmShowForm()
+            });
+        }
+
+        function sendUpdateEvent(event) {
+            axios({
+                method: 'post',
+                url: '/classroom/update-event',
+                data: {
+                    "EventId": currentEvent.eventId,
+                    "Title": event.title,
+                    "Description": event.description,
+                    "Start": event.startTime,
+                    "End": event.endTime,
+                    "AllDay": event.isAllDay
+                }
+            })
+            .then(res => {
+                const { message } = res.data;
+                if (message === '') {
+                    currentEvent.title = event.title;
+                    currentEvent.description = event.description;
+                    currentEvent.start = event.startTime;
+                    currentEvent.end = event.endTime;
+                    currentEvent.allDay = event.isAllDay;
+
+                    $('#calendar').fullCalendar('updateEvent', currentEvent);
+                    $('#eventModal').modal('hide');
+                } else {
+                    alert(`Something went wrong: ${message}`);
+                }
+            })
+            .catch(err => alert(`Something went wrong: ${err}`));
+        }
+        
+        function deleteEvent(){
+            if (confirm(`Do you really want to delete "${currentEvent.title}" event?`)) {
+                axios({
+                    method: 'post',
+                    url: '/classroom/delete-event',
+                    data: {
+                        "EventId": currentEvent.eventId
+                    }
+                })
+                .then(res => {
+                    const { message } = res.data;
+                    if (message === '') {
+                        $('#calendar').fullCalendar('removeEvents', currentEvent._id);
+                        $('#eventModal').modal('hide');
+                    } else {
+                        alert(`Something went wrong: ${message}`);
+                    }
+                })
+                .catch(err => alert(`Something went wrong: ${err}`));
+            }
+        }
+                
+        function changeAllDay(e){            
+            if (e.target.checked) {
+                $('#EndTime').val('');
+                fpEndTime.clear();
+                this.checked = true;
+            } else {
+                this.checked = false;
+            }
+        }
+                
+        function changeEndTime(e){
+            $('#AllDay')[0].checked = false;
+        }
+
+        function addEventCalendar(event){                      
+            calendar.addEvent({
+                title: event.title, 
+                description: event.description, 
+                start: event.start, 
+                end: event.end, 
+                allDay: false, 
+            })
+            
+        }
+
+        function clear(){
+                //$('#inlineRadio1').removeAttr('checked').checkboxradio('refresh');
+                const radio = document.getElementById('inlineRadio1');
+                radio.removeAttribute('checked');
+        }
+
+        function confim() {
+                //title = $('#inlineRadio1').val();
+                //clear();
+                $('#createEvent').modal('hide');
+        }
+
+        function confirmShowForm(){
+                $('#showFormCreateClassroom').modal('hide');
+        }
 
 </script>
