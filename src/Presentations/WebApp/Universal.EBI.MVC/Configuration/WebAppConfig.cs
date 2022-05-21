@@ -17,6 +17,16 @@ namespace Universal.EBI.MVC.Configuration
         {
             services.AddControllersWithViews();
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy("Total",
+                    builder =>
+                        builder
+                            .AllowAnyOrigin()
+                            .AllowAnyMethod()
+                            .AllowAnyHeader());
+            });
+
             services.AddDataProtection()
                .PersistKeysToFileSystem(new DirectoryInfo(@"/var/data_protection_keys/"))
                .SetApplicationName("Universal.EBI");
@@ -48,7 +58,7 @@ namespace Universal.EBI.MVC.Configuration
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            app.UseCors("Total");
             app.UseIdentityConfiguration();
 
             var supportedCultures = new[] { new CultureInfo("pt-BR") };

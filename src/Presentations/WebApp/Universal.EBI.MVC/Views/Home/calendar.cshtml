@@ -190,8 +190,8 @@
         }
 
         function updateEvent(event, element) {
-            console.log($('.fc-event-time').text());
-            console.log(event);
+            //console.log($('.fc-event-time').text());
+            //console.log(event);
             currentEvent = event;
 
             $('#eventModal').modal('show');
@@ -242,7 +242,7 @@
                 endTime: $('#EndTime').val(),
                 isAllDay
             };
-            console.log(event)
+            //console.log(event)
             if (isNewEvent) {
                 sendAddEvent(event);
             } else {

@@ -156,9 +156,9 @@ namespace Universal.EBI.MVC.Controllers
             return Json(events);
         }
 
-        [HttpPost]
+        [HttpPost]        
         [Route("classroom/update-event")]
-        public IActionResult UpdateEvent([FromBody]EventScheduleViewModel vmEvent)
+        public JsonResult UpdateEvent([FromBody]EventScheduleViewModel vmEvent)
         {
             string message = string.Empty;
 
@@ -167,9 +167,9 @@ namespace Universal.EBI.MVC.Controllers
             return Json(new { message });
         }
 
-        [HttpPost]
+        [HttpPost]        
         [Route("classroom/add-event")]
-        public IActionResult AddEvent([FromBody] EventScheduleViewModel vmEvent)
+        public JsonResult AddEvent([FromBody] EventScheduleViewModel vmEvent)
         {
             string message = string.Empty;
             var eventId = Guid.NewGuid();
@@ -179,9 +179,9 @@ namespace Universal.EBI.MVC.Controllers
             return Json(new { message, eventId });
         }
 
-        [HttpPost]
+        [HttpPost]        
         [Route("classroom/delete-event")]
-        public IActionResult DeleteEvent([FromBody] EventScheduleViewModel vmEvent)
+        public JsonResult DeleteEvent([FromBody] EventScheduleViewModel vmEvent)
         {
             string message = string.Empty;
 
