@@ -146,7 +146,7 @@ namespace Universal.EBI.MVC.Controllers
             events.Add(
                 new EventScheduleViewModel
                 {
-                    Id = Guid.NewGuid(),
+                    //Id = Guid.NewGuid(),
                     Title = "Reunião",
                     Description = "Dia do Reencontro com Deus",
                     Start = "2022-05-01 07:00",
@@ -158,7 +158,7 @@ namespace Universal.EBI.MVC.Controllers
 
         [HttpPost]
         [Route("classroom/update-event")]
-        public IActionResult UpdateEvent([FromBody] EventScheduleViewModel evt)
+        public IActionResult UpdateEvent([FromBody]EventScheduleViewModel vmEvent)
         {
             string message = string.Empty;
 
@@ -169,10 +169,10 @@ namespace Universal.EBI.MVC.Controllers
 
         [HttpPost]
         [Route("classroom/add-event")]
-        public IActionResult AddEvent([FromBody] EventScheduleViewModel evt)
+        public IActionResult AddEvent([FromBody] EventScheduleViewModel vmEvent)
         {
             string message = string.Empty;
-            int eventId = 0;
+            var eventId = Guid.NewGuid();
 
             //message = _bffService.AddEvent(evt, out eventId);
 
@@ -181,11 +181,11 @@ namespace Universal.EBI.MVC.Controllers
 
         [HttpPost]
         [Route("classroom/delete-event")]
-        public IActionResult DeleteEvent([FromBody] EventScheduleViewModel evt)
+        public IActionResult DeleteEvent([FromBody] EventScheduleViewModel vmEvent)
         {
             string message = string.Empty;
 
-            //message = _bffService.DeleteEvent(evt.Id);
+            //message = _bffService.DeleteEvent(vmEvent.Id);
 
             return Json(new { message });
         }

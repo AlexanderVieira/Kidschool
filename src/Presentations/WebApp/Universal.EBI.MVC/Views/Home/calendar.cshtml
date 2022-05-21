@@ -81,7 +81,7 @@
                     <h5 class="text-center"><strong>Tem certeza que deseja criar sala de aula?</strong></h5>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal" onclick="deleteEvent()">Cancelar</button>
                     <button type="submit" class="btn btn-primary">Confirmar</button>
                     @*@Html.ActionLink("Confirmar", "Create", "Classroom", new { Id = Model.ClassroomId }, new { @class = "btn btn-primary col-md-4" })*@
                 </div>
@@ -93,14 +93,12 @@
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
 <script>
-
-        //$('#createEvent').modal('show');
-        //$('#showFormCreateClassroom').modal('show');
+            
         var calendar;
         var title;
         let currentEvent;
         const formatDate = date => date === null ? '' : moment(date).format("YYYY-MM-DD h:mm A"); //.format("YYYY-MM-DD[T]HH:mm:ss");
-        const fpStartTime = flatpickr("#StartTime", {       
+        const fpStartTime = flatpickr("#StartTime", {
             enableTime: true,
             //dateFormat: "Y-m-d h:i K"
             time_24hr: true
@@ -115,7 +113,7 @@
 
             var calendarEl = document.getElementById('calendar');
 
-            calendar = new FullCalendar.Calendar(calendarEl, {                
+            calendar = new FullCalendar.Calendar(calendarEl, {
                 headerToolbar: {
                     left: 'prev,next today',
                     center: 'title',
@@ -128,89 +126,77 @@
                 editable: true,
                 dayMaxEvents: true, // allow "more" link when too many events
                 select: function (event){
-                    addEvent(event.startStr, event.endStr);                                                   
+                    addEvent(event.startStr, event.endStr);
                     calendar.unselect();
                 },
                 eventClick: function(event, element){
                     updateEvent(event,element);
                 },
-                events: getEvents,                
+                events: getEvents,
                 eventDidMount: function(info) {
-                    $(info.el).tooltip({ 
+                    $(info.el).tooltip({
                       title: info.event.extendedProps.description,
                       placement: "top",
                       trigger: "hover",
                       container: "body"
                     });
-                }
-
-            //    events: [
-            //    {
-            //        title: 'All Day Event',
-            //        start: '2022-05-01'
-            //    },
-            //    {
-            //        title: 'Long Event',
-            //        start: '2022-05-07',
-            //        end: '2022-05-10'
-            //    },
-            //    {
-            //        groupId: 999,
-            //        title: 'Repeating Event',
-            //        start: '2022-05-09T16:00:00'
-            //    },
-            //    {
-            //        groupId: 999,
-            //        title: 'Repeating Event',
-            //        start: '2022-05-17T16:00:00'
-            //    },
-            //    {
-            //        title: 'Conference',
-            //        start: '2022-05-11',
-            //        end: '2022-05-13'
-            //    },
-            //    {
-            //        title: 'Meeting',
-            //        start: '2022-05-12T10:30:00',
-            //        end: '2022-05-12T12:30:00'
-            //    },
-            //    {
-            //        title: 'Lunch',
-            //        start: '2022-05-14T12:00:00'
-            //    },
-            //    {
-            //        title: 'Meeting',
-            //        start: '2022-05-08T14:30:00'
-            //    },
-            //    {
-            //        title: 'Happy Hour',
-            //        start: '2022-09-10T17:30:00'
-            //    },
-            //    {
-            //        title: 'Dinner',
-            //        start: '2022-05-05T20:00:00'
-            //    },
-            //    {
-            //        title: 'Birthday Party',
-            //        start: '2022-05-01T07:00:00'
-            //    },
-            //    {
-            //        title: 'Click for Google',
-            //        url: 'https://localhost:5001/classroom/create',
-            //        start: '2022-05-28'
-            //    }
-            //]
+                }            
 
             });
 
             calendar.render();
         });
 
+        function getEvents(){
+            return $.ajax({
+                type: "GET",
+                url: "/classroom/events",
+                success: function(data, status, xhr) {
+                    // handle success
+                    //alert(`Resposta: ${data} | ${status}`);
+                    return data;
+                },
+                error: function(xhr, status, error) {
+                    // handle error
+                    alert(`Algo deu errado: ${err} | ${status}`);
+                }
+            });
+        }
+
+        function addEvent(start, end) {
+            currentEvent = event;
+            $('#eventModal').modal('show');            
+            $('#eventForm')[0].reset();
+            $('#eventModalLabel').html('Add Event');
+            $('#eventModalSave').html('Create Event');
+            $('#isNewEvent').val(true);
+
+            start = formatDate(start);
+            end = formatDate(end);
+            fpStartTime.setDate(start);
+            fpEndTime.setDate(end);            
+        }
+
+         function addEventCalendar(event){
+            console.log(event)
+            calendar.addEvent({
+                title: event.title,
+                description: event.description,
+                start: event.start,
+                end: event.end,
+                allDay: event.allDay,
+            })
+
+        }
+
         function updateEvent(event, element) {
             console.log($('.fc-event-time').text());
-            console.log(event); 
+            console.log(event);
             currentEvent = event;
-            if ($(this).data("qtip")) $(this).qtip("hide");    
+
+            $('#eventModal').modal('show');
+
+            if ($(this).data("qtip")) $(this).qtip("hide");
             $('#eventModalLabel').html('Edit Event');
             $('#eventModalSave').html('Update Event');
             $('#EventTitle').val($('.fc-event-title').text());
@@ -221,7 +207,7 @@
             const end = formatDate(event.end);
 
             fpStartTime.setDate(start);
-            fpEndTime.setDate(end);            
+            fpEndTime.setDate(end);
 
             $('#StartTime').val(event.start);
             $('#EndTime').val(event.end);
@@ -230,106 +216,173 @@
                 $('#AllDay').prop('checked', 'checked');
             } else {
                 $('#AllDay')[0].checked = false;
-            }
+            }            
+        }               
 
-            $('#eventModal').modal('show');
-        }
-
-        function addEvent(start, end) {
-            $('#eventForm')[0].reset();
-            $('#eventModalLabel').html('Add Event');
-            $('#eventModalSave').html('Create Event');
-            $('#isNewEvent').val(true);                        
-            
-            start = formatDate(start);
-            end = formatDate(end);           
-            fpStartTime.setDate(start);
-            fpEndTime.setDate(end);           
-            
-            $('#eventModal').modal('show');             
-        }
-        
         function eventModalSave(){
             const title = $('#EventTitle').val();
             const description = $('#Description').val();
-            const startTime = moment($('#StartTime').val()); 
+            const startTime = moment($('#StartTime').val());
             const endTime = moment($('#EndTime').val());
             const isAllDay = $('#AllDay').is(":checked");
-            const isNewEvent = $('#isNewEvent').val() === 'true' ? true : false;                     
-            
+            const isNewEvent = $('#isNewEvent').val() === 'true' ? true : false;
+
             if (startTime > endTime) {
                 alert('Start Time cannot be greater than End Time');
                 return;
             } else if ((!startTime.isValid() || !endTime.isValid()) && !isAllDay) {
                 alert('Please enter both Start Time and End Time');
                 return;
-            }            
+            }
 
             const event = {
                 title,
-                description,
-                isAllDay,
+                description,                
                 startTime: $('#StartTime').val(),
-                endTime: $('#EndTime').val()
-            };                       
-
-            if (isNewEvent) {                
+                endTime: $('#EndTime').val(),
+                isAllDay
+            };
+            console.log(event)
+            if (isNewEvent) {
                 sendAddEvent(event);
             } else {
                 sendUpdateEvent(event);
             }
-        }
-
-        function getEvents(){ 
-            return axios.get('/classroom/events')
-                .then(function (response) {
-                  console.log(response.data);
-                  //console.log(response.status);
-                  //console.log(response.statusText);
-                  //console.log(response.headers);
-                  //console.log(response.config);      
-                  return response.data;
-            });          
-        }             
-
-        function sendAddEvent(event) {
-            axios({
-                method: 'post',
+        }               
+                             
+        function sendAddEvent(event){                    
+            var data = {
+                Title: event.title,
+                Description: event.description,
+                Start: event.startTime,
+                End: event.endTime,
+                AllDay: event.isAllDay
+            };
+            $.ajax({
+                type: "POST",
                 url: '/classroom/add-event',
-                data: {
-                    "Title": event.title,
-                    "Description": event.description,
-                    "Start": event.startTime,
-                    "End": event.endTime,
-                    "AllDay": event.isAllDay
-                }
-            })
-            .then(res => {
-                const { message, eventId } = res.data;                            
-                if (message === '') {
-                    const newEvent = {
-                        start: event.startTime,
-                        end: event.endTime,
-                        allDay: event.isAllDay,
-                        title: event.title,
-                        description: event.description,
-                        eventId
-                    };
-                    
-                    addEventCalendar(newEvent)
-                    
-                    $('#calendar').fullCalendar('renderEvent', newEvent);
-                    $('#calendar').fullCalendar('unselect');
-                    $('#eventModal').modal('hide');
-                    $('#showFormCreateClassroom').modal('show');
-                } else {
-                    alert(`Something went wrong: ${message}`);
-                }
-            })
-            .catch(err => alert(`Something went wrong: ${err}`));
-        }
+                data: JSON.stringify(data),
+                dataType: "json",
+                async:false,
+                contentType: "application/json; charset=utf-8",
+                success: function (response, status, xhr) {
+                    console.log(response)
+                    const { message, eventId } = response;
+                        if (message === '') {
+                            const newEvent = {
+                                title: event.title,
+                                description: event.description,
+                                start: event.startTime,
+                                end: event.endTime,
+                                alDay: event.isAllDay,
+                                eventId
+                            };
 
-         function createClassroom() {
+                            addEventCalendar(newEvent)
+
+                            $('#calendar').fullCalendar('renderEvent', newEvent);
+                            $('#calendar').fullCalendar('unselect');
+                            $('#eventModal').modal('hide');
+                            $('#showFormCreateClassroom').modal('show');                    
+
+                        } else {
+                            alert(`Algo deu errado: ${message}`);
+                        }
+                },
+                error: function (xhr, status, errorThrown) {
+                    //Here the status code can be retrieved like;
+                    xhr.status;
+
+                    //The message added to Response object in Controller can be retrieved as following.
+                    xhr.responseText;
+
+                    alert(`Algo deu errado:: ${status}`);
+                }
+            });
+        }        
+
+        function sendUpdateEvent(event) {            
+            var currentEvent = event;
+            var data = {
+                Title: event.title,
+                Description: event.description,
+                Start: event.startTime,
+                End: event.endTime,
+                AllDay: event.isAllDay
+            };
+            $.ajax({
+                type: "POST",
+                url: '/classroom/update-event',
+                data: JSON.stringify(data),
+                dataType: "json",
+                async:false,
+                contentType: "application/json; charset=utf-8",
+                success: function (data, status, xhr) {                    
+                    const { message } = data;
+                    if (message === '') {
+                        currentEvent.title = event.title;
+                        currentEvent.description = event.description;
+                        currentEvent.start = event.startTime;
+                        currentEvent.end = event.endTime;
+                        currentEvent.allDay = event.isAllDay;
+
+                        $('#calendar').fullCalendar('updateEvent', currentEvent);
+                        $('#eventModal').modal('hide');
+                    } else {
+                        alert(`Algo deu errado: ${message}`);
+                    }
+                },
+                error: function (xhr, status, errorThrown) {
+                    //Here the status code can be retrieved like;
+                    xhr.status;
+
+                    //The message added to Response object in Controller can be retrieved as following.
+                    xhr.responseText;
+
+                    alert(`Algo deu errado: ${status}`);
+                }
+            });
+        }              
+
+        function deleteEvent(){
+            //if (confirm(`Do you really want to delete "${currentEvent.title}" event?`)) {
+                //currentEvent.Id;
+                var data = {
+                    Id: "1"                    
+                };
+                $.ajax({
+                    type: "POST",
+                    url: '/classroom/delete-event',
+                    data: JSON.stringify(data),
+                    dataType: "json",
+                    async:false,
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data, status, xhr) {                    
+                        const { message } = data;
+                        if (message === '') {
+                            $('#calendar').fullCalendar('removeEvents', currentEvent._id);
+                            $('#eventModal').modal('hide');                            
+                            $(".fc-daygrid-event-harness").css({'display':'none'})
+                            //$('.fc-event-time').val('');
+                            //$('.fc-event-title').val('');
+                        } else {
+                            alert(`Something went wrong: ${message}`);
+                        }
+                    },
+                    error: function (xhr, status, errorThrown) {
+                        //Here the status code can be retrieved like;
+                        xhr.status;
+
+                        //The message added to Response object in Controller can be retrieved as following.
+                        xhr.responseText;
+
+                        alert(`Algo deu errado: ${status}`);
+                    }
+                });
+            }
+        //} 
+        
+        function createClassroom() {
              console.log("Create");
             axios.get('/classroom/create')
                 .then(function (response) {
@@ -337,65 +390,12 @@
                   //console.log(response.status);
                   //console.log(response.statusText);
                   //console.log(response.headers);
-                  //console.log(response.config); 
+                  //console.log(response.config);
                   confirmShowForm()
             });
         }
 
-        function sendUpdateEvent(event) {
-            axios({
-                method: 'post',
-                url: '/classroom/update-event',
-                data: {
-                    "EventId": currentEvent.eventId,
-                    "Title": event.title,
-                    "Description": event.description,
-                    "Start": event.startTime,
-                    "End": event.endTime,
-                    "AllDay": event.isAllDay
-                }
-            })
-            .then(res => {
-                const { message } = res.data;
-                if (message === '') {
-                    currentEvent.title = event.title;
-                    currentEvent.description = event.description;
-                    currentEvent.start = event.startTime;
-                    currentEvent.end = event.endTime;
-                    currentEvent.allDay = event.isAllDay;
-
-                    $('#calendar').fullCalendar('updateEvent', currentEvent);
-                    $('#eventModal').modal('hide');
-                } else {
-                    alert(`Something went wrong: ${message}`);
-                }
-            })
-            .catch(err => alert(`Something went wrong: ${err}`));
-        }
-        
-        function deleteEvent(){
-            if (confirm(`Do you really want to delete "${currentEvent.title}" event?`)) {
-                axios({
-                    method: 'post',
-                    url: '/classroom/delete-event',
-                    data: {
-                        "EventId": currentEvent.eventId
-                    }
-                })
-                .then(res => {
-                    const { message } = res.data;
-                    if (message === '') {
-                        $('#calendar').fullCalendar('removeEvents', currentEvent._id);
-                        $('#eventModal').modal('hide');
-                    } else {
-                        alert(`Something went wrong: ${message}`);
-                    }
-                })
-                .catch(err => alert(`Something went wrong: ${err}`));
-            }
-        }
-                
-        function changeAllDay(e){            
+        function changeAllDay(e){
             if (e.target.checked) {
                 $('#EndTime').val('');
                 fpEndTime.clear();
@@ -404,21 +404,10 @@
                 this.checked = false;
             }
         }
-                
+
         function changeEndTime(e){
             $('#AllDay')[0].checked = false;
-        }
-
-        function addEventCalendar(event){                      
-            calendar.addEvent({
-                title: event.title, 
-                description: event.description, 
-                start: event.start, 
-                end: event.end, 
-                allDay: false, 
-            })
-            
-        }
+        }       
 
         function clear(){
                 //$('#inlineRadio1').removeAttr('checked').checkboxradio('refresh');
