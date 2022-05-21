@@ -13,7 +13,7 @@
     <link href="~/font-awesome/css/all.min.css" type="text/css" rel="stylesheet">
     <link href="~/assets/css/main.css" rel="stylesheet" />
     @*<link href="~/assets/css/fullcalendar.css" rel="stylesheet" />
-    <link href="~/assets/css/fullcalendar.print.css" rel="stylesheet" />*@
+        <link href="~/assets/css/fullcalendar.print.css" rel="stylesheet" />*@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
 
@@ -177,10 +177,12 @@
         </div>
     </footer>
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+   @* @section Scripts {*@
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    @*<script src="~/lib/jquery/dist/jquery.min.js"></script>*@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/assets/js/jquery-ui.custom.min.js"></script>
-    
+
     @* <script src="~/lib/bootstrap/dist/js/bootstrap-datetimepicker.js"></script>
         <script src="~/lib/bootstrap/dist/js/locales/bootstrap-datetimepicker.pt-BR.js"></script>*@
     <script src="~/assets/js/fullcalendar.js"></script>
@@ -239,6 +241,9 @@
     </script>
 
     <script src="~/js/site.js" asp-append-version="true"></script>
+
+   @* }*@
+    
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
