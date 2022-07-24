@@ -28,4 +28,6 @@
     <ProjectReference Include="..\..\..\BuildingBlocks\Services\Universal.EBI.WebAPI.Core\Universal.EBI.WebAPI.Core.csproj" />
   </ItemGroup>
 
+  <ProjectExtensions><VisualStudio><UserProperties properties_4launchsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
+
 </Project>

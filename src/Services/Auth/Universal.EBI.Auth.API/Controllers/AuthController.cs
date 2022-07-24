@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -10,23 +11,29 @@ using Universal.EBI.Core.DomainObjects.Models.Enums;
 using Universal.EBI.Core.Messages;
 using Universal.EBI.Core.Messages.Integration.Educator;
 using Universal.EBI.MessageBus.Interfaces;
+using Universal.EBI.WebAPI.Core.AspNetUser.Interfaces;
+using Universal.EBI.WebAPI.Core.Auth;
 using Universal.EBI.WebAPI.Core.Controllers;
 
 namespace Universal.EBI.Auth.API.Controllers
 {
     [Route("api/auth")]
+    [Authorize]
     public class AuthController : BaseController
     {
         private readonly AuthService _authenticationService;
-        private readonly IMessageBus _bus;        
+        private readonly IMessageBus _bus;
+        private readonly IAspNetUser _user;
 
-        public AuthController(AuthService authenticationService, IMessageBus bus)
+        public AuthController(AuthService authenticationService, IMessageBus bus, IAspNetUser user)
         {
             _authenticationService = authenticationService;
             _bus = bus;
+            _user = user;
         }
 
         [HttpPost("signup")]
+        [ClaimsAuthorize("Coordenador", "Full")]
         public async Task<ActionResult> Register(UserRegister userRegister)
         {
 
@@ -61,6 +68,7 @@ namespace Universal.EBI.Auth.API.Controllers
         }
 
         [HttpPost("signin")]
+        [AllowAnonymous]
         public async Task<ActionResult> Login(UserLogin userLogin)
         {
 
@@ -106,52 +114,53 @@ namespace Universal.EBI.Auth.API.Controllers
         private async Task<ResponseMessage> EducatorRecord(UserRegister userRegister)
         {
             var user = await _authenticationService.UserManager.FindByEmailAsync(userRegister.Email);
-            var registeredUser = new RegisteredEducatorIntegrationEvent
-            {
-                AggregateId = Guid.Parse(user.Id),
-                Id = Guid.Parse(user.Id),
-                FirstName = userRegister.FirstName,
-                LastName = userRegister.LastName,
-                FullName = $"{userRegister.FirstName} {userRegister.LastName}",
-                Email = userRegister.Email,
-                Cpf = userRegister.Cpf,
-                BirthDate = userRegister.BirthDate,
-                FunctionType = userRegister.FunctionType,
-                GenderType = userRegister.GenderType,
-                PhotoUrl = userRegister.PhotoUrl,
-                Excluded = userRegister.Excluded,
-                Address = new Address
+            try
+            {                
+                var registeredUser = new RegisteredEducatorIntegrationEvent
                 {
-                    Id = Guid.NewGuid(),
-                    PublicPlace = userRegister.PublicPlace,
-                    Number = userRegister.Number,
-                    Complement = userRegister.Complement,
-                    District = userRegister.District,
-                    City = userRegister.City,
-                    State = userRegister.State,
-                    Country = userRegister.Country,
-                    ZipCode = userRegister.ZipCode,
-                    EducatorId = null
-                },
-                Phones = new List<Phone> 
-                { 
-                    new Phone 
-                    { 
+                    AggregateId = Guid.Parse(user.Id),
+                    Id = Guid.Parse(user.Id),
+                    FirstName = userRegister.FirstName,
+                    LastName = userRegister.LastName,
+                    FullName = $"{userRegister.FirstName} {userRegister.LastName}",
+                    Email = userRegister.Email,
+                    Cpf = userRegister.Cpf,
+                    BirthDate = userRegister.BirthDate,
+                    FunctionType = userRegister.FunctionType,
+                    GenderType = userRegister.GenderType,
+                    PhotoUrl = userRegister.PhotoUrl,
+                    Excluded = userRegister.Excluded,
+                    Address = new Address
+                    {
+                        Id = Guid.NewGuid(),
+                        PublicPlace = userRegister.PublicPlace,
+                        Number = userRegister.Number,
+                        Complement = userRegister.Complement,
+                        District = userRegister.District,
+                        City = userRegister.City,
+                        State = userRegister.State,
+                        Country = userRegister.Country,
+                        ZipCode = userRegister.ZipCode,
+                        EducatorId = Guid.Parse(user.Id)
+                    },
+                    Phones = new List<Phone>
+                {
+                    new Phone
+                    {
                         Id = Guid.NewGuid(),
                         Number = userRegister.PhoneNumber,
                         PhoneType = (PhoneType)Enum.Parse(typeof(PhoneType), userRegister.PhoneType, true),
-                        EducatorId = null
-                    } 
+                        EducatorId = Guid.Parse(user.Id)
+                    }
                 }.ToArray(),
-                CreatedDate = null,
-                CreatedBy = null,
-                LastModifiedDate = null,
-                LastModifiedBy = null,
-                ClassroomId = null
-            };
+                    CreatedDate = null,
+                    CreatedBy = _user.GetUserId().ToString(),
+                    LastModifiedDate = null,
+                    LastModifiedBy = null,
+                    ClassroomId = null
+                };
 
-            try
-            {
+
                 return await _bus.RequestAsync<RegisteredEducatorIntegrationEvent, ResponseMessage>(registeredUser);
             }
             catch
