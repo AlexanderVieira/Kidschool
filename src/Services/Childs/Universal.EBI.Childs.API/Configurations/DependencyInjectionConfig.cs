@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using Universal.EBI.Childs.API.Application.AutoMapper;
 using Universal.EBI.Childs.API.Application.Commands;
 using Universal.EBI.Childs.API.Application.Events;
 using Universal.EBI.Childs.API.Application.Queries;
@@ -29,7 +30,7 @@ namespace Universal.EBI.Childs.API.Configuration
             services.AddScoped<IRequestHandler<UpdateChildCommand, ValidationResult>, UpdateChildCommandHandler>();
             services.AddScoped<IRequestHandler<DeleteChildCommand, ValidationResult>, DeleteChildCommandHandler>();
 
-            //// Events
+            // Events
             services.AddScoped<INotificationHandler<RegisteredChildEvent>, RegisterChildEventHandler>();
             services.AddScoped<INotificationHandler<UpdatedChildEvent>, UpdateChildEventHandler>();
             services.AddScoped<INotificationHandler<DeletedChildEvent>, DeleteChildEventHandler>();
@@ -41,6 +42,11 @@ namespace Universal.EBI.Childs.API.Configuration
             // Data
             services.AddScoped<IChildRepository, ChildRepository>();            
             services.AddScoped<IChildContext, ChildContext>();
+            services.AddScoped<ChildDbContext>();
+
+            //AutoMapper
+            services.AddAutoMapper(typeof(DomainToDtoMappingProfiles).Assembly);
+            services.AddAutoMapper(typeof(DtoToDomainMappingProfile).Assembly);
         }
     }
 }

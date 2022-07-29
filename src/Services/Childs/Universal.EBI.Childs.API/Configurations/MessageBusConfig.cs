@@ -10,10 +10,10 @@ namespace Universal.EBI.Childs.API.Configurations
     {
         public static void AddMessageBusConfiguration(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddMessageBus(configuration.GetMessageQueueConnection("MessageBus"))
-                    .AddHostedService<RegisterChildIntegrationHandler>()
-                    .AddHostedService<UpdateChildIntegrationHandler>()
-                    .AddHostedService<DeleteChildIntegrationHandler>();
+            services.AddMessageBus(configuration.GetMessageQueueConnection("MessageBus"));
+                    //.AddHostedService<RegisterChildIntegrationHandler>()
+                    //.AddHostedService<UpdateChildIntegrationHandler>()
+                    //.AddHostedService<DeleteChildIntegrationHandler>();
         }
     }
 }

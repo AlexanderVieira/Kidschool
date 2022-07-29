@@ -60,7 +60,7 @@ namespace Universal.EBI.Childs.API.Controllers
                     Email = item.Email != null ? item.Email.Address : null,
                     Excluded = item.Excluded,
                     Address = new AddressDto(),
-                    Phones = new List<PhoneDto>(),
+                    Phones = new List<PhoneRequestDto>(),
                     PhotoUrl = item.PhotoUrl,
                     Responsibles = new List<ResponsibleDto>()
 
@@ -93,13 +93,13 @@ namespace Universal.EBI.Childs.API.Controllers
                             Country = responsibles[j].Address.Country,
                             ZipCode = responsibles[j].Address.ZipCode
                         },
-                        Phones = new List<PhoneDto>()
+                        Phones = new List<PhoneRequestDto>()
                     };
 
                     var phones = responsibles[j].Phones.ToList();
                     for (int k = 0; k < phones.Count; k++)
                     {
-                        var phoneDto = new PhoneDto
+                        var phoneDto = new PhoneRequestDto
                         {
                             Id = phones[k].Id,
                             Number = phones[k].Number,
@@ -137,9 +137,22 @@ namespace Universal.EBI.Childs.API.Controllers
 
         [HttpPost("api/child/create")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        public async Task<ActionResult> CreateChild([FromBody] RegisterChildCommand command)
-        {            
-            return CustomResponse(await _mediator.SendCommand(command));
+        public async Task<ActionResult> CreateChild([FromBody] ChildRequestDto request)
+        {
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
+            try
+            {
+                if (request == null) return CustomResponse();
+                request.CreatedBy = _user.GetUserEmail();
+                var command = new RegisterChildCommand(request);
+                return CustomResponse(await _mediator.SendCommand(command));
+            }
+            catch (Exception ex)
+            {
+                AddProcessingErrors(ex.Message);
+                return CustomResponse();
+            }
+            
         }
         
         [HttpPut("api/child/update")]

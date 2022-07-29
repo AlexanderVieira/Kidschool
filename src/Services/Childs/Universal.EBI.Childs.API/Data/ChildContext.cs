@@ -50,11 +50,11 @@ namespace Universal.EBI.Childs.API.Data
                 });
             }
 
-            var client = new MongoClient(configuration.GetValue<string>("DatabaseSettings:ConnectionString"));
-            var database = client.GetDatabase(configuration.GetValue<string>("DatabaseSettings:DatabaseName"));
+            //var client = new MongoClient(configuration.GetValue<string>("DatabaseSettings:ConnectionString"));
+            //var database = client.GetDatabase(configuration.GetValue<string>("DatabaseSettings:DatabaseName"));
 
-            Childs = database.GetCollection<Child>(configuration.GetValue<string>("DatabaseSettings:CollectionName"));
-            ChildContextSeed.SeedData(Childs);
+            //Childs = database.GetCollection<Child>(configuration.GetValue<string>("DatabaseSettings:CollectionName"));
+            //ChildContextSeed.SeedData(Childs);
         }
 
         public IMongoCollection<Child> Childs { get; }

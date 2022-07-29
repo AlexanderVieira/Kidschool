@@ -8,7 +8,7 @@ namespace Universal.EBI.Childs.API.Application.DTOs
     public class ChildDto : PersonDto
     {
         public string AgeGroupType { get; set; }
-        public List<PhoneDto> Phones { get; set; }
+        public List<PhoneRequestDto> Phones { get; set; }
         public List<ResponsibleDto> Responsibles { get; set; }
 
     }

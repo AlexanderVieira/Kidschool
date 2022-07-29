@@ -1,13 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using Universal.EBI.Childs.API.Models;
+﻿using System.Collections.Generic;
 
 namespace Universal.EBI.Childs.API.Application.DTOs
 {
     public class ResponsibleDto : PersonDto
     {
         public string KinshipType { get; set; }
-        public List<PhoneDto> Phones { get; set; }
+        public ICollection<PhoneRequestDto> Phones { get; set; }
+        public ICollection<ChildDto> Children { get; set; }
+
+        public ResponsibleDto()
+        {
+        }
 
     }
 }
