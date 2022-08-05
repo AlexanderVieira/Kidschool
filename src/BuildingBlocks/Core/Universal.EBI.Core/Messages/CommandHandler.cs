@@ -22,12 +22,6 @@ namespace Universal.EBI.Core.Messages
         {
             if (!await unitOfWork.Commit()) AddError("Houve um erro ao persistir os dados.");
             return ValidationResult;
-        }
-
-        protected async Task<ValidationResult> PersistData(IUnitOfWork unitOfWork, bool success)
-        {
-            if (!await unitOfWork.Commit(success)) AddError("Houve um erro ao persistir os dados.");
-            return ValidationResult;
-        }
+        }       
     }
 }

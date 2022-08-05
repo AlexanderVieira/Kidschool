@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Universal.EBI.Childs.API.Application.Queries.Interfaces;
 using Universal.EBI.Childs.API.Models;
 using Universal.EBI.Childs.API.Models.Interfaces;
-using Universal.EBI.Core.DomainObjects.Models;
+
 
 namespace Universal.EBI.Childs.API.Application.Queries
 {
@@ -24,14 +24,14 @@ namespace Universal.EBI.Childs.API.Application.Queries
         {
             
             query = string.IsNullOrEmpty(query) ? "" : query;
-            var filter = new BsonDocument { { "FullName", new BsonDocument { { "$regex", query }, { "$options", "i" } } } };
+            var filter = new BsonDocument { { "FirstName", new BsonDocument { { "$regex", query }, { "$options", "i" } } } };
 
-            var childs = await _context.Childs.Find(filter).ToListAsync();
+            var children = await _context.Children.Find(filter).ToListAsync();
 
-            var total = childs.Count;
+            var total = children.Count;
             var pageResult = new PagedResult<Child>
             {
-                List = (IEnumerable<Child>)childs,
+                List = (IEnumerable<Child>)children,
                 TotalResults = total,
                 PageIndex = pageIndex,
                 PageSize = pageSize,
@@ -44,7 +44,7 @@ namespace Universal.EBI.Childs.API.Application.Queries
         public async Task<Child> GetChildByCpf(string cpf)
         {
             return await _context
-                            .Childs
+                            .Children
                             .Find(c => c.Cpf.Number.Equals(cpf))
                             .FirstOrDefaultAsync();
 
@@ -53,7 +53,7 @@ namespace Universal.EBI.Childs.API.Application.Queries
         public async Task<Child> GetChildById(Guid id)
         {
             return await _context
-                            .Childs
+                            .Children
                             .Find(c => c.Id == id)
                             .FirstOrDefaultAsync();
         }

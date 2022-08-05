@@ -1,0 +1,15 @@
+version: '3.8'
+services: 
+  database:
+    image: mongo
+    restart: always 
+    environment: 
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=mongo-teste
+    ports:
+      - 27017:27017
+    volumes: 
+      - my_data:/data/db 
+  
+volumes: 
+  my_data: 

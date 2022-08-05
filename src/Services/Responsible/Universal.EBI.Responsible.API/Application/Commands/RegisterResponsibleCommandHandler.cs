@@ -121,7 +121,7 @@ namespace Universal.EBI.Responsibles.API.Application.Commands
 
             await _bus.PublishAsync(new RegisteredResponsibleIntegrationEvent { Id = responsible.Id });            
 
-            return await PersistData(_responsibleRepository.UnitOfWork, success);
+            return await PersistData(_responsibleRepository.UnitOfWork);
         }
     }
 }

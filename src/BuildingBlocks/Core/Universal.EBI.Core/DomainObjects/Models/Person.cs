@@ -22,11 +22,11 @@ namespace Universal.EBI.Core.DomainObjects.Models
         public string LastModifiedBy { get; set; }
         public DateTime? LastModifiedDate { get; set; }
 
-        public ICollection<Event> Notifications { get; set; }
+        public IList<Event> Notifications { get; set; }
 
         public Person()
         {
-            Notifications = new HashSet<Event>();
+            Notifications = new List<Event>();
         }
 
         public void AddEvent(Event myEvent)

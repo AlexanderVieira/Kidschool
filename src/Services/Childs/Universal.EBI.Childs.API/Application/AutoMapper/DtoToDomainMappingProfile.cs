@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Universal.EBI.Childs.API.Application.DTOs;
-using Universal.EBI.Core.DomainObjects.Models;
+using Universal.EBI.Childs.API.Models;
 
 namespace Universal.EBI.Childs.API.Application.AutoMapper
 {
@@ -14,10 +14,10 @@ namespace Universal.EBI.Childs.API.Application.AutoMapper
                 //.ForPath(c => c.AgeGroupType, opt => opt.MapFrom(s => s.AgeGroupType))
                 //.ForPath(c => c.GenderType, opt => opt.MapFrom(s => s.GenderType));
 
-            CreateMap<AddressDto, Address>();
+            CreateMap<AddressRequestDto, Address>();
 
             CreateMap<PhoneRequestDto, Phone>();
-                //.ForPath(c => c.PhoneType, opt => opt.MapFrom(s => s.PhoneType));
+            //.ForPath(c => c.PhoneType, opt => opt.MapFrom(s => s.PhoneType));
 
             CreateMap<ResponsibleRequestDto, Responsible>()
                 .ForPath(c => c.Cpf, opt => opt.MapFrom(s => s.NumberCpf))

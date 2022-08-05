@@ -5,9 +5,10 @@ using FluentValidation.Results;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Universal.EBI.Childs.API.Application.Commands;
+using Universal.EBI.Childs.API.Application.DTOs;
+using Universal.EBI.Childs.API.Application.Events.Integration;
 using Universal.EBI.Core.Mediator.Interfaces;
 using Universal.EBI.Core.Messages;
-using Universal.EBI.Core.Messages.Integration.Child;
 using Universal.EBI.MessageBus.Interfaces;
 
 namespace Universal.EBI.Childs.API.Services
@@ -40,18 +41,15 @@ namespace Universal.EBI.Childs.API.Services
         }
 
         private async Task<ResponseMessage> DeleteChild(DeletedChildIntegrationEvent message)
-        {            
-            var ChildCommand = new DeleteChildCommand
-            {
-                AggregateId = message.Id,
-                Id = message.Id                
-            };
+        {
+            var command = new DeleteChildCommand(new ChildRequestDto { Id = message.Id });
+            command.AggregateId = message.AggregateId;
             ValidationResult sucesso;
 
             using (var scope = _serviceProvider.CreateScope())
             {
                 var mediator = scope.ServiceProvider.GetRequiredService<IMediatorHandler>();
-                sucesso = await mediator.SendCommand(ChildCommand);
+                sucesso = await mediator.SendCommand(command);
             }
 
             return new ResponseMessage(sucesso);

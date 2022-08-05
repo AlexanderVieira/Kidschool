@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Universal.EBI.Childs.API.Models;
 using Universal.EBI.Core.DomainObjects;
-using Universal.EBI.Core.DomainObjects.Models;
 
 namespace Universal.EBI.Childs.API.Data.Mapping
 {
@@ -45,16 +45,13 @@ namespace Universal.EBI.Childs.API.Data.Mapping
             });
 
             builder.HasMany(c => c.Responsibles)
-                .WithMany(r => r.Children);
-
-            builder.HasOne(c => c.Address)
-               .WithOne(a => a.Child);
+                .WithMany(r => r.Children);            
 
             builder.HasMany(c => c.Phones)
-                .WithOne(p => p.Child);
+                .WithOne();
 
-            builder.HasOne(c => c.Classroom)
-                .WithMany(cl => cl.Children);
+            builder.HasOne(c => c.Address)
+                .WithMany();
 
             builder.ToTable("Children");
         }

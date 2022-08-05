@@ -8,6 +8,10 @@ namespace Universal.EBI.Childs.API.Application.DTOs
         public string Number { get; set; }
         public string PhoneType { get; set; }        
 
+        public PhoneRequestDto()
+        {
+        }
+
     }
     
 }

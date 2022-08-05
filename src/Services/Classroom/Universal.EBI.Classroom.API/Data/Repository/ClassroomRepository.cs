@@ -9,9 +9,9 @@ namespace Universal.EBI.Classrooms.API.Data.Repository
 {
     public class ClassroomRepository : IClassroomRepository
     {
-        private readonly IClassroomContext _context;        
+        private readonly IClassroomContext _context;
 
-        public IUnitOfWork UnitOfWork => _context;
+        public IUnitOfWork UnitOfWork => throw new NotImplementedException();
 
         public ClassroomRepository(IClassroomContext context)
         {

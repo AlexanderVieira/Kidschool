@@ -11,113 +11,50 @@ using Universal.EBI.WebAPI.Core.Controllers;
 using Universal.EBI.Childs.API.Application.DTOs;
 using System.Linq;
 using System.Collections.Generic;
+using AutoMapper;
 
 namespace Universal.EBI.Childs.API.Controllers
 {
     public class ChildController : BaseController
     {
-        private readonly IMediatorHandler _mediator;
-        private readonly IAspNetUser _user;
+        private readonly IMediatorHandler _mediator;        
         private readonly IChildQueries _childQueries;
+        private readonly IAspNetUser _user;
+        private readonly IMapper _mapper;
 
-        public ChildController(IMediatorHandler mediator, IAspNetUser user, IChildQueries childQueries)
+        public ChildController(IMediatorHandler mediator, 
+                               IChildQueries childQueries, 
+                               IAspNetUser user, 
+                               IMapper mapper)
         {
             _mediator = mediator;
-            _user = user;
             _childQueries = childQueries;
+            _user = user;
+            _mapper = mapper;
         }
 
         [HttpGet("api/childs")]
-        public async Task<PagedResult<ChildDto>> GetChilds([FromQuery] int ps = 8, [FromQuery] int page = 1, [FromQuery] string q = null)
+        public async Task<PagedResult<ChildResponseDto>> GetChilds([FromQuery] int ps = 8, [FromQuery] int page = 1, [FromQuery] string q = null)
         {
             var pagedResult = await _childQueries.GetChilds(ps, page, q);
-            //var pagedResultDto = new PagedResult<ChildDto>();
-            var childrenDto = new List<ChildDto>();
-            ResponsibleDto responsibleDto;
-            var pagedResultDto = new PagedResult<ChildDto>
+            
+            var childrenDto = new List<ChildResponseDto>();            
+            var pagedResultDto = new PagedResult<ChildResponseDto>
             {
-                List = new List<ChildDto>(),
+                List = new List<ChildResponseDto>(),
                 PageIndex = pagedResult.PageIndex,
                 PageSize = pagedResult.PageSize,
                 Query = pagedResult.Query,
                 TotalResults = pagedResult.TotalResults
             };
-            
-            for (int i = 0; i < pagedResult.List.ToList().Count; i++)
+
+            foreach (var child in pagedResult.List)
             {
-                var item = pagedResult.List.ToList()[i];
-                var responsibles = item.Responsibles.ToList();
-                var childDto = new ChildDto
-                {
-                    Id = item.Id,
-                    FirstName = item.FirstName,
-                    LastName = item.LastName,
-                    FullName = item.FullName,
-                    BirthDate = item.BirthDate.Date.ToShortDateString(),
-                    GenderType = item.GenderType.ToString(),
-                    AgeGroupType = item.AgeGroupType.ToString(),
-                    Cpf = item.Cpf != null ? item.Cpf.Number : null,
-                    Email = item.Email != null ? item.Email.Address : null,
-                    Excluded = item.Excluded,
-                    Address = new AddressDto(),
-                    Phones = new List<PhoneRequestDto>(),
-                    PhotoUrl = item.PhotoUrl,
-                    Responsibles = new List<ResponsibleDto>()
-
-                };
-
-                for (int j = 0; j < responsibles.Count; j++)
-                {
-                    responsibleDto = new ResponsibleDto
-                    {
-                        Id = responsibles[j].Id,
-                        FirstName = responsibles[j].FirstName,
-                        LastName = responsibles[j].LastName,
-                        FullName = responsibles[j].FullName,
-                        BirthDate = responsibles[j].BirthDate.ToShortDateString(),
-                        Cpf = responsibles[j].Cpf.Number,
-                        Email = responsibles[j].Email.Address,
-                        GenderType = responsibles[j].GenderType.ToString(),
-                        KinshipType = responsibles[j].KinshipType.ToString(),
-                        Excluded = responsibles[j].Excluded,
-                        PhotoUrl = responsibles[j].PhotoUrl,
-                        Address = new AddressDto
-                        {
-                            Id = responsibles[j].Address.Id,
-                            PublicPlace = responsibles[j].Address.PublicPlace,
-                            Number = responsibles[j].Address.Number,
-                            Complement = responsibles[j].Address.Complement,
-                            District = responsibles[j].Address.District,
-                            City = responsibles[j].Address.City,
-                            State = responsibles[j].Address.State,
-                            Country = responsibles[j].Address.Country,
-                            ZipCode = responsibles[j].Address.ZipCode
-                        },
-                        Phones = new List<PhoneRequestDto>()
-                    };
-
-                    var phones = responsibles[j].Phones.ToList();
-                    for (int k = 0; k < phones.Count; k++)
-                    {
-                        var phoneDto = new PhoneRequestDto
-                        {
-                            Id = phones[k].Id,
-                            Number = phones[k].Number,
-                            PhoneType = phones[k].PhoneType.ToString()
-                        };
-                        responsibleDto.Phones.Add(phoneDto);
-                    }
-
-                    childDto.Responsibles.Add(responsibleDto);
-
-                }
-
-                childrenDto.Add(childDto);
-
-            }
+                var childResponse = _mapper.Map<ChildResponseDto>(child);
+                childrenDto.Add(childResponse);
+            }           
 
             pagedResultDto.List = childrenDto;
-
             return pagedResultDto;
         }
 
@@ -156,16 +93,39 @@ namespace Universal.EBI.Childs.API.Controllers
         }
         
         [HttpPut("api/child/update")]
-        public async Task<IActionResult> UpdateChild([FromBody] UpdateChildCommand command)
+        public async Task<IActionResult> UpdateChild([FromBody] ChildRequestDto request)
         {
-            return CustomResponse(await _mediator.SendCommand(command));
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
+            try
+            {
+                if (request == null) return CustomResponse();
+                request.LastModifiedBy = _user.GetUserEmail();
+                var command = new UpdateChildCommand(request);
+                return CustomResponse(await _mediator.SendCommand(command));
+            }
+            catch (Exception ex)
+            {
+                AddProcessingErrors(ex.Message);
+                return CustomResponse();
+            }
         }
         
-        [HttpDelete("api/child/delete/{id}")]
-        public async Task<IActionResult> DeleteChild(Guid id)
+        [HttpDelete("api/child/delete")]
+        public async Task<IActionResult> DeleteChild([FromBody] ChildRequestDto request)
         {
-            var command = new DeleteChildCommand { Id = id };
-            return CustomResponse(await _mediator.SendCommand(command));
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
+            try
+            {
+                if (request == null) return CustomResponse();
+                //request.LastModifiedBy = _user.GetUserEmail();
+                var command = new DeleteChildCommand(request);
+                return CustomResponse(await _mediator.SendCommand(command));
+            }
+            catch (Exception ex)
+            {
+                AddProcessingErrors(ex.Message);
+                return CustomResponse();
+            }
         }
        
     }

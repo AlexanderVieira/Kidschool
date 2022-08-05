@@ -7,6 +7,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
+using System;
+using System.Collections.Generic;
 using Universal.EBI.Childs.API.Data;
 using Universal.EBI.WebAPI.Core.Auth;
 
@@ -17,8 +19,7 @@ namespace Universal.EBI.Childs.API.Configurations
         public static void AddApiConfiguration(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<ChildDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("ChildConnection"),
-                                     providerOptions => providerOptions.EnableRetryOnFailure()));
+                options.UseSqlServer(configuration.GetConnectionString("ChildConnection")));
 
             services.AddHealthChecks()
                     .AddMongoDb(configuration["DatabaseSettings:ConnectionString"], "MongoDb Health", HealthStatus.Degraded);

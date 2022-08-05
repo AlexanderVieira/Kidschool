@@ -100,7 +100,7 @@ namespace Universal.EBI.Classrooms.API.Application.Commands
                 });
             }            
 
-            return await PersistData(_classroomRepository.UnitOfWork, success);
+            return await PersistData(_classroomRepository.UnitOfWork);
         }
         
     }

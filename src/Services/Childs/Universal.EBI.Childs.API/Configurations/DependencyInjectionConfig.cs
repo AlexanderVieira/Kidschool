@@ -40,10 +40,11 @@ namespace Universal.EBI.Childs.API.Configuration
             services.AddScoped<IChildQueries, ChildQueries>();
 
             // Data
+            services.AddScoped<IChildNoSqlRepository, ChildNoSqlRepository>();
             services.AddScoped<IChildRepository, ChildRepository>();            
             services.AddScoped<IChildContext, ChildContext>();
             services.AddScoped<ChildDbContext>();
-
+             
             //AutoMapper
             services.AddAutoMapper(typeof(DomainToDtoMappingProfiles).Assembly);
             services.AddAutoMapper(typeof(DtoToDomainMappingProfile).Assembly);

@@ -40,7 +40,7 @@ namespace Universal.EBI.Responsibles.API.Application.Commands
                 Id = message.Id
             });
 
-             return await PersistData(_responsibleRepository.UnitOfWork, success);
+             return await PersistData(_responsibleRepository.UnitOfWork);
         }
     }
 }

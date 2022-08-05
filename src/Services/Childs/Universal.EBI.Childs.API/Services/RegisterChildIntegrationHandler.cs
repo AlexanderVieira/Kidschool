@@ -7,14 +7,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Universal.EBI.Childs.API.Application.Commands;
 using Universal.EBI.Childs.API.Application.DTOs;
+using Universal.EBI.Childs.API.Application.Events.Integration;
 using Universal.EBI.Childs.API.Application.Queries.Interfaces;
+using Universal.EBI.Childs.API.Models;
 using Universal.EBI.Childs.API.Models.Interfaces;
 using Universal.EBI.Core.DomainObjects.Exceptions;
-using Universal.EBI.Core.DomainObjects.Models;
 using Universal.EBI.Core.Mediator.Interfaces;
 using Universal.EBI.Core.Messages;
-using Universal.EBI.Core.Messages.Integration.Child;
-using Universal.EBI.Core.Messages.Integration.Responsible;
 using Universal.EBI.MessageBus.Interfaces;
 
 namespace Universal.EBI.Childs.API.Services

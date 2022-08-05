@@ -15,20 +15,20 @@ namespace Universal.EBI.Classrooms.API.Application.Commands
                                                  IRequestHandler<DeleteClassroomCommand, ValidationResult>, 
                                                  IRequestHandler<DeleteChildClassroomCommand, ValidationResult>
     {
-        private readonly IClassroomRepository _ClassroomRepository;
-        private readonly IClassroomQueries _ClassroomQueries;
+        private readonly IClassroomRepository _classroomRepository;
+        private readonly IClassroomQueries _classroomQueries;
 
-        public DeleteClassroomCommandHandler(IClassroomRepository childRepository, IClassroomQueries childQueries)
+        public DeleteClassroomCommandHandler(IClassroomRepository classroomRepository, IClassroomQueries classroomQueries)
         {
-            _ClassroomRepository = childRepository;
-            _ClassroomQueries = childQueries;
+            _classroomRepository = classroomRepository;
+            _classroomQueries = classroomQueries;
         }
 
         public async Task<ValidationResult> Handle(DeleteClassroomCommand message, CancellationToken cancellationToken)
         {
             if (!message.IsValid()) return message.ValidationResult;
 
-            var existingClassroom = await _ClassroomQueries.GetClassroomById(message.Id);
+            var existingClassroom = await _classroomQueries.GetClassroomById(message.Id);
 
             if (existingClassroom == null)
             {
@@ -36,7 +36,7 @@ namespace Universal.EBI.Classrooms.API.Application.Commands
                 return ValidationResult;
             }
 
-            var success = await _ClassroomRepository.DeleteClassroom(existingClassroom.Id);
+            var success = await _classroomRepository.DeleteClassroom(existingClassroom.Id);
 
             existingClassroom.AddEvent(new DeletedClassroomEvent
             {
@@ -44,14 +44,14 @@ namespace Universal.EBI.Classrooms.API.Application.Commands
                 Id = message.Id
             });
 
-             return await PersistData(_ClassroomRepository.UnitOfWork, success);
+             return await PersistData(_classroomRepository.UnitOfWork);
         }
 
         public async Task<ValidationResult> Handle(DeleteChildClassroomCommand message, CancellationToken cancellationToken)
         {
             if (!message.IsValid()) return message.ValidationResult;
 
-            var existingClassroom = await _ClassroomQueries.GetClassroomById(message.ClassroomId);
+            var existingClassroom = await _classroomQueries.GetClassroomById(message.ClassroomId);
 
             if (existingClassroom == null)
             {
@@ -67,7 +67,7 @@ namespace Universal.EBI.Classrooms.API.Application.Commands
                 }
             }
 
-            var success = await _ClassroomRepository.UpdateClassroom(existingClassroom);
+            var success = await _classroomRepository.UpdateClassroom(existingClassroom);
 
             existingClassroom.AddEvent(new DeletedChildClassroomEvent
             {
@@ -76,7 +76,7 @@ namespace Universal.EBI.Classrooms.API.Application.Commands
                 ChildId = message.ChildId
             });
 
-            return await PersistData(_ClassroomRepository.UnitOfWork, success);
+            return await PersistData(_classroomRepository.UnitOfWork);
         }
     }
 }

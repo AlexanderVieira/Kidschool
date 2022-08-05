@@ -1,13 +1,14 @@
 ﻿using FluentValidation.Results;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Universal.EBI.Childs.API.Extensions;
+using Universal.EBI.Childs.API.Models;
 using Universal.EBI.Core.Data.Interfaces;
-using Universal.EBI.Core.DomainObjects.Models;
 using Universal.EBI.Core.Mediator.Interfaces;
 using Universal.EBI.Core.Messages;
 
@@ -20,12 +21,11 @@ namespace Universal.EBI.Childs.API.Data
         public DbSet<Responsible> Responsibles { get; set; }
         public DbSet<Address> Addresses { get; set; }
         public DbSet<Phone> Phones { get; set; }
-        public DbSet<Classroom> Classrooms { get; set; }
 
-        public ChildDbContext(DbContextOptions<ChildDbContext> options,IMediatorHandler mediatorHandler) : base(options)
+        public ChildDbContext(DbContextOptions<ChildDbContext> options, IMediatorHandler mediatorHandler) : base(options)
         {
             _mediatorHandler = mediatorHandler;
-            ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+            ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTrackingWithIdentityResolution;
             ChangeTracker.AutoDetectChangesEnabled = false;
         }
 
@@ -33,14 +33,13 @@ namespace Universal.EBI.Childs.API.Data
         {
             modelBuilder.Ignore<ValidationResult>();
             modelBuilder.Ignore<Event>();
-            modelBuilder.Ignore<Educator>();            
 
             foreach (var property in modelBuilder.Model.GetEntityTypes().SelectMany(
                 e => e.GetProperties().Where(p => p.ClrType == typeof(string))))
                 property.SetColumnType("varchar(100)");
 
             foreach (var relationship in modelBuilder.Model.GetEntityTypes()
-                .SelectMany(e => e.GetForeignKeys())) relationship.DeleteBehavior = DeleteBehavior.ClientSetNull;
+                .SelectMany(e => e.GetForeignKeys())) relationship.DeleteBehavior = DeleteBehavior.ClientCascade;
 
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {
@@ -62,7 +61,7 @@ namespace Universal.EBI.Childs.API.Data
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
-            foreach (var entry in ChangeTracker.Entries<Educator>())
+            foreach (var entry in ChangeTracker.Entries<Child>())
             {
                 switch (entry.State)
                 {
@@ -82,13 +81,11 @@ namespace Universal.EBI.Childs.API.Data
         public async Task<bool> Commit()
         {
             var success = await SaveChangesAsync() > 0;
-            if (success) await _mediatorHandler.PublishEvents_v2(this);
+            //if (success)
+            //{
+            //    await _mediatorHandler.PublishEvents_v2(this);
+            //}
             return success;
-        }
-
-        public Task<bool> Commit(bool commited)
-        {
-            throw new NotImplementedException();
-        }
+        }       
     }
 }

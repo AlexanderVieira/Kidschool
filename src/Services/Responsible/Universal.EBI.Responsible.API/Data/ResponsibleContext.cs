@@ -14,6 +14,7 @@ namespace Universal.EBI.Responsibles.API.Data
     public class ResponsibleContext : IResponsibleContext
     {
         private readonly IMediatorHandler _mediatorHandler;
+        public IMongoCollection<Responsible> Responsibles { get; }
 
         public ResponsibleContext(IConfiguration configuration, IMediatorHandler mediatorHandler)
         {
@@ -40,21 +41,5 @@ namespace Universal.EBI.Responsibles.API.Data
             Responsibles = database.GetCollection<Responsible>(configuration.GetValue<string>("DatabaseSettings:CollectionName"));
             ResponsibleContextSeed.SeedData(Responsibles);
         }
-
-        public IMongoCollection<Responsible> Responsibles { get; }
-
-        public async Task<bool> Commit()
-        {
-            await _mediatorHandler.PublishEvents(this);
-            return true;
-        }
-
-        public async Task<bool> Commit(bool success)
-        {
-            if (success) await _mediatorHandler.PublishEvents(this);
-            return success;
-        }         
-        
-    }
-    
+    }    
 }

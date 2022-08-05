@@ -13,8 +13,8 @@ namespace Universal.EBI.Core.DomainObjects.Models
         public string HoraryOfExit { get; set; }
         public AgeGroupType AgeGroupType { get; set; }         
         public virtual Address Address { get; set; }
-        public virtual ICollection<Phone> Phones { get; set; }
-        public virtual ICollection<Responsible> Responsibles { get; set; }
+        public virtual IList<Phone> Phones { get; set; }
+        public virtual IList<Responsible> Responsibles { get; set; }
         public Guid? ClassroomId { get; set; }
 
         [JsonIgnore]

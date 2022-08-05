@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Universal.EBI.Childs.API.Models;
 using Universal.EBI.Core.DomainObjects;
-using Universal.EBI.Core.DomainObjects.Models;
 
 namespace Universal.EBI.Childs.API.Data.Mapping
 {
@@ -9,7 +9,7 @@ namespace Universal.EBI.Childs.API.Data.Mapping
     {
         public void Configure(EntityTypeBuilder<Responsible> builder)
         {
-            builder.HasKey(r => r.Id);            
+            builder.HasKey(r => r.Id);
 
             builder.Property(r => r.FirstName)
                 .IsRequired()
@@ -26,11 +26,11 @@ namespace Universal.EBI.Childs.API.Data.Mapping
             builder.OwnsOne(r => r.Cpf, tf =>
             {
                 tf.Property(c => c.Number)
-                .IsRequired()                
+                .IsRequired()
                 .HasConversion<string>(x => x.ToString(), x => new Cpf(x).Number)
                 .HasMaxLength(Cpf.CPF_MAX_LENGTH)
                 .HasColumnName("Cpf")
-                .HasColumnType($"varchar({Cpf.CPF_MAX_LENGTH})");                
+                .HasColumnType($"varchar({Cpf.CPF_MAX_LENGTH})");
 
             });
 
@@ -40,18 +40,15 @@ namespace Universal.EBI.Childs.API.Data.Mapping
                 .IsRequired()
                 .HasConversion<string>(x => x.ToString(), x => new Email(x).Address)
                 .HasColumnName("Email")
-                .HasColumnType($"varchar({Email.ADDRESS_MAX_LENGTH})");                
+                .HasColumnType($"varchar({Email.ADDRESS_MAX_LENGTH})");
 
-            });
-
-            builder.HasMany(r => r.Children)
-                .WithMany(c => c.Responsibles);
-
-            builder.HasOne(r => r.Address)
-               .WithOne(a => a.Responsible);
+            });        
 
             builder.HasMany(r => r.Phones)
-                .WithOne(p => p.Responsible);
+                .WithOne();
+
+            builder.HasOne(c => c.Address)
+                .WithMany();
 
             builder.ToTable("Responsibles");
         }

@@ -11,9 +11,6 @@ namespace Universal.EBI.Responsibles.API.Models.Interfaces
         Task<bool> UpdateResponsible(Responsible responsible);
         Task<bool> DeleteResponsible(Guid id);
         Task<IResponsibleContext> GetContext();
-        
-        //Task<Address> GetAddressById(Guid id);
-        //Task CreateAddress(Address address);        
 
     }
 }

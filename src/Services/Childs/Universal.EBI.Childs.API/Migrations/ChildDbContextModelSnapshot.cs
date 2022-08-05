@@ -34,13 +34,10 @@ namespace Universal.EBI.Childs.API.Migrations
                     b.ToTable("ChildResponsible");
                 });
 
-            modelBuilder.Entity("Universal.EBI.Core.DomainObjects.Models.Address", b =>
+            modelBuilder.Entity("Universal.EBI.Childs.API.Models.Address", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("ChildId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("City")
@@ -55,17 +52,11 @@ namespace Universal.EBI.Childs.API.Migrations
                     b.Property<string>("District")
                         .HasColumnType("varchar(100)");
 
-                    b.Property<Guid?>("EducatorId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Number")
                         .HasColumnType("varchar(50)");
 
                     b.Property<string>("PublicPlace")
                         .HasColumnType("varchar(200)");
-
-                    b.Property<Guid?>("ResponsibleId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("State")
                         .HasColumnType("varchar(100)");
@@ -75,21 +66,16 @@ namespace Universal.EBI.Childs.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ChildId")
-                        .IsUnique()
-                        .HasFilter("[ChildId] IS NOT NULL");
-
-                    b.HasIndex("ResponsibleId")
-                        .IsUnique()
-                        .HasFilter("[ResponsibleId] IS NOT NULL");
-
                     b.ToTable("Addresses");
                 });
 
-            modelBuilder.Entity("Universal.EBI.Core.DomainObjects.Models.Child", b =>
+            modelBuilder.Entity("Universal.EBI.Childs.API.Models.Child", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("AddressId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("AgeGroupType")
@@ -98,9 +84,6 @@ namespace Universal.EBI.Childs.API.Migrations
 
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("ClassroomId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(100)");
@@ -123,12 +106,6 @@ namespace Universal.EBI.Childs.API.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(50)");
 
-                    b.Property<string>("HoraryOfEntry")
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<string>("HoraryOfExit")
-                        .HasColumnType("varchar(100)");
-
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("varchar(100)");
 
@@ -144,63 +121,18 @@ namespace Universal.EBI.Childs.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClassroomId");
+                    b.HasIndex("AddressId");
 
                     b.ToTable("Children");
                 });
 
-            modelBuilder.Entity("Universal.EBI.Core.DomainObjects.Models.Classroom", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("Actived")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Church")
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<string>("ClassroomType")
-                        .IsRequired()
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<DateTime?>("LastModifiedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Lunch")
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<string>("MeetingTime")
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<string>("Region")
-                        .HasColumnType("varchar(100)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Classrooms");
-                });
-
-            modelBuilder.Entity("Universal.EBI.Core.DomainObjects.Models.Phone", b =>
+            modelBuilder.Entity("Universal.EBI.Childs.API.Models.Phone", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("ChildId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("EducatorId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Number")
@@ -222,10 +154,13 @@ namespace Universal.EBI.Childs.API.Migrations
                     b.ToTable("Phones");
                 });
 
-            modelBuilder.Entity("Universal.EBI.Core.DomainObjects.Models.Responsible", b =>
+            modelBuilder.Entity("Universal.EBI.Childs.API.Models.Responsible", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("AddressId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("BirthDate")
@@ -271,42 +206,29 @@ namespace Universal.EBI.Childs.API.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AddressId");
+
                     b.ToTable("Responsibles");
                 });
 
             modelBuilder.Entity("ChildResponsible", b =>
                 {
-                    b.HasOne("Universal.EBI.Core.DomainObjects.Models.Child", null)
+                    b.HasOne("Universal.EBI.Childs.API.Models.Child", null)
                         .WithMany()
                         .HasForeignKey("ChildrenId")
                         .IsRequired();
 
-                    b.HasOne("Universal.EBI.Core.DomainObjects.Models.Responsible", null)
+                    b.HasOne("Universal.EBI.Childs.API.Models.Responsible", null)
                         .WithMany()
                         .HasForeignKey("ResponsiblesId")
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Universal.EBI.Core.DomainObjects.Models.Address", b =>
+            modelBuilder.Entity("Universal.EBI.Childs.API.Models.Child", b =>
                 {
-                    b.HasOne("Universal.EBI.Core.DomainObjects.Models.Child", "Child")
-                        .WithOne("Address")
-                        .HasForeignKey("Universal.EBI.Core.DomainObjects.Models.Address", "ChildId");
-
-                    b.HasOne("Universal.EBI.Core.DomainObjects.Models.Responsible", "Responsible")
-                        .WithOne("Address")
-                        .HasForeignKey("Universal.EBI.Core.DomainObjects.Models.Address", "ResponsibleId");
-
-                    b.Navigation("Child");
-
-                    b.Navigation("Responsible");
-                });
-
-            modelBuilder.Entity("Universal.EBI.Core.DomainObjects.Models.Child", b =>
-                {
-                    b.HasOne("Universal.EBI.Core.DomainObjects.Models.Classroom", "Classroom")
-                        .WithMany("Children")
-                        .HasForeignKey("ClassroomId");
+                    b.HasOne("Universal.EBI.Childs.API.Models.Address", "Address")
+                        .WithMany()
+                        .HasForeignKey("AddressId");
 
                     b.OwnsOne("Universal.EBI.Core.DomainObjects.Cpf", "Cpf", b1 =>
                         {
@@ -343,30 +265,30 @@ namespace Universal.EBI.Childs.API.Migrations
                                 .HasForeignKey("ChildId");
                         });
 
-                    b.Navigation("Classroom");
+                    b.Navigation("Address");
 
                     b.Navigation("Cpf");
 
                     b.Navigation("Email");
                 });
 
-            modelBuilder.Entity("Universal.EBI.Core.DomainObjects.Models.Phone", b =>
+            modelBuilder.Entity("Universal.EBI.Childs.API.Models.Phone", b =>
                 {
-                    b.HasOne("Universal.EBI.Core.DomainObjects.Models.Child", "Child")
+                    b.HasOne("Universal.EBI.Childs.API.Models.Child", null)
                         .WithMany("Phones")
                         .HasForeignKey("ChildId");
 
-                    b.HasOne("Universal.EBI.Core.DomainObjects.Models.Responsible", "Responsible")
+                    b.HasOne("Universal.EBI.Childs.API.Models.Responsible", null)
                         .WithMany("Phones")
                         .HasForeignKey("ResponsibleId");
-
-                    b.Navigation("Child");
-
-                    b.Navigation("Responsible");
                 });
 
-            modelBuilder.Entity("Universal.EBI.Core.DomainObjects.Models.Responsible", b =>
+            modelBuilder.Entity("Universal.EBI.Childs.API.Models.Responsible", b =>
                 {
+                    b.HasOne("Universal.EBI.Childs.API.Models.Address", "Address")
+                        .WithMany()
+                        .HasForeignKey("AddressId");
+
                     b.OwnsOne("Universal.EBI.Core.DomainObjects.Cpf", "Cpf", b1 =>
                         {
                             b1.Property<Guid>("ResponsibleId")
@@ -404,27 +326,20 @@ namespace Universal.EBI.Childs.API.Migrations
                                 .HasForeignKey("ResponsibleId");
                         });
 
+                    b.Navigation("Address");
+
                     b.Navigation("Cpf");
 
                     b.Navigation("Email");
                 });
 
-            modelBuilder.Entity("Universal.EBI.Core.DomainObjects.Models.Child", b =>
+            modelBuilder.Entity("Universal.EBI.Childs.API.Models.Child", b =>
                 {
-                    b.Navigation("Address");
-
                     b.Navigation("Phones");
                 });
 
-            modelBuilder.Entity("Universal.EBI.Core.DomainObjects.Models.Classroom", b =>
+            modelBuilder.Entity("Universal.EBI.Childs.API.Models.Responsible", b =>
                 {
-                    b.Navigation("Children");
-                });
-
-            modelBuilder.Entity("Universal.EBI.Core.DomainObjects.Models.Responsible", b =>
-                {
-                    b.Navigation("Address");
-
                     b.Navigation("Phones");
                 });
 #pragma warning restore 612, 618

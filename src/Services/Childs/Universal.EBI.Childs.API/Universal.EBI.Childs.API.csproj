@@ -6,11 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Models\Address.cs" />
-    <Compile Remove="Models\Child.cs" />
-    <Compile Remove="Models\Phone.cs" />
     <Compile Remove="Models\PhoneType.cs" />
-    <Compile Remove="Models\Responsible.cs" />
     <Compile Remove="Models\TEntity.cs" />
   </ItemGroup>
 

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Universal.EBI.Core.Data.Interfaces;
-using Universal.EBI.Core.DomainObjects.Models;
 
 namespace Universal.EBI.Classrooms.API.Models.Interfaces
 {
@@ -11,9 +10,6 @@ namespace Universal.EBI.Classrooms.API.Models.Interfaces
         Task<bool> UpdateClassroom(Classroom Classroom);
         Task<bool> DeleteClassroom(Guid id);
         Task<IClassroomContext> GetContext();
-        
-        //Task<Address> GetAddressById(Guid id);
-        //Task CreateAddress(Address address);        
 
     }
 }

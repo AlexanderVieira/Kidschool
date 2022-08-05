@@ -1,27 +1,16 @@
-﻿using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
-using System;
-using System.Text.Json.Serialization;
+﻿using System;
 using Universal.EBI.Core.DomainObjects;
-using Universal.EBI.Core.DomainObjects.Interfaces;
+using Universal.EBI.Core.DomainObjects.Models.Enums;
 
 namespace Universal.EBI.Childs.API.Models
 {
-    public class Phone : IAggregateRoot
-    {
-        public Guid Id { get; set; }
+    public class Phone : Entity
+    {        
         public string Number { get; set; }        
-        public PhoneType PhoneType { get; set; }        
-        public Guid? ChildId { get; set; }
+        public PhoneType PhoneType { get; set; } 
 
         public Phone()
-        {
-            Id = Guid.NewGuid();
+        {            
         }
-        
-        //[JsonIgnore]
-        //public virtual Child Child { get; set; }
-
     }
-    
 }

@@ -1,10 +1,10 @@
 ﻿using System;
-using Universal.EBI.Core.DomainObjects;
 
-namespace Universal.EBI.Childs.API.Models
+namespace Universal.EBI.Childs.API.Application.DTOs
 {
-    public class Address : Entity
-    {        
+    public class AddressRequestDto
+    {
+        public Guid Id { get; set; }
         public string PublicPlace { get; set; }
         public string Number { get; set; }
         public string Complement { get; set; }
@@ -12,10 +12,11 @@ namespace Universal.EBI.Childs.API.Models
         public string ZipCode { get; set; }
         public string City { get; set; }
         public string State { get; set; }
-        public string Country { get; set; }       
+        public string Country { get; set; }        
 
-        public Address() 
+        public AddressRequestDto()
         {
-        }       
+        }
+
     }
 }

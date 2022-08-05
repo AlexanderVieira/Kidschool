@@ -15,18 +15,18 @@ namespace Universal.EBI.Core.DomainObjects.Models
         public string Lunch { get; set; }
         public string MeetingTime { get; set; }        
         public virtual Educator Educator { get; set; }        
-        public virtual ICollection<Child> Children { get; set; }        
+        public virtual IList<Child> Children { get; set; }        
         public bool Actived { get; set; }
         public string CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; }
         public string LastModifiedBy { get; set; }
         public DateTime? LastModifiedDate { get; set; }
 
-        public ICollection<Event> Notifications { get; set; }
+        public IList<Event> Notifications { get; set; }
 
         public Classroom()
         {
-            Notifications = new HashSet<Event>();
+            Notifications = new List<Event>();
         }
 
         public void AddEvent(Event myEvent)

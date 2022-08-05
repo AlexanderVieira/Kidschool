@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Universal.EBI.Childs.API.Application.DTOs;
-using Universal.EBI.Core.DomainObjects.Models;
+using Universal.EBI.Childs.API.Models;
 
 namespace Universal.EBI.Childs.API.Application.AutoMapper
 {
@@ -8,18 +8,19 @@ namespace Universal.EBI.Childs.API.Application.AutoMapper
     {
         public DomainToDtoMappingProfiles()
         {
-            CreateMap<Child, ChildResponseDto>();
-            //.ForPath(c => c.Cpf, opt => opt.MapFrom(s => s.Cpf))
-            //.ForPath(c => c.Email, opt => opt.MapFrom(s => s.Email))
+            CreateMap<Child, ChildResponseDto>()
+            .ForPath(c => c.NumberCpf, opt => opt.MapFrom(s => s.Cpf))
+            .ForPath(c => c.AddressEmail, opt => opt.MapFrom(s => s.Email));
 
-            CreateMap<Address, AddressDto>();
+            CreateMap<Address, AddressResponseDto>();
 
             CreateMap<Phone, PhoneResponseDto>();
 
-            CreateMap<Responsible, ResponsibleDto>();
-                //.ForPath(c => c.Cpf, opt => opt.MapFrom(s => s.Cpf))
-                //.ForPath(c => c.Email, opt => opt.MapFrom(s => s.Email))
-                
+            CreateMap<Responsible, ResponsibleResponseDto>();
+                //.ForPath(c => c.NumberCpf, opt => opt.MapFrom(s => s.Cpf))
+                //.ForPath(c => c.AddressEmail, opt => opt.MapFrom(s => s.Email));
+
+
         }
     }
 }
