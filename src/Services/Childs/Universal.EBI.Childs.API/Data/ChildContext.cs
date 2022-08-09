@@ -31,6 +31,12 @@ namespace Universal.EBI.Childs.API.Data
                     map.AutoMap();
                     map.MapProperty(t => t.Id).SetSerializer(new GuidSerializer(BsonType.String));
                     map.UnmapProperty(c => c.Notifications);
+                   // map.GetMemberMap(c => c.CreatedDate).SetShouldSerializeMethod(
+                   //    obj => ((Entity)obj).CreatedDate > new DateTime(1900, 1, 1)
+                   //);
+                   // map.GetMemberMap(c => c.LastModifiedDate).SetShouldSerializeMethod(
+                   //     obj => ((Entity)obj).LastModifiedDate > new DateTime(1900, 1, 1)
+                   // );
                 });
 
                 BsonClassMap.RegisterClassMap<Child>(map =>
@@ -41,15 +47,15 @@ namespace Universal.EBI.Childs.API.Data
                     map.MapProperty(c => c.AgeGroupType).SetSerializer(new EnumSerializer<AgeGroupType>(BsonType.String));
                     map.MapProperty(c => c.GenderType).SetSerializer(new EnumSerializer<GenderType>(BsonType.String));                    
                     //map.UnmapProperty(c => c.Notifications);
-                    map.GetMemberMap(c => c.BirthDate).SetShouldSerializeMethod(
-                        obj => ((Child)obj).BirthDate > new DateTime(1900, 1, 1)
-                    );
-                    map.GetMemberMap(c => c.CreatedDate).SetShouldSerializeMethod(
-                        obj => ((Child)obj).CreatedDate > new DateTime(1900, 1, 1)
-                    );
-                    map.GetMemberMap(c => c.LastModifiedDate).SetShouldSerializeMethod(
-                        obj => ((Child)obj).LastModifiedDate > new DateTime(1900, 1, 1)
-                    );
+                    //map.GetMemberMap(c => c.BirthDate).SetShouldSerializeMethod(
+                    //    obj => ((Child)obj).BirthDate > new DateTime(1900, 1, 1)
+                    //);
+                    //map.GetMemberMap(c => c.CreatedDate).SetShouldSerializeMethod(
+                    //    obj => ((Child)obj).CreatedDate > new DateTime(1900, 1, 1)
+                    //);
+                    //map.GetMemberMap(c => c.LastModifiedDate).SetShouldSerializeMethod(
+                    //    obj => ((Child)obj).LastModifiedDate > new DateTime(1900, 1, 1)
+                    //);
 
                 });
 
@@ -67,7 +73,7 @@ namespace Universal.EBI.Childs.API.Data
                 {
                     map.AutoMap();
                     map.MapCreator(c => new Phone());
-                    //map.MapProperty(p => p.Id).SetSerializer(new GuidSerializer(BsonType.String));
+                    map.MapProperty(p => p.Id).SetSerializer(new GuidSerializer(BsonType.String));
                     map.MapProperty(p => p.PhoneType).SetSerializer(new EnumSerializer<PhoneType>(BsonType.String));                    
                 });
 
@@ -75,7 +81,7 @@ namespace Universal.EBI.Childs.API.Data
                 {
                     map.AutoMap();
                     map.MapCreator(c => new Address());
-                    //map.MapProperty(a => a.Id).SetSerializer(new GuidSerializer(BsonType.String));                    
+                    map.MapProperty(a => a.Id).SetSerializer(new GuidSerializer(BsonType.String));                    
                 });
             }
 

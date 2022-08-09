@@ -17,40 +17,15 @@ namespace Universal.EBI.Childs.API.Models
         public string PhotoUrl { get; set; }
         public DateTime BirthDate { get; set; }
         public AgeGroupType AgeGroupType { get; set; }
-        public GenderType GenderType { get; set; }        
-        public string CreatedBy { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public string LastModifiedBy { get; set; }
-        public DateTime? LastModifiedDate { get; set; }
-        public Address Address { get; set; }
-        public IList<Phone> Phones { get; set; }
-        public IList<Responsible> Responsibles { get; set; }
+        public GenderType GenderType { get; set; }       
+        public virtual Address Address { get; set; }        
+        public virtual IList<Phone> Phones { get; set; }
+        public virtual IList<Responsible> Responsibles { get; set; }
 
         public Child()
         {            
             Responsibles = new List<Responsible>();
             Phones = new List<Phone>();            
         }
-        
-        //private List<Event> _notifications;
-       
-        //public IReadOnlyCollection<Event> Notifications => _notifications?.AsReadOnly();
-
-        //public void AddEvent(Event myEvent)
-        //{
-        //    _notifications ??= new List<Event>();
-        //    _notifications.Add(myEvent);
-        //}
-
-        //public void RemoveEvent(Event myEvent)
-        //{
-        //    _notifications?.Remove(myEvent);
-        //}
-
-        //public void ClearEvent()
-        //{
-        //    _notifications?.Clear();
-        //}
-
     }
 }

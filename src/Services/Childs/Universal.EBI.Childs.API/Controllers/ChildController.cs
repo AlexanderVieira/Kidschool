@@ -33,7 +33,7 @@ namespace Universal.EBI.Childs.API.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("api/childs")]
+        [HttpGet("api/children/name")]
         public async Task<PagedResult<ChildResponseDto>> GetChilds([FromQuery] int ps = 8, [FromQuery] int page = 1, [FromQuery] string q = null)
         {
             var pagedResult = await _childQueries.GetChilds(ps, page, q);
@@ -80,7 +80,10 @@ namespace Universal.EBI.Childs.API.Controllers
             try
             {
                 if (request == null) return CustomResponse();
+                request.FullName = $"{request.FirstName} {request.LastName}";
                 request.CreatedBy = _user.GetUserEmail();
+                request.Responsibles.ToList().ForEach(r => r.CreatedBy = _user.GetUserEmail());
+                request.Responsibles.ToList().ForEach(r => r.FullName = $"{r.FirstName} {r.LastName}");
                 var command = new RegisterChildCommand(request);
                 return CustomResponse(await _mediator.SendCommand(command));
             }
@@ -98,8 +101,9 @@ namespace Universal.EBI.Childs.API.Controllers
             if (!ModelState.IsValid) return CustomResponse(ModelState);
             try
             {
-                if (request == null) return CustomResponse();
+                if (request == null) return CustomResponse();                
                 request.LastModifiedBy = _user.GetUserEmail();
+                request.Responsibles.ToList().ForEach(r => r.LastModifiedBy = _user.GetUserEmail());
                 var command = new UpdateChildCommand(request);
                 return CustomResponse(await _mediator.SendCommand(command));
             }
@@ -110,16 +114,13 @@ namespace Universal.EBI.Childs.API.Controllers
             }
         }
         
-        [HttpDelete("api/child/delete")]
-        public async Task<IActionResult> DeleteChild([FromBody] ChildRequestDto request)
+        [HttpDelete("api/child/delete/{id}")]
+        public async Task<IActionResult> DeleteChild(Guid id)
         {
             if (!ModelState.IsValid) return CustomResponse(ModelState);
             try
-            {
-                if (request == null) return CustomResponse();
-                //request.LastModifiedBy = _user.GetUserEmail();
-                var command = new DeleteChildCommand(request);
-                return CustomResponse(await _mediator.SendCommand(command));
+            {                              
+                return CustomResponse(await _mediator.SendCommand(new DeleteChildCommand { Id = id }));
             }
             catch (Exception ex)
             {

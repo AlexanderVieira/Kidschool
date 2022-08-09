@@ -1,10 +1,10 @@
 ﻿using System;
-using Universal.EBI.Core.DomainObjects;
 
 namespace Universal.EBI.Childs.API.Models
 {
-    public class Address : Entity
-    {        
+    public class Address
+    {
+        public Guid Id { get; set; }
         public string PublicPlace { get; set; }
         public string Number { get; set; }
         public string Complement { get; set; }
@@ -12,7 +12,11 @@ namespace Universal.EBI.Childs.API.Models
         public string ZipCode { get; set; }
         public string City { get; set; }
         public string State { get; set; }
-        public string Country { get; set; }       
+        public string Country { get; set; }
+        public Guid? ChildId { get; set; }
+        public Guid? ResponsibleId { get; set; }
+        public Child Child { get; set; }
+        public Responsible Responsible { get; set; }
 
         public Address() 
         {

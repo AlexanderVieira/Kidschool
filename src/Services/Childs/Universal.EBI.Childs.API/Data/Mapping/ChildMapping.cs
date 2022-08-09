@@ -26,7 +26,7 @@ namespace Universal.EBI.Childs.API.Data.Mapping
             builder.OwnsOne(c => c.Cpf, tf =>
             {
                 tf.Property(c => c.Number)
-                //.IsRequired()
+                .IsRequired()
                 .HasConversion<string>(c => c.ToString(), c => new Cpf(c).Number)
                 .HasMaxLength(Cpf.CPF_MAX_LENGTH)
                 .HasColumnName("Cpf")
@@ -37,21 +37,15 @@ namespace Universal.EBI.Childs.API.Data.Mapping
             builder.OwnsOne(c => c.Email, tf =>
             {
                 tf.Property(c => c.Address)
-                //.IsRequired()
+                .IsRequired()
                 .HasConversion<string>(c => c.ToString(), c => new Email(c).Address)
                 .HasColumnName("Email")
                 .HasColumnType($"varchar({Email.ADDRESS_MAX_LENGTH})");                
 
-            });
+            });  
 
             builder.HasMany(c => c.Responsibles)
-                .WithMany(r => r.Children);            
-
-            builder.HasMany(c => c.Phones)
-                .WithOne();
-
-            builder.HasOne(c => c.Address)
-                .WithMany();
+                .WithMany(r => r.Children);                                    
 
             builder.ToTable("Children");
         }

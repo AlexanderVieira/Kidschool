@@ -26,14 +26,14 @@ namespace Universal.EBI.Childs.API.Configuration
             services.AddScoped<IAspNetUser, AspNetUser>();
 
             // Commands
-            services.AddScoped<IRequestHandler<RegisterChildCommand, ValidationResult>, RegisterChildCommandHandler>();
-            services.AddScoped<IRequestHandler<UpdateChildCommand, ValidationResult>, UpdateChildCommandHandler>();
-            services.AddScoped<IRequestHandler<DeleteChildCommand, ValidationResult>, DeleteChildCommandHandler>();
+            //services.AddScoped<IRequestHandler<RegisterChildCommand, ValidationResult>, RegisterChildCommandHandler>();
+            //services.AddScoped<IRequestHandler<UpdateChildCommand, ValidationResult>, UpdateChildCommandHandler>();
+            //services.AddScoped<IRequestHandler<DeleteChildCommand, ValidationResult>, DeleteChildCommandHandler>();
 
             // Events
-            services.AddScoped<INotificationHandler<RegisteredChildEvent>, RegisterChildEventHandler>();
-            services.AddScoped<INotificationHandler<UpdatedChildEvent>, UpdateChildEventHandler>();
-            services.AddScoped<INotificationHandler<DeletedChildEvent>, DeleteChildEventHandler>();
+            //services.AddScoped<INotificationHandler<RegisteredChildEvent>, RegisterChildEventHandler>();
+            //services.AddScoped<INotificationHandler<UpdatedChildEvent>, UpdateChildEventHandler>();
+            //services.AddScoped<INotificationHandler<DeletedChildEvent>, DeleteChildEventHandler>();
 
             // Application
             services.AddScoped<IMediatorHandler, MediatorHandler>();            

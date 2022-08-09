@@ -8,7 +8,7 @@ namespace Universal.EBI.Childs.API.Application.Validations
     {
         public DeleteChildValidation()
         {
-            RuleFor(c => c.ChildRequest.Id)
+            RuleFor(c => c.Id)
                 .NotEqual(Guid.Empty)
                 .WithMessage("Id da criança inválido.");
             

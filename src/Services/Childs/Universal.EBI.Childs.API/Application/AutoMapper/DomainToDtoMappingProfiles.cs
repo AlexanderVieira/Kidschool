@@ -9,18 +9,17 @@ namespace Universal.EBI.Childs.API.Application.AutoMapper
         public DomainToDtoMappingProfiles()
         {
             CreateMap<Child, ChildResponseDto>()
-            .ForPath(c => c.NumberCpf, opt => opt.MapFrom(s => s.Cpf))
+            .ForPath(c => c.NumberCpf, opt => opt.MapFrom(s => s.Cpf.Number))
             .ForPath(c => c.AddressEmail, opt => opt.MapFrom(s => s.Email));
 
             CreateMap<Address, AddressResponseDto>();
 
             CreateMap<Phone, PhoneResponseDto>();
 
-            CreateMap<Responsible, ResponsibleResponseDto>();
-                //.ForPath(c => c.NumberCpf, opt => opt.MapFrom(s => s.Cpf))
-                //.ForPath(c => c.AddressEmail, opt => opt.MapFrom(s => s.Email));
-
-
+            CreateMap<Responsible, ResponsibleResponseDto>()
+            .ForPath(c => c.NumberCpf, opt => opt.MapFrom(s => s.Cpf.Number))
+            .ForPath(c => c.AddressEmail, opt => opt.MapFrom(s => s.Email.Address));          
+            
         }
     }
 }

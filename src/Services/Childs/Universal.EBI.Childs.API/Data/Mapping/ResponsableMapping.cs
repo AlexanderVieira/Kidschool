@@ -42,13 +42,7 @@ namespace Universal.EBI.Childs.API.Data.Mapping
                 .HasColumnName("Email")
                 .HasColumnType($"varchar({Email.ADDRESS_MAX_LENGTH})");
 
-            });        
-
-            builder.HasMany(r => r.Phones)
-                .WithOne();
-
-            builder.HasOne(c => c.Address)
-                .WithMany();
+            });                                
 
             builder.ToTable("Responsibles");
         }

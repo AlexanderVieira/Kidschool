@@ -22,6 +22,14 @@ namespace Universal.EBI.Childs.API.Data.Mapping
                 //.IsRequired()
                 .HasColumnType("varchar(20)");
 
+            builder.HasOne(a => a.Child)
+                .WithOne(c => c.Address)
+                .HasForeignKey<Address>(a => a.ChildId);
+
+            builder.HasOne(a => a.Responsible)
+                .WithOne(c => c.Address)
+                .HasForeignKey<Address>(a => a.ResponsibleId);
+
             builder.ToTable("Addresses");
 
         }

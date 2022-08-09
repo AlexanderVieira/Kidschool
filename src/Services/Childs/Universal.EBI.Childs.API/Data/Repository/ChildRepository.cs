@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using Universal.EBI.Childs.API.Models;
 using Microsoft.EntityFrameworkCore.Storage;
 using System.Data;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace Universal.EBI.Childs.API.Data.Repository
 {
@@ -23,24 +25,44 @@ namespace Universal.EBI.Childs.API.Data.Repository
         {
             var childCreated = await _context.AddAsync(child);
             return childCreated.Entity != null;
-        }        
+        }
 
         public Task<bool> UpdateChild(Child child)
         {
-            var childUpdated = _context.Children.Update(child);
-            return Task.FromResult(childUpdated.Entity != null);
+            _context.Responsibles.UpdateRange(child.Responsibles);
+            child.Responsibles = null;
+            var childUpdated = _context.Children.Update(child);           
+            return Task.FromResult(childUpdated.State.ToString() == "Modified");
         }
 
         public async Task<bool> DeleteChild(Child child)
         {
-            var childRecived = await _context.Children
-                                      .Include(x => x.Address)
-                                      .Include(x => x.Phones)
-                                      .Include(x => x.Responsibles)
-                                      .ThenInclude(x => x.Address)
-                                      .FirstOrDefaultAsync(c => c.Id == child.Id);            
-            var childRemoved = _context.Children.Remove(childRecived);
-            return childRemoved.Entity == null;
+            var recoveredChild = await _context.Children                
+                                     .Include(x => x.Address)
+                                     .Include(x => x.Phones)
+                                     .Include(x => x.Responsibles)                                     
+                                     .ThenInclude(x => x.Phones)                                     
+                                     .FirstOrDefaultAsync(c => c.Id == child.Id);
+            
+            var recoveredResponsibles = new List<Responsible>();
+            foreach (var item in recoveredChild.Responsibles)
+            {
+                recoveredResponsibles = await _context.Responsibles
+                                     .Include(x => x.Address)
+                                     .Include(x => x.Phones)
+                                     .Where(x => x.Id == item.Id).ToListAsync();
+            }                  
+                     
+            _context.Responsibles.RemoveRange(recoveredResponsibles);
+
+            recoveredResponsibles = await _context.Responsibles
+                                     .Include(x => x.Address)
+                                     .Include(x => x.Phones)
+                                     .Where(c => c.Id == child.Id).ToListAsync();           
+
+            var childRemoved = _context.Children.Remove(recoveredChild);
+
+            return (recoveredResponsibles == null || recoveredResponsibles.Count == 0) && childRemoved.State.ToString().Equals("Deleted");
         }
 
         public void Dispose()
@@ -50,7 +72,7 @@ namespace Universal.EBI.Childs.API.Data.Repository
                 _context.Dispose();
             }
             GC.SuppressFinalize(this);
-        }    
+        }
 
         public async Task<IDbContextTransaction> CriarTransacao()
         {

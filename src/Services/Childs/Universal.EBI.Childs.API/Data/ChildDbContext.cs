@@ -3,12 +3,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Universal.EBI.Childs.API.Extensions;
 using Universal.EBI.Childs.API.Models;
 using Universal.EBI.Core.Data.Interfaces;
+using Universal.EBI.Core.DomainObjects;
 using Universal.EBI.Core.Mediator.Interfaces;
 using Universal.EBI.Core.Messages;
 
@@ -25,15 +27,15 @@ namespace Universal.EBI.Childs.API.Data
         public ChildDbContext(DbContextOptions<ChildDbContext> options, IMediatorHandler mediatorHandler) : base(options)
         {
             _mediatorHandler = mediatorHandler;
-            ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTrackingWithIdentityResolution;
-            ChangeTracker.AutoDetectChangesEnabled = false;
+            //ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.TrackAll;
+            //ChangeTracker.AutoDetectChangesEnabled = true;
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Ignore<ValidationResult>();
             modelBuilder.Ignore<Event>();
-
+            
             foreach (var property in modelBuilder.Model.GetEntityTypes().SelectMany(
                 e => e.GetProperties().Where(p => p.ClrType == typeof(string))))
                 property.SetColumnType("varchar(100)");
@@ -66,12 +68,10 @@ namespace Universal.EBI.Childs.API.Data
                 switch (entry.State)
                 {
                     case EntityState.Added:
-                        entry.Entity.CreatedDate = DateTime.Now.ToLocalTime();
-                        //entry.Entity.CreatedBy = "Admin";
+                        entry.Entity.CreatedDate = DateTime.Now.ToLocalTime();                        
                         break;
                     case EntityState.Modified:
-                        entry.Entity.LastModifiedDate = DateTime.Now.ToLocalTime();
-                        //entry.Entity.LastModifiedBy = "Admin";
+                        entry.Entity.LastModifiedDate = DateTime.Now.ToLocalTime();                        
                         break;
                 }
             }

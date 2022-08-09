@@ -1,13 +1,17 @@
 ﻿using AutoMapper;
 using FluentValidation.Results;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Universal.EBI.Childs.API.Application.Events;
 using Universal.EBI.Childs.API.Application.Queries.Interfaces;
+using Universal.EBI.Childs.API.Extensions;
 using Universal.EBI.Childs.API.Models;
 using Universal.EBI.Childs.API.Models.Interfaces;
+using Universal.EBI.Core.Mediator.Interfaces;
 using Universal.EBI.Core.Messages;
 
 namespace Universal.EBI.Childs.API.Application.Commands
@@ -16,56 +20,83 @@ namespace Universal.EBI.Childs.API.Application.Commands
     {
         private readonly IChildRepository _childRepository;
         private readonly IChildQueries _childQueries;
+        private readonly IMediatorHandler _mediatorHandler;
         private readonly IMapper _mapper;
 
-        public DeleteChildCommandHandler(IChildRepository childRepository, IChildQueries childQueries, IMapper mapper)
+        public DeleteChildCommandHandler(IChildRepository childRepository, IChildQueries childQueries, IMediatorHandler mediatorHandler, IMapper mapper)
         {
             _childRepository = childRepository;
             _childQueries = childQueries;
+            _mediatorHandler = mediatorHandler;
             _mapper = mapper;
         }
 
         public async Task<ValidationResult> Handle(DeleteChildCommand message, CancellationToken cancellationToken)
         {
             if (!message.IsValid()) return message.ValidationResult;
-            var child = _mapper.Map<Child>(message.ChildRequest);
+            
             //var existingChild = await _childQueries.GetChildById(message.Id);
-            var existingChild = new Child { Id = child.Id };
+            var context = await _childRepository.GetContext();
+            var existingChild = context.Children.FirstOrDefault(c => c.Id == message.Id);            
 
             if (existingChild == null)
             {
                 AddError("Criança não encontrado.");
                 return ValidationResult;
             }
-
-            var success = await _childRepository.DeleteChild(child);
-            if (success)
+            
+            var strategy = context.Database.CreateExecutionStrategy();
+            await strategy.ExecuteAsync(async () =>
             {
-                child.AddEvent(new DeletedChildEvent
+                await using (var transaction = context.Database.BeginTransaction())
                 {
-                    AggregateId = child.Id,
-                    Id = child.Id,                    
-                    FirstName = child.FirstName,
-                    LastName = child.LastName,
-                    FullName = child.FullName,
-                    Email = child.Email?.Address,
-                    Cpf = child.Cpf?.Number,
-                    BirthDate = child.BirthDate.ToString(),
-                    GenderType = child.GenderType.ToString(),
-                    AgeGroupType = child.AgeGroupType.ToString(),
-                    PhotoUrl = child.PhotoUrl,
-                    Excluded = child.Excluded,
-                    CreatedBy = child.CreatedBy,
-                    CreatedDate = child.CreatedDate,
-                    LastModifiedBy = child.LastModifiedBy,
-                    LastModifiedDate = child.LastModifiedDate,
-                    Phones = child.Phones.ToArray(),
-                    Address = child.Address,
-                    Responsibles = child.Responsibles.ToArray()
-                });
-            }
+                    try
+                    {
+                        var result = await _childRepository.DeleteChild(existingChild);
+                        if (result)
+                        {
+                            ValidationResult = await PersistData(_childRepository.UnitOfWork);
 
-            return await PersistData(_childRepository.UnitOfWork);
+                            if (ValidationResult.IsValid)
+                            {
+                                existingChild.AddEvent(new DeletedChildEvent
+                                {
+                                    AggregateId = existingChild.Id,
+                                    Id = existingChild.Id
+                                });
+
+                                //await _mediatorHandler.PublishEvents_v2(context);
+                                await transaction.CommitAsync(cancellationToken);
+                            }
+                            else
+                            {
+                                await transaction.RollbackAsync(cancellationToken);
+                                AddError($"{message.GetType().Name} : Houve um erro ao persistir os dados.");
+                            }
+                        }
+                        else
+                        {
+                            AddError($"{message.GetType().Name} : Houve um erro ao persistir os dados.");
+                            await transaction.RollbackAsync(cancellationToken);
+                        }
+
+                    }
+                    catch (DbUpdateException ex)
+                    {
+                        await transaction.RollbackAsync(cancellationToken);
+                        AddError($"{ex.GetType().Name} : Houve um erro ao persistir os dados.");
+                    }
+                    catch (Exception ex)
+                    {
+                        //await transaction.RollbackToSavepointAsync("RegisterChild");
+                        await transaction.RollbackAsync(cancellationToken);
+                        AddError($"{ex.GetType().Name} : {ex.Message}");
+                    }
+                }
+
+            });
+           
+            return ValidationResult;
         }
     }
 }

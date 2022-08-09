@@ -1,11 +1,11 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
+using MongoDB.Driver;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Universal.EBI.Childs.API.Models;
 using Universal.EBI.Childs.API.Models.Interfaces;
-using Universal.EBI.Core.DomainObjects.Models.Enums;
-using Universal.EBI.Core.Utils;
 using Universal.EBI.MessageBus.Interfaces;
 
 namespace Universal.EBI.Childs.API.Application.Events
@@ -13,11 +13,13 @@ namespace Universal.EBI.Childs.API.Application.Events
     public class UpdateChildEventHandler : INotificationHandler<UpdatedChildEvent>
     {
         private readonly IMessageBus _bus;
+        private readonly IMapper _mapper;
         private readonly IChildNoSqlRepository _childNoSqlRepository;
 
-        public UpdateChildEventHandler(IMessageBus bus, IChildNoSqlRepository childNoSqlRepository)
+        public UpdateChildEventHandler(IMessageBus bus, IMapper mapper, IChildNoSqlRepository childNoSqlRepository)
         {
             _bus = bus;
+            _mapper = mapper;
             _childNoSqlRepository = childNoSqlRepository;
         }
 
@@ -25,43 +27,24 @@ namespace Universal.EBI.Childs.API.Application.Events
         {
             try
             {
-                var child = new Child
-                {
-                    Id = notification.Id,
-                    FirstName = notification.FirstName,
-                    LastName = notification.LastName,
-                    FullName = notification.FullName,
-                    Email = ValidationUtils.ValidateRequestEmail(notification.Email),
-                    Cpf = ValidationUtils.ValidateRequestCpf(notification.Cpf),
-                    BirthDate = DateTime.Parse(notification.BirthDate),
-                    GenderType = (GenderType)Enum.Parse(typeof(GenderType), notification.GenderType, true),
-                    AgeGroupType = (AgeGroupType)Enum.Parse(typeof(AgeGroupType), notification.AgeGroupType, true),
-                    PhotoUrl = notification.PhotoUrl,
-                    Excluded = notification.Excluded,
-                    CreatedBy = notification.CreatedBy,
-                    CreatedDate = notification.CreatedDate,
-                    LastModifiedBy = notification.LastModifiedBy,
-                    LastModifiedDate = notification.LastModifiedDate,
-                    Phones = notification.Phones,
-                    Address = notification.Address,
-                    Responsibles = notification.Responsibles
-
-                };
-
-                var result = _childNoSqlRepository.UpdateChild(child);
-
+                var child = _mapper.Map<Child>(notification.ChildRequest);                
+                var result = _childNoSqlRepository.UpdateChild(child).Result;
+                if (result) throw new ArgumentException("Erro ao tentar sincronizar base de dados.");
+            }
+            catch (MongoException)
+            {
+                throw new MongoException("Erro ao tentar sincronizar base de dados.");
+            }
+            catch (ArgumentException)
+            {
+                throw;
             }
             catch (Exception)
             {
-                //Debug.WriteLine(ex.Message);                
-                throw;
+                throw new Exception("Erro ao tentar sincronizar base de dados.");
             }
-
+            //return _bus.PublishAsync(new RegisteredChildIntegrationEvent(notification.Id));
             return Task.CompletedTask;
-            //return _bus.PublishAsync(new UpdatedChildIntegrationEvent 
-            //{ 
-            //    Id = notification.Id 
-            //});
         }
     }
 }

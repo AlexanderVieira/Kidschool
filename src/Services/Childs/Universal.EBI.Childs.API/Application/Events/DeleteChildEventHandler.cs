@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using MongoDB.Driver;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -22,13 +23,21 @@ namespace Universal.EBI.Childs.API.Application.Events
         public Task Handle(DeletedChildEvent notification, CancellationToken cancellationToken)
         {
             try
-            {                
-                var result = _childNoSqlRepository.DeleteChild(notification.Id);
+            {   
+                var result = _childNoSqlRepository.DeleteChild(notification.Id).Result;
+                if (result) throw new ArgumentException("Erro ao tentar sincronizar base de dados.");
+            }
+            catch (MongoException)
+            {
+                throw new MongoException("Erro ao tentar sincronizar base de dados.");
+            }
+            catch (ArgumentException)
+            {
+                throw;
             }
             catch (Exception)
             {
-                //Debug.WriteLine(ex.Message);                
-                throw;
+                throw new Exception("Erro ao tentar sincronizar base de dados.");
             }
             return Task.CompletedTask;
             //return _bus.PublishAsync(new DeletedChildIntegrationEvent(notification.Id));

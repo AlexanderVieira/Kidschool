@@ -30,22 +30,15 @@ namespace Universal.EBI.Childs.API.Application.Events
         {              
             try
             {
-                var child = _mapper.Map<Child>(notification.ChildRequest);
-                var savedChild = _childNoSqlRepository.CreateChild(child).Result;
-                if (savedChild == null)
-                {
-                    throw new ArgumentException();
-                }
-                else
-                {
-                    throw new DomainException("Sincronização das bases de dados realizada com sucesso.");
-                }                
+                var child = _mapper.Map<Child>(notification.ChildRequest);                
+                var result = _childNoSqlRepository.CreateChild(child).Result;
+                if (result == null) throw new ArgumentException("Erro ao tentar sincronizar base de dados.");
             }
             catch (MongoException)
             {
                 throw new MongoException("Erro ao tentar sincronizar base de dados.");
             }
-            catch (DomainException)
+            catch (ArgumentException)
             {
                 throw;
             }
@@ -54,6 +47,7 @@ namespace Universal.EBI.Childs.API.Application.Events
                 throw new Exception("Erro ao tentar sincronizar base de dados.");
             }
             //return _bus.PublishAsync(new RegisteredChildIntegrationEvent(notification.Id));
+            return Task.CompletedTask;
         }
     }
 }

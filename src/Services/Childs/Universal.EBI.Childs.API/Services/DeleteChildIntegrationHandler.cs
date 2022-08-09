@@ -42,8 +42,7 @@ namespace Universal.EBI.Childs.API.Services
 
         private async Task<ResponseMessage> DeleteChild(DeletedChildIntegrationEvent message)
         {
-            var command = new DeleteChildCommand(new ChildRequestDto { Id = message.Id });
-            command.AggregateId = message.AggregateId;
+            var command = new DeleteChildCommand { AggregateId = message.AggregateId, Id = message.Id };            
             ValidationResult sucesso;
 
             using (var scope = _serviceProvider.CreateScope())

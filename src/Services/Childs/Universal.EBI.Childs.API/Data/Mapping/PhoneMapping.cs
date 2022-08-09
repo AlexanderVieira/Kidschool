@@ -13,6 +13,12 @@ namespace Universal.EBI.Childs.API.Data.Mapping
             builder.Property(p => p.Number)
                 //.IsRequired()
                 .HasColumnType("varchar(13)");
+
+            builder.HasOne(p => p.Child)
+                .WithMany(c => c.Phones);
+
+            builder.HasOne(p => p.Responsible)
+                .WithMany(r => r.Phones);                
         }
     }
 }
