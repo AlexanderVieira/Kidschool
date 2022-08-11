@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace Universal.EBI.Childs.API.Models.Interfaces
 {
-    public interface IChildNoSqlRepository
+    public interface ISincDatabase
     {
         Task<Child> CreateChild(Child child);
         Task<bool> UpdateChild(Child child);

@@ -12,9 +12,9 @@ namespace Universal.EBI.Childs.API.Application.Events
     public class DeleteChildEventHandler : INotificationHandler<DeletedChildEvent>
     {
         private readonly IMessageBus _bus;
-        private readonly IChildNoSqlRepository _childNoSqlRepository;
+        private readonly ISincDatabase _childNoSqlRepository;
 
-        public DeleteChildEventHandler(IMessageBus bus, IChildNoSqlRepository childNoSqlRepository)
+        public DeleteChildEventHandler(IMessageBus bus, ISincDatabase childNoSqlRepository)
         {
             _bus = bus;
             _childNoSqlRepository = childNoSqlRepository;

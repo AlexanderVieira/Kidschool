@@ -12,6 +12,8 @@ using Universal.EBI.Childs.API.Application.DTOs;
 using System.Linq;
 using System.Collections.Generic;
 using AutoMapper;
+using Universal.EBI.Childs.API.Application.Queries;
+using Microsoft.AspNetCore.Http;
 
 namespace Universal.EBI.Childs.API.Controllers
 {
@@ -34,28 +36,24 @@ namespace Universal.EBI.Childs.API.Controllers
         }
 
         [HttpGet("api/children/name")]
-        public async Task<PagedResult<ChildResponseDto>> GetChilds([FromQuery] int ps = 8, [FromQuery] int page = 1, [FromQuery] string q = null)
+        public async Task<IActionResult> GetChildrenPaged([FromQuery] int ps = 8, [FromQuery] int page = 1, [FromQuery] string q = null)
         {
-            var pagedResult = await _childQueries.GetChilds(ps, page, q);
-            
-            var childrenDto = new List<ChildResponseDto>();            
-            var pagedResultDto = new PagedResult<ChildResponseDto>
+            try
             {
-                List = new List<ChildResponseDto>(),
-                PageIndex = pagedResult.PageIndex,
-                PageSize = pagedResult.PageSize,
-                Query = pagedResult.Query,
-                TotalResults = pagedResult.TotalResults
-            };
-
-            foreach (var child in pagedResult.List)
+                var response = (GetChildrenPagedQueryResponse)await _mediator.SendQuery(new GetChildrenPagedQuery() 
+                { 
+                    PageSize = ps,  
+                    PageIndex = page, 
+                    Query = q 
+                });
+                return response.pagedResult == null ? ProcessingMassage(StatusCodes.Status404NotFound, 
+                                                                        "Não existem dados para exibição.") : CustomResponse(response.pagedResult);
+            }
+            catch (Exception ex)
             {
-                var childResponse = _mapper.Map<ChildResponseDto>(child);
-                childrenDto.Add(childResponse);
-            }           
-
-            pagedResultDto.List = childrenDto;
-            return pagedResultDto;
+                AddProcessingErrors(ex.Message);
+                return CustomResponse();
+            }
         }
 
         [HttpGet("api/child/{id}")]

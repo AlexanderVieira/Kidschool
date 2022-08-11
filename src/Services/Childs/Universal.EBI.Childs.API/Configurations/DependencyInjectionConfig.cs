@@ -40,7 +40,7 @@ namespace Universal.EBI.Childs.API.Configuration
             services.AddScoped<IChildQueries, ChildQueries>();
 
             // Data
-            services.AddScoped<IChildNoSqlRepository, ChildNoSqlRepository>();
+            services.AddScoped<ISincDatabase, SincDatabase>();
             services.AddScoped<IChildRepository, ChildRepository>();            
             services.AddScoped<IChildContext, ChildContext>();
             services.AddScoped<ChildDbContext>();

@@ -66,6 +66,12 @@ namespace Universal.EBI.WebAPI.Core.Controllers
             return true;
         }
 
+        protected ActionResult ProcessingMassage(int statusCode, string mensagem)
+        {
+            AddProcessingErrors(mensagem);
+            return CustomResponse(statusCode);
+        }
+
         protected bool ValidOperation()
         {
             return !Errors.Any();

@@ -3,15 +3,14 @@ using Universal.EBI.Childs.API.Models;
 using Universal.EBI.Childs.API.Models.Interfaces;
 using System.Threading.Tasks;
 using System;
-using System.Threading;
 
 namespace Universal.EBI.Childs.API.Data.Repository
 {
-    public class ChildNoSqlRepository : IChildNoSqlRepository
+    public class SincDatabase : ISincDatabase
     {
         private readonly IChildContext _context;        
 
-        public ChildNoSqlRepository(IChildContext context)
+        public SincDatabase(IChildContext context)
         {
             _context = context;
         }

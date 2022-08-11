@@ -14,9 +14,9 @@ namespace Universal.EBI.Childs.API.Application.Events
     {
         private readonly IMessageBus _bus;
         private readonly IMapper _mapper;
-        private readonly IChildNoSqlRepository _childNoSqlRepository;
+        private readonly ISincDatabase _childNoSqlRepository;
 
-        public UpdateChildEventHandler(IMessageBus bus, IMapper mapper, IChildNoSqlRepository childNoSqlRepository)
+        public UpdateChildEventHandler(IMessageBus bus, IMapper mapper, ISincDatabase childNoSqlRepository)
         {
             _bus = bus;
             _mapper = mapper;
