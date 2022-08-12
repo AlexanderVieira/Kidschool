@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
@@ -14,6 +15,7 @@ namespace Universal.EBI.WebAPI.Core.Controllers
     {
         protected ICollection<string> Errors = new List<string>();
         protected ValidationResult ValidationResult { get; set; }
+        protected string MessageSuccess { get; set; }
 
         protected virtual bool ExcuteValidation<TV, TE>(TV validacao, TE entidade) where TV : AbstractValidator<TE> where TE : class
         {
@@ -23,15 +25,18 @@ namespace Universal.EBI.WebAPI.Core.Controllers
         {
             if (ValidOperation())
             {
+                if (result is int) return MessageHandler(result);
                 return Ok(result);
             }
+
+            if (result is int) return MessageHandler(result);
 
             return BadRequest(new ValidationProblemDetails(new Dictionary<string, string[]>
             {
                 { "Messages", Errors.ToArray() }
             }));
 
-        }
+        }               
 
         protected ActionResult CustomResponse(ModelStateDictionary modelState)
         {
@@ -92,6 +97,78 @@ namespace Universal.EBI.WebAPI.Core.Controllers
         protected void ClearProcessingErrors()
         {
             Errors.Clear();
+        }
+
+        protected void AddMessageSuccess(string message)
+        {
+            MessageSuccess = message;
+        }
+
+        private ActionResult MessageHandler(object result)
+        {
+            switch (result)
+            {
+                case 200:
+                    return Ok(new
+                    {
+                        Titulo = "Opa! Sucesso.",
+                        Codigo = StatusCodes.Status200OK,
+                        Sucesso = MessageSuccess
+                    });
+
+                case 201:
+                    return Ok(new
+                    {
+                        Titulo = "Opa! Sucesso.",
+                        Codigo = StatusCodes.Status201Created,
+                        Sucesso = MessageSuccess
+                    });
+
+                case 204:
+                    return Ok(new
+                    {
+                        Titulo = "Opa! Sucesso.",
+                        Codigo = StatusCodes.Status204NoContent,
+                        Sucesso = MessageSuccess
+                    });
+
+                case 400:
+                    return BadRequest(new ValidationProblemDetails(new Dictionary<string, string[]>
+                        {
+                            { "Mensagens", Errors.ToArray() }
+                        }));
+
+                case 401:
+                    return Unauthorized(new ValidationProblemDetails(new Dictionary<string, string[]>
+                        {
+                            { "Mensagens", Errors.ToArray() }
+                        }));
+
+                case 403:
+                    return new ObjectResult(new ResponseResult
+                    {
+                        Title = "Opa! Ocorreu um erro.",
+                        Status = StatusCodes.Status403Forbidden,
+                        Errors = new ResponseErrorMessages { Messages = Errors.ToList() }
+                    });                
+
+                case 404:
+                    return NotFound(new ResponseResult
+                    {
+                        Title = "Opa! Ocorreu um erro.",
+                        Status = StatusCodes.Status404NotFound,
+                        Errors = new ResponseErrorMessages { Messages = Errors.ToList() }
+                    });
+
+                default:
+                    return new ObjectResult(new
+                    {
+                        Titulo = "Opa! Ocorreu um erro.",
+                        Codigo = StatusCodes.Status500InternalServerError,
+                        Mensagem = "Sistema indisponível. Tente mais tarde."
+                    });
+            }
+
         }
     }
 }

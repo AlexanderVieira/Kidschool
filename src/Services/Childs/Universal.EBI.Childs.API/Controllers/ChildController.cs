@@ -27,7 +27,7 @@ namespace Universal.EBI.Childs.API.Controllers
             _user = user;
         }
 
-        [HttpGet("api/children/name")]
+        [HttpGet("api/children")]
         public async Task<IActionResult> GetChildrenPaged([FromQuery] int ps = 8, [FromQuery] int page = 1, [FromQuery] string q = null)
         {
             if (!ModelState.IsValid) return CustomResponse(ModelState);
@@ -42,8 +42,8 @@ namespace Universal.EBI.Childs.API.Controllers
                 return (response.pagedResult == null) || 
                        (response.pagedResult.List == null) || 
                        (response.pagedResult.List.Count() == 0) ? 
-                       ProcessingMassage(StatusCodes.Status404NotFound,"Não existem dados para exibição.") : 
-                       CustomResponse(response.pagedResult);
+                       ProcessingMassage(StatusCodes.Status404NotFound,
+                                         "Não existem dados para exibição.") : CustomResponse(response.pagedResult);
             }
             catch (Exception ex)
             {
@@ -58,10 +58,12 @@ namespace Universal.EBI.Childs.API.Controllers
             if (!ModelState.IsValid) return CustomResponse(ModelState);
             try
             {                
-                if (!ExcuteValidation(new GetChildByIdQueryValidation(), new GetChildByIdQuery { Id = id })) return CustomResponse(ValidationResult);
+                if (!ExcuteValidation(new GetChildByIdQueryValidation(), 
+                                      new GetChildByIdQuery { Id = id })) return CustomResponse(ValidationResult);
                 var response = (GetChildByIdQueryResponse)await _mediator.SendQuery(new GetChildByIdQuery { Id = id });               
-                return response.Child == null ? ProcessingMassage(StatusCodes.Status404NotFound,
-                                                                        "Não existem dados para exibição.") : CustomResponse(response.Child);
+                return response.Child == null ? 
+                        ProcessingMassage(StatusCodes.Status404NotFound,
+                                          "Não existem dados para exibição.") : CustomResponse(response.Child);
             }
             catch (Exception ex)
             {
@@ -76,10 +78,12 @@ namespace Universal.EBI.Childs.API.Controllers
             if (!ModelState.IsValid) return CustomResponse(ModelState);
             try
             {                
-                if (!ExcuteValidation(new GetChildByCpfQueryValidation(), new GetChildByCpfQuery { Cpf = cpf })) return CustomResponse(ValidationResult);
+                if (!ExcuteValidation(new GetChildByCpfQueryValidation(), 
+                                      new GetChildByCpfQuery { Cpf = cpf })) return CustomResponse(ValidationResult);
                 var response = (GetChildByCpfQueryResponse)await _mediator.SendQuery(new GetChildByCpfQuery { Cpf = cpf });
-                return response.Child == null ? ProcessingMassage(StatusCodes.Status404NotFound,
-                                                                        "Não existem dados para exibição.") : CustomResponse(response.Child);
+                return response.Child == null ? 
+                        ProcessingMassage(StatusCodes.Status404NotFound,
+                                          "Não existem dados para exibição.") : CustomResponse(response.Child);
             }
             catch (Exception ex)
             {
@@ -96,12 +100,19 @@ namespace Universal.EBI.Childs.API.Controllers
             try
             {
                 if (request == null) return CustomResponse();
+                
                 request.FullName = $"{request.FirstName} {request.LastName}";
                 request.CreatedBy = _user.GetUserEmail();
                 request.Responsibles.ToList().ForEach(r => r.CreatedBy = _user.GetUserEmail());
                 request.Responsibles.ToList().ForEach(r => r.FullName = $"{r.FirstName} {r.LastName}");
+                
                 var command = new RegisterChildCommand(request);
-                return CustomResponse(await _mediator.SendCommand(command));
+                
+                ValidationResult = await _mediator.SendCommand(command);
+                if (!ValidationResult.IsValid) return CustomResponse(ValidationResult);
+                
+                AddMessageSuccess("Criança adicionada com sucesso.");                
+                return CustomResponse(StatusCodes.Status201Created);
             }
             catch (Exception ex)
             {
@@ -118,10 +129,16 @@ namespace Universal.EBI.Childs.API.Controllers
             try
             {
                 if (request == null) return CustomResponse();                
+                
                 request.LastModifiedBy = _user.GetUserEmail();
                 request.Responsibles.ToList().ForEach(r => r.LastModifiedBy = _user.GetUserEmail());
                 var command = new UpdateChildCommand(request);
-                return CustomResponse(await _mediator.SendCommand(command));
+                
+                ValidationResult = await _mediator.SendCommand(command);
+                if (!ValidationResult.IsValid) return CustomResponse(ValidationResult);
+
+                AddMessageSuccess("Criança atualizada com sucesso.");
+                return CustomResponse(StatusCodes.Status200OK);
             }
             catch (Exception ex)
             {
@@ -135,8 +152,12 @@ namespace Universal.EBI.Childs.API.Controllers
         {
             if (!ModelState.IsValid) return CustomResponse(ModelState);
             try
-            {                              
-                return CustomResponse(await _mediator.SendCommand(new DeleteChildCommand { Id = id }));
+            {
+                ValidationResult = await _mediator.SendCommand(new DeleteChildCommand { Id = id });
+                if (!ValidationResult.IsValid) return CustomResponse(ValidationResult);
+
+                AddMessageSuccess("Criança excluída com sucesso.");
+                return CustomResponse(StatusCodes.Status204NoContent);                
             }
             catch (Exception ex)
             {
