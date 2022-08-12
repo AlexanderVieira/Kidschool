@@ -2,6 +2,7 @@
 using Universal.EBI.Childs.API.Application.Commands;
 using System;
 using Universal.EBI.Core.Utils;
+using Universal.EBI.Core.DomainObjects;
 
 namespace Universal.EBI.Childs.API.Application.Validations
 {
@@ -49,28 +50,28 @@ namespace Universal.EBI.Childs.API.Application.Validations
 
             RuleFor(c => c.ChildRequest.AgeGroupType)
                 .NotEmpty()
-                .WithMessage("A faixa etária da criança não foi informada.");                     
+                .WithMessage("A faixa etária da criança não foi informada.");
 
-            //RuleFor(c => c.ChildRequest.Responsibles)
-            //    .Custom((responsibles, context) =>
-            //    {
-            //        foreach (var item in responsibles)
-            //        {
-            //            if (item.Id == Guid.Empty) context.AddFailure("Id do responsável inválido");
-            //            if (string.IsNullOrEmpty(item.FirstName)) context.AddFailure("O nome do responsável não foi informado.");
-            //            if (string.IsNullOrEmpty(item.LastName)) context.AddFailure("O Sobrenome do responsável não foi informado.");
-            //            if (string.IsNullOrEmpty(item.AddressEmail)) context.AddFailure("O e-mail do responsável não foi informado.");
-            //            if (!Email.EmailValid(item.AddressEmail)) context.AddFailure("E-mail do responsável inválido.");
-            //            if (string.IsNullOrEmpty(item.NumberCpf)) context.AddFailure("O CPF do responsável não foi informado.");
-            //            if (!Cpf.CpfValid(item.NumberCpf)) context.AddFailure("CPF do responsável inválido.");
-            //            if (item.Address == null) context.AddFailure("Endereço do responsável não foi informado.");
-            //            if (!string.IsNullOrWhiteSpace(item.BirthDate.Date.ToShortDateString()))
-            //            {
-            //                if (DateUtils.IsDataInformadaMaiorQueDataAtual(item.BirthDate.Date.ToShortDateString()))
-            //                    context.AddFailure("A data de nascimento informada não é válida.");
-            //            }
-            //        }
-            //    });
+            RuleFor(c => c.ChildRequest.Responsibles)
+                .Custom((responsibles, context) =>
+                {
+                    foreach (var item in responsibles)
+                    {
+                        if (item.Id == Guid.Empty) context.AddFailure("Id do responsável inválido");
+                        if (string.IsNullOrEmpty(item.FirstName)) context.AddFailure("O nome do responsável não foi informado.");
+                        if (string.IsNullOrEmpty(item.LastName)) context.AddFailure("O Sobrenome do responsável não foi informado.");
+                        if (string.IsNullOrEmpty(item.AddressEmail)) context.AddFailure("O e-mail do responsável não foi informado.");
+                        if (!Email.EmailValid(item.AddressEmail)) context.AddFailure("E-mail do responsável inválido.");
+                        if (string.IsNullOrEmpty(item.NumberCpf)) context.AddFailure("O CPF do responsável não foi informado.");
+                        if (!Cpf.CpfValid(item.NumberCpf)) context.AddFailure("CPF do responsável inválido.");
+                        if (item.Address == null) context.AddFailure("Endereço do responsável não foi informado.");
+                        if (!string.IsNullOrWhiteSpace(item.BirthDate.Date.ToShortDateString()))
+                        {
+                            if (DateUtils.IsDataInformadaMaiorQueDataAtual(item.BirthDate.Date.ToShortDateString()))
+                                context.AddFailure("A data de nascimento informada não é válida.");
+                        }
+                    }
+                });
         }        
     }
 }

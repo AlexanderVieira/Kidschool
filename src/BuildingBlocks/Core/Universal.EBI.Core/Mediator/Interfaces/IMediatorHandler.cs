@@ -9,6 +9,6 @@ namespace Universal.EBI.Core.Mediator.Interfaces
     {
         Task PublishEvent<T>(T myEvent) where T : Event;
         Task<ValidationResult> SendCommand<T>(T command) where T : Command;
-        Task<Object> SendQuery<T>(T query) where T : Query;
+        Task<object> SendQuery<T>(T query) where T : Query;
     }
 }

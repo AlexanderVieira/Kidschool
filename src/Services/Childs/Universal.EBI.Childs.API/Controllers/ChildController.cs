@@ -4,40 +4,33 @@ using System.Net;
 using System.Threading.Tasks;
 using Universal.EBI.Core.Mediator.Interfaces;
 using Universal.EBI.Childs.API.Application.Commands;
-using Universal.EBI.Childs.API.Application.Queries.Interfaces;
-using Universal.EBI.Childs.API.Models;
 using Universal.EBI.WebAPI.Core.AspNetUser.Interfaces;
 using Universal.EBI.WebAPI.Core.Controllers;
 using Universal.EBI.Childs.API.Application.DTOs;
 using System.Linq;
-using System.Collections.Generic;
-using AutoMapper;
 using Universal.EBI.Childs.API.Application.Queries;
 using Microsoft.AspNetCore.Http;
+using Universal.EBI.Core.Utils;
+using FluentValidation.Results;
+using Universal.EBI.Childs.API.Application.Validations;
 
 namespace Universal.EBI.Childs.API.Controllers
 {
     public class ChildController : BaseController
     {
-        private readonly IMediatorHandler _mediator;        
-        private readonly IChildQueries _childQueries;
+        private readonly IMediatorHandler _mediator;
         private readonly IAspNetUser _user;
-        private readonly IMapper _mapper;
 
-        public ChildController(IMediatorHandler mediator, 
-                               IChildQueries childQueries, 
-                               IAspNetUser user, 
-                               IMapper mapper)
+        public ChildController(IMediatorHandler mediator, IAspNetUser user)
         {
             _mediator = mediator;
-            _childQueries = childQueries;
             _user = user;
-            _mapper = mapper;
         }
 
         [HttpGet("api/children/name")]
         public async Task<IActionResult> GetChildrenPaged([FromQuery] int ps = 8, [FromQuery] int page = 1, [FromQuery] string q = null)
         {
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
             try
             {
                 var response = (GetChildrenPagedQueryResponse)await _mediator.SendQuery(new GetChildrenPagedQuery() 
@@ -46,8 +39,11 @@ namespace Universal.EBI.Childs.API.Controllers
                     PageIndex = page, 
                     Query = q 
                 });
-                return response.pagedResult == null ? ProcessingMassage(StatusCodes.Status404NotFound, 
-                                                                        "Não existem dados para exibição.") : CustomResponse(response.pagedResult);
+                return (response.pagedResult == null) || 
+                       (response.pagedResult.List == null) || 
+                       (response.pagedResult.List.Count() == 0) ? 
+                       ProcessingMassage(StatusCodes.Status404NotFound,"Não existem dados para exibição.") : 
+                       CustomResponse(response.pagedResult);
             }
             catch (Exception ex)
             {
@@ -56,18 +52,40 @@ namespace Universal.EBI.Childs.API.Controllers
             }
         }
 
-        [HttpGet("api/child/{id}")]
+        [HttpGet("api/child/{id:guid}")]
         public async Task<IActionResult> GetChildById(Guid id)
         {
-            var child = await _childQueries.GetChildById(id);
-            return child == null ? NotFound() : CustomResponse(child);
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
+            try
+            {                
+                if (!ExcuteValidation(new GetChildByIdQueryValidation(), new GetChildByIdQuery { Id = id })) return CustomResponse(ValidationResult);
+                var response = (GetChildByIdQueryResponse)await _mediator.SendQuery(new GetChildByIdQuery { Id = id });               
+                return response.Child == null ? ProcessingMassage(StatusCodes.Status404NotFound,
+                                                                        "Não existem dados para exibição.") : CustomResponse(response.Child);
+            }
+            catch (Exception ex)
+            {
+                AddProcessingErrors(ex.Message);
+                return CustomResponse();
+            }
         }
 
         [HttpGet("api/child/{cpf:length(11)}", Name = "GetChildByCpf")]
         public async Task<ActionResult> GetChildByCpf(string cpf)
         {
-            var child = await _childQueries.GetChildByCpf(cpf);
-            return child == null ? NotFound() : CustomResponse(child);
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
+            try
+            {                
+                if (!ExcuteValidation(new GetChildByCpfQueryValidation(), new GetChildByCpfQuery { Cpf = cpf })) return CustomResponse(ValidationResult);
+                var response = (GetChildByCpfQueryResponse)await _mediator.SendQuery(new GetChildByCpfQuery { Cpf = cpf });
+                return response.Child == null ? ProcessingMassage(StatusCodes.Status404NotFound,
+                                                                        "Não existem dados para exibição.") : CustomResponse(response.Child);
+            }
+            catch (Exception ex)
+            {
+                AddProcessingErrors(ex.Message);
+                return CustomResponse();
+            }
         }
 
         [HttpPost("api/child/create")]
@@ -126,6 +144,13 @@ namespace Universal.EBI.Childs.API.Controllers
                 return CustomResponse();
             }
         }
-       
+
+        protected override bool ExcuteValidation<TV, TE>(TV validation, TE entity)
+        {
+            ValidationResult = validation.Validate(entity);
+            if (ValidationResult.IsValid) return true;
+            return false;
+        }
+
     }
 }

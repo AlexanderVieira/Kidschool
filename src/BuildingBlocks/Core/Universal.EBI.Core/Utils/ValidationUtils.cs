@@ -1,4 +1,5 @@
-﻿using Universal.EBI.Core.DomainObjects;
+﻿using System;
+using Universal.EBI.Core.DomainObjects;
 
 namespace Universal.EBI.Core.Utils
 {
@@ -63,6 +64,12 @@ namespace Universal.EBI.Core.Utils
             {
                 return null;
             }
+        }
+
+        public static bool ValidarSeGuidIsEmpty(Guid id)
+        {
+            if (id == Guid.Empty) return true;
+            return false;
         }
         
     }

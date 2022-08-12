@@ -1,6 +1,8 @@
-﻿using FluentValidation.Results;
+﻿using FluentValidation;
+using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Universal.EBI.Core.Comunication;
@@ -11,7 +13,12 @@ namespace Universal.EBI.WebAPI.Core.Controllers
     public abstract class BaseController : Controller
     {
         protected ICollection<string> Errors = new List<string>();
+        protected ValidationResult ValidationResult { get; set; }
 
+        protected virtual bool ExcuteValidation<TV, TE>(TV validacao, TE entidade) where TV : AbstractValidator<TE> where TE : class
+        {
+            throw new NotImplementedException();
+        }
         protected ActionResult CustomResponse(object result = null)
         {
             if (ValidOperation())
