@@ -25,10 +25,10 @@ namespace Universal.EBI.Childs.API.Application.Queries.Handlers
         {
             var pagedResult = await _childQueries.GetChilds(request.PageSize, request.PageIndex, request.Query);
 
-            var childrenDto = new List<ChildResponseDto>();
-            var pagedResultDto = new PagedResult<ChildResponseDto>
+            var childrenDto = new List<ChildDesignedQueryResponseDto>();
+            var pagedResultDto = new PagedResult<ChildDesignedQueryResponseDto>
             {
-                List = new List<ChildResponseDto>(),
+                List = new List<ChildDesignedQueryResponseDto>(),
                 PageIndex = pagedResult.PageIndex,
                 PageSize = pagedResult.PageSize,
                 Query = pagedResult.Query,
@@ -37,7 +37,7 @@ namespace Universal.EBI.Childs.API.Application.Queries.Handlers
 
             foreach (var child in pagedResult.List)
             {
-                var childResponse = _mapper.Map<ChildResponseDto>(child);
+                var childResponse = _mapper.Map<ChildDesignedQueryResponseDto>(child);
                 childrenDto.Add(childResponse);
             }
 

@@ -18,8 +18,10 @@ namespace Universal.EBI.Childs.API.Application.AutoMapper
 
             CreateMap<Responsible, ResponsibleResponseDto>()
             .ForPath(c => c.NumberCpf, opt => opt.MapFrom(s => s.Cpf.Number))
-            .ForPath(c => c.AddressEmail, opt => opt.MapFrom(s => s.Email.Address));          
-            
+            .ForPath(c => c.AddressEmail, opt => opt.MapFrom(s => s.Email.Address));
+
+            CreateMap<ChildDesignedQuery, ChildDesignedQueryResponseDto>();
+
         }
     }
 }

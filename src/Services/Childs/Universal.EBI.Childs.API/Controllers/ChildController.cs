@@ -10,7 +10,6 @@ using Universal.EBI.Childs.API.Application.DTOs;
 using System.Linq;
 using Universal.EBI.Childs.API.Application.Queries;
 using Microsoft.AspNetCore.Http;
-using Universal.EBI.Core.Utils;
 using FluentValidation.Results;
 using Universal.EBI.Childs.API.Application.Validations;
 
@@ -32,7 +31,7 @@ namespace Universal.EBI.Childs.API.Controllers
         {
             if (!ModelState.IsValid) return CustomResponse(ModelState);
             try
-            {
+            {                
                 var response = (GetChildrenPagedQueryResponse)await _mediator.SendQuery(new GetChildrenPagedQuery() 
                 { 
                     PageSize = ps,  
@@ -45,9 +44,9 @@ namespace Universal.EBI.Childs.API.Controllers
                        ProcessingMassage(StatusCodes.Status404NotFound,
                                          "Não existem dados para exibição.") : CustomResponse(response.pagedResult);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                AddProcessingErrors(ex.Message);
+                AddProcessingErrors("Sistema indisponível no momento. Tente mais tarde.");
                 return CustomResponse();
             }
         }

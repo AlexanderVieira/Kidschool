@@ -20,13 +20,22 @@ namespace Universal.EBI.Childs.API.Application.Queries
             _context = context;
         }
 
-        public async Task<PagedResult<Child>> GetChilds(int pageSize, int pageIndex, string query = null)
+        public async Task<PagedResult<ChildDesignedQuery>> GetChilds(int pageSize, int pageIndex, string query = null)
         {
             query = string.IsNullOrEmpty(query) ? "" : query;
             var filter = new BsonDocument { { "FullName", new BsonDocument { { "$regex", query }, { "$options", "i" } } } };
-            var children = await _context.Children.Find(filter).ToListAsync();
+            var collection = await _context.Children.Find(filter).ToListAsync();
+            var children =  collection.Select(x => 
+                new ChildDesignedQuery 
+                { 
+                    Id = x.Id, 
+                    FullName = x.FullName, 
+                    BirthDate = x.BirthDate, 
+                    GenderType = x.GenderType
+                    
+                }).ToList();
             var total = children.Count;
-            var pageResult = new PagedResult<Child>
+            var pageResult = new PagedResult<ChildDesignedQuery>
             {
                 List = children,
                 TotalResults = total,

@@ -7,7 +7,7 @@ namespace Universal.EBI.Childs.API.Application.Queries.Interfaces
 {
     public interface IChildQueries
     {
-        Task<PagedResult<Child>> GetChilds(int pageSize, int pageIndex, string query = null);
+        Task<PagedResult<ChildDesignedQuery>> GetChilds(int pageSize, int pageIndex, string query = null);
         Task<IEnumerable<Child>> GetChildsByName(string name);
         Task<Child> GetChildByCpf(string cpf);
         Task<Child> GetChildById(Guid id);

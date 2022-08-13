@@ -14,9 +14,9 @@ namespace Universal.EBI.Childs.API.Application.Queries
 
     public class GetChildrenPagedQueryResponse
     {
-        public PagedResult<ChildResponseDto> pagedResult { get; set; }
+        public PagedResult<ChildDesignedQueryResponseDto> pagedResult { get; set; }
 
-        public GetChildrenPagedQueryResponse(PagedResult<ChildResponseDto> pagedResult)
+        public GetChildrenPagedQueryResponse(PagedResult<ChildDesignedQueryResponseDto> pagedResult)
         {
             this.pagedResult = pagedResult;
         }

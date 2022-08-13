@@ -15,7 +15,7 @@ namespace Universal.EBI.WebAPI.Core.Controllers
     {
         protected ICollection<string> Errors = new List<string>();
         protected ValidationResult ValidationResult { get; set; }
-        protected string MessageSuccess { get; set; }
+        protected string SuccessMessage { get; set; }
 
         protected virtual bool ExcuteValidation<TV, TE>(TV validacao, TE entidade) where TV : AbstractValidator<TE> where TE : class
         {
@@ -25,16 +25,18 @@ namespace Universal.EBI.WebAPI.Core.Controllers
         {
             if (ValidOperation())
             {
-                if (result is int) return MessageHandler(result);
+                if (result is int) return MessageHandler((int)result);
                 return Ok(result);
             }
 
             if (result is int) return MessageHandler(result);
 
-            return BadRequest(new ValidationProblemDetails(new Dictionary<string, string[]>
+            return BadRequest(new ResponseResult
             {
-                { "Messages", Errors.ToArray() }
-            }));
+                Title = "Opa! Ocorreu um erro.",
+                Status = StatusCodes.Status500InternalServerError,
+                Errors = new ResponseErrorMessages { Messages = Errors.ToList() }
+            });
 
         }               
 
@@ -101,48 +103,55 @@ namespace Universal.EBI.WebAPI.Core.Controllers
 
         protected void AddMessageSuccess(string message)
         {
-            MessageSuccess = message;
+            SuccessMessage = message;
         }
 
-        private ActionResult MessageHandler(object result)
+        private ActionResult MessageHandler(object status)
         {
-            switch (result)
+            switch (status)
             {
                 case 200:
-                    return Ok(new
+                    return Ok(new ResponseResult
                     {
-                        Titulo = "Opa! Sucesso.",
-                        Codigo = StatusCodes.Status200OK,
-                        Sucesso = MessageSuccess
-                    });
+                        Title = "Opa! Sucesso.",
+                        Status = StatusCodes.Status200OK,
+                        SuccessMessage = SuccessMessage,
+                        Errors = new ResponseErrorMessages { Messages = Errors.ToList() }
+                    });                    
 
                 case 201:
-                    return Ok(new
+                    return Ok(new ResponseResult
                     {
-                        Titulo = "Opa! Sucesso.",
-                        Codigo = StatusCodes.Status201Created,
-                        Sucesso = MessageSuccess
-                    });
+                        Title = "Opa! Sucesso.",
+                        Status = StatusCodes.Status201Created,
+                        SuccessMessage = SuccessMessage,
+                        Errors = new ResponseErrorMessages { Messages = Errors.ToList() }
+                    });                   
 
                 case 204:
-                    return Ok(new
+                    return Ok(new ResponseResult
                     {
-                        Titulo = "Opa! Sucesso.",
-                        Codigo = StatusCodes.Status204NoContent,
-                        Sucesso = MessageSuccess
-                    });
+                        Title = "Opa! Sucesso.",
+                        Status = StatusCodes.Status204NoContent,
+                        SuccessMessage = SuccessMessage,
+                        Errors = new ResponseErrorMessages { Messages = Errors.ToList() }
+                    });                   
 
                 case 400:
-                    return BadRequest(new ValidationProblemDetails(new Dictionary<string, string[]>
-                        {
-                            { "Mensagens", Errors.ToArray() }
-                        }));
+                    return BadRequest(new ResponseResult
+                    {
+                        Title = "Opa! Ocorreu um erro.",
+                        Status = StatusCodes.Status400BadRequest,
+                        Errors = new ResponseErrorMessages { Messages = Errors.ToList() }
+                    });
 
                 case 401:
-                    return Unauthorized(new ValidationProblemDetails(new Dictionary<string, string[]>
-                        {
-                            { "Mensagens", Errors.ToArray() }
-                        }));
+                    return Unauthorized(new ResponseResult
+                    {
+                        Title = "Opa! Ocorreu um erro.",
+                        Status = StatusCodes.Status401Unauthorized,
+                        Errors = new ResponseErrorMessages { Messages = Errors.ToList() }
+                    });
 
                 case 403:
                     return new ObjectResult(new ResponseResult
@@ -161,12 +170,13 @@ namespace Universal.EBI.WebAPI.Core.Controllers
                     });
 
                 default:
-                    return new ObjectResult(new
+                    return new ObjectResult(new ResponseResult
                     {
-                        Titulo = "Opa! Ocorreu um erro.",
-                        Codigo = StatusCodes.Status500InternalServerError,
-                        Mensagem = "Sistema indisponível. Tente mais tarde."
+                        Title = "Opa! Ocorreu um erro.",
+                        Status = StatusCodes.Status500InternalServerError,
+                        Errors = new ResponseErrorMessages { Messages = Errors.ToList() }
                     });
+                    
             }
 
         }
