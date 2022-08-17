@@ -1,7 +1,6 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Driver;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Universal.EBI.Childs.API.Application.Queries.Interfaces;
@@ -20,12 +19,12 @@ namespace Universal.EBI.Childs.API.Application.Queries
             _context = context;
         }
 
-        public async Task<PagedResult<ChildDesignedQuery>> GetChilds(int pageSize, int pageIndex, string query = null)
+        public async Task<PagedResult<ChildDesignedQuery>> GetChildren(int pageSize, int pageIndex, string query = null)
         {
             query = string.IsNullOrEmpty(query) ? "" : query;
             var filter = new BsonDocument { { "FullName", new BsonDocument { { "$regex", query }, { "$options", "i" } } } };
             var collection = await _context.Children.Find(filter).ToListAsync();
-            var children =  collection.Select(x => 
+            var children =  collection.Where(x => x.Excluded == false).Select(x => 
                 new ChildDesignedQuery 
                 { 
                     Id = x.Id, 
@@ -34,6 +33,33 @@ namespace Universal.EBI.Childs.API.Application.Queries
                     GenderType = x.GenderType
                     
                 }).ToList();
+            var total = children.Count;
+            var pageResult = new PagedResult<ChildDesignedQuery>
+            {
+                List = children,
+                TotalResults = total,
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                Query = query
+            };
+
+            return pageResult;
+        }
+
+        public async Task<PagedResult<ChildDesignedQuery>> GetChildrenInactives(int pageSize, int pageIndex, string query = null)
+        {
+            query = string.IsNullOrEmpty(query) ? "" : query;
+            var filter = new BsonDocument { { "FullName", new BsonDocument { { "$regex", query }, { "$options", "i" } } } };
+            var collection = await _context.Children.Find(filter).ToListAsync();
+            var children = collection.Where(x => x.Excluded == true).Select(x =>
+               new ChildDesignedQuery
+               {
+                   Id = x.Id,
+                   FullName = x.FullName,
+                   BirthDate = x.BirthDate,
+                   GenderType = x.GenderType
+
+               }).ToList();
             var total = children.Count;
             var pageResult = new PagedResult<ChildDesignedQuery>
             {
@@ -57,13 +83,7 @@ namespace Universal.EBI.Childs.API.Application.Queries
         {
             var child = await _context.Children.Find(c => c.Id == id).FirstOrDefaultAsync();            
             return child;
-        }
-
-        public async Task<IEnumerable<Child>> GetChildsByName(string name)
-        {
-            var child = await _context.Children.Find(c => c.FirstName == name).ToListAsync();
-            return child;
-        }
+        }        
     }
 
 }

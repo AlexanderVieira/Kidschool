@@ -27,5 +27,17 @@ namespace Universal.EBI.Childs.API.Models
             Responsibles = new List<Responsible>();
             Phones = new List<Phone>();            
         }
+
+        public void Activate(bool excluded) { Excluded = excluded; }
+
+        public void Inactivate(bool excluded) { Excluded = excluded; }
+
+        public void UpadateEmail(string email) 
+        {
+            Email = new Email(email);
+        }
+
+
+
     }
 }

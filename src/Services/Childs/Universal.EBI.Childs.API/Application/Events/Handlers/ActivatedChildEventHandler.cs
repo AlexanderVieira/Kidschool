@@ -6,31 +6,30 @@ using System.Threading;
 using System.Threading.Tasks;
 using Universal.EBI.Childs.API.Models;
 using Universal.EBI.Childs.API.Models.Interfaces;
-using Universal.EBI.Core.DomainObjects.Exceptions;
 using Universal.EBI.MessageBus.Interfaces;
 
 namespace Universal.EBI.Childs.API.Application.Events
 {
-    public class RegisterChildEventHandler : INotificationHandler<RegisteredChildEvent>
+    public class ActivatedChildEventHandler : INotificationHandler<ActivatedChildEvent>
     {
         private readonly IMessageBus _bus;
-        private readonly IMapper _mapper;        
+        private readonly IMapper _mapper;
         private readonly ISincDatabase _sinc;
 
-        public RegisterChildEventHandler(IMessageBus bus, IMapper mapper, ISincDatabase sinc)
+        public ActivatedChildEventHandler(IMessageBus bus, IMapper mapper, ISincDatabase sinc)
         {
             _bus = bus;
             _mapper = mapper;
             _sinc = sinc;
         }
 
-        public Task Handle(RegisteredChildEvent notification, CancellationToken cancellationToken)
-        {              
+        public Task Handle(ActivatedChildEvent notification, CancellationToken cancellationToken)
+        {
             try
             {
                 var child = _mapper.Map<Child>(notification.ChildRequest);                
-                var result = _sinc.CreateChild(child).Result;
-                if (result == null) throw new ArgumentException("Erro ao tentar sincronizar base de dados.");
+                var result = _sinc.UpdateChild(child).Result;
+                if (!result) throw new ArgumentException("Erro ao tentar sincronizar base de dados.");
             }
             catch (MongoException)
             {

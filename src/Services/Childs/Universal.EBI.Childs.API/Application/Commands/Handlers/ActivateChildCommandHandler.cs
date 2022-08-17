@@ -10,21 +10,20 @@ using Universal.EBI.Childs.API.Application.DTOs;
 using Universal.EBI.Childs.API.Application.Events;
 using Universal.EBI.Childs.API.Application.Queries.Interfaces;
 using Universal.EBI.Childs.API.Extensions;
-using Universal.EBI.Childs.API.Models;
 using Universal.EBI.Childs.API.Models.Interfaces;
 using Universal.EBI.Core.Mediator.Interfaces;
 using Universal.EBI.Core.Messages;
 
 namespace Universal.EBI.Childs.API.Application.Commands
 {
-    public class UpdateChildCommandHandler : CommandHandler, IRequestHandler<UpdateChildCommand, ValidationResult>
+    public class ActivateChildCommandHandler : CommandHandler, IRequestHandler<ActivateChildCommand, ValidationResult>
     {
         private readonly IChildRepository _childRepository;
         private readonly IChildQueries _childQueries;
         private readonly IMediatorHandler _mediatorHandler;
         private readonly IMapper _mapper;
 
-        public UpdateChildCommandHandler(IChildRepository childRepository, 
+        public ActivateChildCommandHandler(IChildRepository childRepository, 
                                          IChildQueries childQueries, 
                                          IMediatorHandler mediatorHandler, 
                                          IMapper mapper)
@@ -35,43 +34,44 @@ namespace Universal.EBI.Childs.API.Application.Commands
             _mapper = mapper;
         }
 
-        public async Task<ValidationResult> Handle(UpdateChildCommand message, CancellationToken cancellationToken)
+        public async Task<ValidationResult> Handle(ActivateChildCommand message, CancellationToken cancellationToken)
         {
             if (!message.IsValid()) return message.ValidationResult;            
             
-            var updateChild = await _childQueries.GetChildById(message.ChildRequest.Id);            
+            var activateChild = await _childQueries.GetChildById(message.ChildRequest.Id);            
             
-            if (updateChild == null)
+            if (activateChild == null)
             {
                 AddError("Criança não encontrada.");
                 return ValidationResult;
-            }
+            }                       
 
-            message.ChildRequest.Responsibles.ToList().ForEach(r => r.LastModifiedDate = DateTime.Now.ToLocalTime());
-            var child = _mapper.Map<Child>(message.ChildRequest);                        
-            child.Address.ChildId = child.Id;
-            child.Phones.ToList().ForEach(c => c.Child = child);
-            child.Responsibles.ToList().ForEach(r => r.Address.ResponsibleId = r.Id);
-            child.Responsibles.ToList().ForEach(r => r.Phones.ToList().ForEach(p => p.Responsible = r));
-            child.Responsibles.ToList().ForEach(r => r.LastModifiedDate = DateTime.Now.ToLocalTime());
-                        
-            updateChild.FirstName = child.FirstName;
-            updateChild.LastName = child.LastName;
-            updateChild.FullName = child.FullName;
-            updateChild.Email = child.Email;
-            updateChild.Cpf = child.Cpf;
-            updateChild.Phones = child.Phones;
-            updateChild.Address = child.Address;
-            updateChild.BirthDate = child.BirthDate.Date.ToLocalTime();
-            updateChild.GenderType = child.GenderType;
-            updateChild.AgeGroupType = child.AgeGroupType;
-            updateChild.PhotoUrl = child.PhotoUrl;
-            updateChild.Excluded = child.Excluded;
-            updateChild.CreatedDate = child.CreatedDate;
-            updateChild.CreatedBy = child.CreatedBy;
-            updateChild.LastModifiedBy = child.LastModifiedBy;
-            updateChild.LastModifiedDate = child.LastModifiedDate;
-            updateChild.Responsibles = child.Responsibles;
+            //message.ChildRequest.Responsibles.ToList().ForEach(r => r.LastModifiedDate = DateTime.Now.ToLocalTime());
+            //var activateChild = _mapper.Map<Child>(message.ChildRequest);
+            activateChild.Activate(message.ChildRequest.Excluded);
+            activateChild.Address.ChildId = message.ChildRequest.Id;
+            activateChild.Phones.ToList().ForEach(c => c.Child = activateChild);
+            activateChild.Responsibles.ToList().ForEach(r => r.Address.ResponsibleId = r.Id);
+            activateChild.Responsibles.ToList().ForEach(r => r.Phones.ToList().ForEach(p => p.Responsible = r));
+            activateChild.Responsibles.ToList().ForEach(r => r.LastModifiedDate = DateTime.Now.ToLocalTime());
+
+            //updateChild.FirstName = child.FirstName;
+            //updateChild.LastName = child.LastName;
+            //updateChild.FullName = child.FullName;
+            //updateChild.Email = child.Email;
+            //updateChild.Cpf = child.Cpf;
+            //updateChild.Phones = child.Phones;
+            //updateChild.Address = child.Address;
+            //updateChild.BirthDate = child.BirthDate.Date.ToLocalTime();
+            //updateChild.GenderType = child.GenderType;
+            //updateChild.AgeGroupType = child.AgeGroupType;
+            //updateChild.PhotoUrl = child.PhotoUrl;
+            //updateChild.Excluded = child.Excluded;
+            //updateChild.CreatedDate = child.CreatedDate;
+            //updateChild.CreatedBy = child.CreatedBy;
+            //updateChild.LastModifiedBy = child.LastModifiedBy;
+            //updateChild.LastModifiedDate = child.LastModifiedDate;
+            //updateChild.Responsibles = child.Responsibles;
 
             var context = await _childRepository.GetContext();
             var strategy = context.Database.CreateExecutionStrategy();
@@ -82,7 +82,7 @@ namespace Universal.EBI.Childs.API.Application.Commands
                 {
                     try
                     {
-                        var result = await _childRepository.UpdateChild(updateChild);
+                        var result = await _childRepository.UpdateChild(activateChild);
                         if (result)
                         {
                             ValidationResult = await PersistData(_childRepository.UnitOfWork);
@@ -91,7 +91,7 @@ namespace Universal.EBI.Childs.API.Application.Commands
                             {
                                 //transaction.CreateSavepoint("RegisterChild");                                
 
-                                updateChild.AddEvent(new UpdatedChildEvent(new ChildRequestDto
+                                activateChild.AddEvent(new ActivatedChildEvent(new ChildRequestDto
                                 {
                                     Id = message.ChildRequest.Id,
                                     FirstName = message.ChildRequest.FirstName,
@@ -107,7 +107,7 @@ namespace Universal.EBI.Childs.API.Application.Commands
                                     CreatedBy = message.ChildRequest.CreatedBy,
                                     CreatedDate = message.ChildRequest.CreatedDate,
                                     LastModifiedBy = message.ChildRequest.LastModifiedBy,
-                                    LastModifiedDate = updateChild.LastModifiedDate,
+                                    LastModifiedDate = activateChild.LastModifiedDate,
                                     Phones = message.ChildRequest.Phones,
                                     Address = message.ChildRequest.Address,
                                     Responsibles = message.ChildRequest.Responsibles

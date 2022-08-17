@@ -14,13 +14,13 @@ namespace Universal.EBI.Childs.API.Application.Events
     {
         private readonly IMessageBus _bus;
         private readonly IMapper _mapper;
-        private readonly ISincDatabase _childNoSqlRepository;
+        private readonly ISincDatabase _sinc;
 
-        public UpdateChildEventHandler(IMessageBus bus, IMapper mapper, ISincDatabase childNoSqlRepository)
+        public UpdateChildEventHandler(IMessageBus bus, IMapper mapper, ISincDatabase sinc)
         {
             _bus = bus;
             _mapper = mapper;
-            _childNoSqlRepository = childNoSqlRepository;
+            _sinc = sinc;
         }
 
         public Task Handle(UpdatedChildEvent notification, CancellationToken cancellationToken)
@@ -28,8 +28,8 @@ namespace Universal.EBI.Childs.API.Application.Events
             try
             {
                 var child = _mapper.Map<Child>(notification.ChildRequest);                
-                var result = _childNoSqlRepository.UpdateChild(child).Result;
-                if (result) throw new ArgumentException("Erro ao tentar sincronizar base de dados.");
+                var result = _sinc.UpdateChild(child).Result;
+                if (!result) throw new ArgumentException("Erro ao tentar sincronizar base de dados.");
             }
             catch (MongoException)
             {

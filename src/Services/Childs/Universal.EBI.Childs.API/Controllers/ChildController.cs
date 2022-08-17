@@ -51,6 +51,31 @@ namespace Universal.EBI.Childs.API.Controllers
             }
         }
 
+        [HttpGet("api/children-inactives")]
+        public async Task<IActionResult> GetChildrenInactives([FromQuery] int ps = 8, [FromQuery] int page = 1, [FromQuery] string q = null)
+        {
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
+            try
+            {
+                var response = (GetChildrenPagedInactiveQueryResponse)await _mediator.SendQuery(new GetChildrenPagedInactiveQuery()
+                {
+                    PageSize = ps,
+                    PageIndex = page,
+                    Query = q
+                });
+                return (response.pagedResult == null) ||
+                       (response.pagedResult.List == null) ||
+                       (response.pagedResult.List.Count() == 0) ?
+                       ProcessingMassage(StatusCodes.Status404NotFound,
+                                         "Não existem dados para exibição.") : CustomResponse(response.pagedResult);
+            }
+            catch (Exception)
+            {
+                AddProcessingErrors("Sistema indisponível no momento. Tente mais tarde.");
+                return CustomResponse();
+            }
+        }
+
         [HttpGet("api/child/{id:guid}")]
         public async Task<IActionResult> GetChildById(Guid id)
         {
@@ -157,6 +182,56 @@ namespace Universal.EBI.Childs.API.Controllers
 
                 AddMessageSuccess("Criança excluída com sucesso.");
                 return CustomResponse(StatusCodes.Status204NoContent);                
+            }
+            catch (Exception ex)
+            {
+                AddProcessingErrors(ex.Message);
+                return CustomResponse();
+            }
+        }
+
+        [HttpPut("api/child/Inactivate")]
+        public async Task<IActionResult> InactivateChild([FromBody] ChildRequestDto request)
+        {
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
+            try
+            {
+                if (request == null) return CustomResponse();
+
+                request.LastModifiedBy = _user.GetUserEmail();
+                //request.Responsibles.ToList().ForEach(r => r.LastModifiedBy = _user.GetUserEmail());
+                var command = new InactivateChildCommand(request);
+
+                ValidationResult = await _mediator.SendCommand(command);
+                if (!ValidationResult.IsValid) return CustomResponse(ValidationResult);
+
+                AddMessageSuccess("Criança atualizada com sucesso.");
+                return CustomResponse(StatusCodes.Status200OK);
+            }
+            catch (Exception ex)
+            {
+                AddProcessingErrors(ex.Message);
+                return CustomResponse();
+            }
+        }
+
+        [HttpPut("api/child/Activate")]
+        public async Task<IActionResult> ActivateChild([FromBody] ChildRequestDto request)
+        {
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
+            try
+            {
+                if (request == null) return CustomResponse();
+
+                request.LastModifiedBy = _user.GetUserEmail();
+                //request.Responsibles.ToList().ForEach(r => r.LastModifiedBy = _user.GetUserEmail());
+                var command = new ActivateChildCommand(request);
+
+                ValidationResult = await _mediator.SendCommand(command);
+                if (!ValidationResult.IsValid) return CustomResponse(ValidationResult);
+
+                AddMessageSuccess("Criança atualizada com sucesso.");
+                return CustomResponse(StatusCodes.Status200OK);
             }
             catch (Exception ex)
             {

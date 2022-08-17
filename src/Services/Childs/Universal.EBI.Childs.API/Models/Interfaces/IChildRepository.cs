@@ -12,11 +12,10 @@ namespace Universal.EBI.Childs.API.Models.Interfaces
         Task<bool> CreateChild(Child child);
         Task<bool> UpdateChild(Child child);
         Task<bool> DeleteChild(Child child);
+        Task<bool> ActivateChild(Child child);
+        Task<bool> InactivateChild(Child child);
         Task<IDbContextTransaction> CriarTransacao();
         Task<IDbContextTransaction> CriarTransacao(IsolationLevel isolation);
-        Task<ChildDbContext> GetContext();        
-        //Task<Address> GetAddressById(Guid id);
-        //Task CreateAddress(Address address);        
-
+        Task<ChildDbContext> GetContext();
     }
 }

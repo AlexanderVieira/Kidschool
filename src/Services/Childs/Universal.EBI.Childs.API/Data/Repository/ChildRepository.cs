@@ -65,6 +65,18 @@ namespace Universal.EBI.Childs.API.Data.Repository
             return (recoveredResponsibles == null || recoveredResponsibles.Count == 0) && childRemoved.State.ToString().Equals("Deleted");
         }
 
+        public Task<bool> ActivateChild(Child child)
+        {            
+            var childUpdated = _context.Children.Update(child);
+            return Task.FromResult(childUpdated.State.ToString() == "Modified");
+        }
+
+        public Task<bool> InactivateChild(Child child)
+        {            
+            var childUpdated = _context.Children.Update(child);
+            return Task.FromResult(childUpdated.State.ToString() == "Modified");
+        }
+
         public void Dispose()
         {
             if (_context != null)
@@ -87,6 +99,6 @@ namespace Universal.EBI.Childs.API.Data.Repository
         public Task<ChildDbContext> GetContext()
         {
             return Task.FromResult(_context);
-        }
+        }        
     }
 }
