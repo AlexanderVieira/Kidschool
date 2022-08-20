@@ -10,7 +10,7 @@ namespace Universal.EBI.Childs.API.Application.AutoMapper
         {
             CreateMap<Child, ChildResponseDto>()
             .ForPath(c => c.NumberCpf, opt => opt.MapFrom(s => s.Cpf.Number))
-            .ForPath(c => c.AddressEmail, opt => opt.MapFrom(s => s.Email));
+            .ForPath(c => c.AddressEmail, opt => opt.MapFrom(s => s.Email.Address));
 
             CreateMap<Address, AddressResponseDto>();
 
@@ -21,6 +21,18 @@ namespace Universal.EBI.Childs.API.Application.AutoMapper
             .ForPath(c => c.AddressEmail, opt => opt.MapFrom(s => s.Email.Address));
 
             CreateMap<ChildDesignedQuery, ChildDesignedQueryResponseDto>();
+
+            CreateMap<Child, ChildRequestDto>()
+            .ForPath(c => c.NumberCpf, opt => opt.MapFrom(s => s.Cpf.Number))
+            .ForPath(c => c.AddressEmail, opt => opt.MapFrom(s => s.Email.Address));
+
+            CreateMap<Address, AddressRequestDto>();
+
+            CreateMap<Phone, PhoneRequestDto>();
+
+            CreateMap<Responsible, ResponsibleRequestDto>()
+            .ForPath(c => c.NumberCpf, opt => opt.MapFrom(s => s.Cpf.Number))
+            .ForPath(c => c.AddressEmail, opt => opt.MapFrom(s => s.Email.Address));
 
         }
     }

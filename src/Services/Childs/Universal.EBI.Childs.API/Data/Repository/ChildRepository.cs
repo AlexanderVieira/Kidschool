@@ -1,13 +1,11 @@
-﻿using Universal.EBI.Childs.API.Models.Interfaces;
-using System.Threading.Tasks;
-using System;
-using Universal.EBI.Core.Data.Interfaces;
-using Microsoft.EntityFrameworkCore;
-using Universal.EBI.Childs.API.Models;
-using Microsoft.EntityFrameworkCore.Storage;
+﻿using System;
 using System.Data;
-using System.Linq;
-using System.Collections.Generic;
+using System.Threading.Tasks;
+using Universal.EBI.Childs.API.Models.Interfaces;
+using Universal.EBI.Core.Data.Interfaces;
+using Universal.EBI.Childs.API.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Universal.EBI.Childs.API.Data.Repository
 {
@@ -21,6 +19,20 @@ namespace Universal.EBI.Childs.API.Data.Repository
             _context = context;
         }
 
+        public async Task<Child> GetChildById(Guid id)
+        {
+            var recoveredChild = await _context.Children
+                                     .Include(x => x.Address)
+                                     .Include(x => x.Phones)                                     
+                                     .Include(x => x.Responsibles)
+                                     .ThenInclude(x => x.Phones)
+                                     .Include(x => x.Responsibles)
+                                     .ThenInclude(x => x.Address)
+                                     .FirstOrDefaultAsync(c => c.Id == id); 
+
+            return recoveredChild;
+        }
+
         public async Task<bool> CreateChild(Child child)
         {
             var childCreated = await _context.AddAsync(child);
@@ -28,62 +40,37 @@ namespace Universal.EBI.Childs.API.Data.Repository
         }
 
         public Task<bool> UpdateChild(Child child)
-        {
+        {            
             _context.Responsibles.UpdateRange(child.Responsibles);
             child.Responsibles = null;
-            var childUpdated = _context.Children.Update(child);           
-            return Task.FromResult(childUpdated.State.ToString() == "Modified");
+            var childUpdated = _context.Children.Update(child);
+            return Task.FromResult(childUpdated.State.ToString() == "Modified");            
         }
 
-        public async Task<bool> DeleteChild(Child child)
+        public Task<bool> DeleteChild(Child child)
         {
-            var recoveredChild = await _context.Children                
-                                     .Include(x => x.Address)
-                                     .Include(x => x.Phones)
-                                     .Include(x => x.Responsibles)                                     
-                                     .ThenInclude(x => x.Phones)                                     
-                                     .FirstOrDefaultAsync(c => c.Id == child.Id);
-            
-            var recoveredResponsibles = new List<Responsible>();
-            foreach (var item in recoveredChild.Responsibles)
-            {
-                recoveredResponsibles = await _context.Responsibles
-                                     .Include(x => x.Address)
-                                     .Include(x => x.Phones)
-                                     .Where(x => x.Id == item.Id).ToListAsync();
-            }                  
-                     
-            _context.Responsibles.RemoveRange(recoveredResponsibles);
-
-            recoveredResponsibles = await _context.Responsibles
-                                     .Include(x => x.Address)
-                                     .Include(x => x.Phones)
-                                     .Where(c => c.Id == child.Id).ToListAsync();           
-
-            var childRemoved = _context.Children.Remove(recoveredChild);
-
-            return (recoveredResponsibles == null || recoveredResponsibles.Count == 0) && childRemoved.State.ToString().Equals("Deleted");
+            _context.Responsibles.RemoveRange(child.Responsibles);          
+            var childRemoved = _context.Children.Remove(child);            
+            return Task.FromResult(childRemoved.State.ToString().Equals("Deleted"));
         }
 
-        public Task<bool> ActivateChild(Child child)
+        public async Task<bool> ActivateChild(Child child)
         {            
+            var updated = await UpdateChild(child);
+            return updated;
+        }
+
+        public async Task<bool> InactivateChild(Child child)
+        {
+            var updated = await UpdateChild(child);
+            return updated;
+        }
+
+        public Task<bool> AddResponsible(Child child)
+        {
+            _context.Responsibles.AddRange(child.Responsibles);
             var childUpdated = _context.Children.Update(child);
             return Task.FromResult(childUpdated.State.ToString() == "Modified");
-        }
-
-        public Task<bool> InactivateChild(Child child)
-        {            
-            var childUpdated = _context.Children.Update(child);
-            return Task.FromResult(childUpdated.State.ToString() == "Modified");
-        }
-
-        public void Dispose()
-        {
-            if (_context != null)
-            {
-                _context.Dispose();
-            }
-            GC.SuppressFinalize(this);
         }
 
         public async Task<IDbContextTransaction> CriarTransacao()
@@ -99,6 +86,16 @@ namespace Universal.EBI.Childs.API.Data.Repository
         public Task<ChildDbContext> GetContext()
         {
             return Task.FromResult(_context);
-        }        
+        }
+
+        public void Dispose()
+        {
+            if (_context != null)
+            {
+                _context.Dispose();
+            }
+            GC.SuppressFinalize(this);
+        }
+        
     }
 }

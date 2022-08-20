@@ -125,13 +125,9 @@ namespace Universal.EBI.Childs.API.Controllers
             {
                 if (request == null) return CustomResponse();
                 
-                request.FullName = $"{request.FirstName} {request.LastName}";
                 request.CreatedBy = _user.GetUserEmail();
                 request.Responsibles.ToList().ForEach(r => r.CreatedBy = _user.GetUserEmail());
-                request.Responsibles.ToList().ForEach(r => r.FullName = $"{r.FirstName} {r.LastName}");
-                
-                var command = new RegisterChildCommand(request);
-                
+                var command = new RegisterChildCommand(request);                
                 ValidationResult = await _mediator.SendCommand(command);
                 if (!ValidationResult.IsValid) return CustomResponse(ValidationResult);
                 
@@ -154,10 +150,8 @@ namespace Universal.EBI.Childs.API.Controllers
             {
                 if (request == null) return CustomResponse();                
                 
-                request.LastModifiedBy = _user.GetUserEmail();
-                request.Responsibles.ToList().ForEach(r => r.LastModifiedBy = _user.GetUserEmail());
-                var command = new UpdateChildCommand(request);
-                
+                request.LastModifiedBy = _user.GetUserEmail();                
+                var command = new UpdateChildCommand(request);                
                 ValidationResult = await _mediator.SendCommand(command);
                 if (!ValidationResult.IsValid) return CustomResponse(ValidationResult);
 
@@ -198,14 +192,12 @@ namespace Universal.EBI.Childs.API.Controllers
             {
                 if (request == null) return CustomResponse();
 
-                request.LastModifiedBy = _user.GetUserEmail();
-                //request.Responsibles.ToList().ForEach(r => r.LastModifiedBy = _user.GetUserEmail());
+                request.LastModifiedBy = _user.GetUserEmail();                
                 var command = new InactivateChildCommand(request);
-
                 ValidationResult = await _mediator.SendCommand(command);
                 if (!ValidationResult.IsValid) return CustomResponse(ValidationResult);
 
-                AddMessageSuccess("Criança atualizada com sucesso.");
+                AddMessageSuccess("Criança inativada com sucesso.");
                 return CustomResponse(StatusCodes.Status200OK);
             }
             catch (Exception ex)
@@ -223,14 +215,35 @@ namespace Universal.EBI.Childs.API.Controllers
             {
                 if (request == null) return CustomResponse();
 
-                request.LastModifiedBy = _user.GetUserEmail();
-                //request.Responsibles.ToList().ForEach(r => r.LastModifiedBy = _user.GetUserEmail());
+                request.LastModifiedBy = _user.GetUserEmail();                
                 var command = new ActivateChildCommand(request);
-
                 ValidationResult = await _mediator.SendCommand(command);
                 if (!ValidationResult.IsValid) return CustomResponse(ValidationResult);
 
-                AddMessageSuccess("Criança atualizada com sucesso.");
+                AddMessageSuccess("Criança ativada com sucesso.");
+                return CustomResponse(StatusCodes.Status200OK);
+            }
+            catch (Exception ex)
+            {
+                AddProcessingErrors(ex.Message);
+                return CustomResponse();
+            }
+        }
+
+        [HttpPut("api/child/add/responsible")]
+        public async Task<IActionResult> AddResponsible([FromBody] AddResponsibleRequestDto request)
+        {
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
+            try
+            {
+                if (request == null) return CustomResponse();
+
+                request.ResponsibleDto.CreatedBy = _user.GetUserEmail();                
+                var command = new AddResponsibleCommand(request);
+                ValidationResult = await _mediator.SendCommand(command);
+                if (!ValidationResult.IsValid) return CustomResponse(ValidationResult);
+
+                AddMessageSuccess("Responsável adicionado com sucesso.");
                 return CustomResponse(StatusCodes.Status200OK);
             }
             catch (Exception ex)

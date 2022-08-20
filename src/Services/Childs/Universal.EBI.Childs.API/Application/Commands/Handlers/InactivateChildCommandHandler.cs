@@ -10,7 +10,6 @@ using Universal.EBI.Childs.API.Application.DTOs;
 using Universal.EBI.Childs.API.Application.Events;
 using Universal.EBI.Childs.API.Application.Queries.Interfaces;
 using Universal.EBI.Childs.API.Extensions;
-using Universal.EBI.Childs.API.Models;
 using Universal.EBI.Childs.API.Models.Interfaces;
 using Universal.EBI.Core.Mediator.Interfaces;
 using Universal.EBI.Core.Messages;
@@ -46,33 +45,13 @@ namespace Universal.EBI.Childs.API.Application.Commands
                 AddError("Criança não encontrada.");
                 return ValidationResult;
             }
-
-            //message.ChildRequest.Responsibles.ToList().ForEach(r => r.LastModifiedDate = DateTime.Now.ToLocalTime());
-            //var child = _mapper.Map<Child>(message.ChildRequest);
+                        
             inactiveChild.Inactivate(message.ChildRequest.Excluded);
             inactiveChild.Address.ChildId = message.ChildRequest.Id;
             inactiveChild.Phones.ToList().ForEach(c => c.Child = inactiveChild);
             inactiveChild.Responsibles.ToList().ForEach(r => r.Address.ResponsibleId = r.Id);
             inactiveChild.Responsibles.ToList().ForEach(r => r.Phones.ToList().ForEach(p => p.Responsible = r));
             inactiveChild.Responsibles.ToList().ForEach(r => r.LastModifiedDate = DateTime.Now.ToLocalTime());
-
-            //inactiveChild.FirstName = child.FirstName;
-            //inactiveChild.LastName = child.LastName;
-            //inactiveChild.FullName = child.FullName;
-            //inactiveChild.Email = child.Email;
-            //inactiveChild.Cpf = child.Cpf;
-            //inactiveChild.Phones = child.Phones;
-            //inactiveChild.Address = child.Address;
-            //inactiveChild.BirthDate = child.BirthDate;
-            //inactiveChild.GenderType = child.GenderType;
-            //inactiveChild.AgeGroupType = child.AgeGroupType;
-            //inactiveChild.PhotoUrl = child.PhotoUrl;
-            //inactiveChild.Excluded = child.Excluded;
-            //inactiveChild.CreatedDate = child.CreatedDate;
-            //inactiveChild.CreatedBy = child.CreatedBy;
-            //inactiveChild.LastModifiedBy = child.LastModifiedBy;
-            //inactiveChild.LastModifiedDate = child.LastModifiedDate;
-            //inactiveChild.Responsibles = child.Responsibles;
 
             var context = await _childRepository.GetContext();
             var strategy = context.Database.CreateExecutionStrategy();
@@ -83,15 +62,14 @@ namespace Universal.EBI.Childs.API.Application.Commands
                 {
                     try
                     {
-                        var result = await _childRepository.UpdateChild(inactiveChild);
+                        var result = await _childRepository.InactivateChild(inactiveChild);
                         if (result)
                         {
                             ValidationResult = await PersistData(_childRepository.UnitOfWork);
 
                             if (ValidationResult.IsValid)
                             {
-                                //transaction.CreateSavepoint("RegisterChild");                                
-
+                                //inactiveChild.AddEvent(new InactivatedChildEvent(_mapper.Map<ChildRequestDto>(inactiveChild)));
                                 inactiveChild.AddEvent(new InactivatedChildEvent(new ChildRequestDto
                                 {
                                     Id = message.ChildRequest.Id,
@@ -114,7 +92,7 @@ namespace Universal.EBI.Childs.API.Application.Commands
                                     Responsibles = message.ChildRequest.Responsibles
                                 }));
 
-                                await _mediatorHandler.PublishEvents_v2(context);
+                                await _mediatorHandler.PublishEvents(context);
                                 await transaction.CommitAsync(cancellationToken);
                             }
                             else
@@ -136,8 +114,7 @@ namespace Universal.EBI.Childs.API.Application.Commands
                         AddError($"{ex.GetType().Name} : Houve um erro ao persistir os dados.");
                     }
                     catch (Exception ex)
-                    {
-                        //await transaction.RollbackToSavepointAsync("RegisterChild");
+                    {                        
                         await transaction.RollbackAsync(cancellationToken);
                         AddError($"{ex.GetType().Name} : {ex.Message}");
                     }

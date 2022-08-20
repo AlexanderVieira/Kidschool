@@ -10,33 +10,8 @@ using Universal.EBI.Core.Mediator.Interfaces;
 namespace Universal.EBI.Childs.API.Extensions
 {
     public static class MediatorExtension
-    {
-        public static async Task PublishEvents<T>(this IMediatorHandler mediator, T context) where T : ChildContext
-        {
-            //FilterDefinition<Child> filter = Builders<Child>.Filter.ElemMatch(x => x.Notifications, y => y.AggregateId == System.Guid.Empty);
-            FilterDefinition<Child> filter = Builders<Child>.Filter.Where(x => x.Notifications != null && x.Notifications.Any());
-            var domainEntities = await context
-                                        .Children
-                                        .Find(filter)
-                                        .ToListAsync();
-
-            var domainEvents = domainEntities
-                .SelectMany(x => x.Notifications)
-                .ToList();
-
-            domainEntities.ToList()
-                .ForEach(entity => entity.ClearEvent());
-
-            var tasks = domainEvents
-                .Select(async (domainEvent) =>
-                {
-                    await mediator.PublishEvent(domainEvent);
-                });
-
-            await Task.WhenAll(tasks);
-        }
-
-        public static async Task PublishEvents_v2<T>(this IMediatorHandler mediator, T context) where T : DbContext
+    {        
+        public static async Task PublishEvents<T>(this IMediatorHandler mediator, T context) where T : DbContext
         {
             var domainEntities = context.ChangeTracker
                 .Entries<Entity>()

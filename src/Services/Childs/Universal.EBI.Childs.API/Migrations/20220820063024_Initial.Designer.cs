@@ -10,8 +10,8 @@ using Universal.EBI.Childs.API.Data;
 namespace Universal.EBI.Childs.API.Migrations
 {
     [DbContext(typeof(ChildDbContext))]
-    [Migration("20220807201712_MigrationInicial")]
-    partial class MigrationInicial
+    [Migration("20220820063024_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

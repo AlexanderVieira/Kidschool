@@ -1,5 +1,4 @@
 ﻿using System;
-using Universal.EBI.Core.DomainObjects;
 using Universal.EBI.Core.DomainObjects.Models.Enums;
 
 namespace Universal.EBI.Childs.API.Models

@@ -6,7 +6,7 @@ using Universal.EBI.Core.DomainObjects.Models.Enums;
 
 namespace Universal.EBI.Childs.API.Models
 {
-    public class Child : Entity, IAggregateRoot
+    public class Child : Entity, IAggregateRoot, ICloneable
     {     
         public string FirstName { get; set; }                
         public string LastName { get; set; }
@@ -30,14 +30,11 @@ namespace Universal.EBI.Childs.API.Models
 
         public void Activate(bool excluded) { Excluded = excluded; }
 
-        public void Inactivate(bool excluded) { Excluded = excluded; }
+        public void Inactivate(bool excluded) { Excluded = excluded; }        
 
-        public void UpadateEmail(string email) 
+        public object Clone()
         {
-            Email = new Email(email);
+            return MemberwiseClone();
         }
-
-
-
     }
 }

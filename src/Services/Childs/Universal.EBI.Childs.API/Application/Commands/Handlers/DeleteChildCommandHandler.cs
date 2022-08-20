@@ -35,10 +35,9 @@ namespace Universal.EBI.Childs.API.Application.Commands
         {
             if (!message.IsValid()) return message.ValidationResult;
             
-            //var existingChild = await _childQueries.GetChildById(message.Id);
+            var existingChild = await _childRepository.GetChildById(message.Id);
             var context = await _childRepository.GetContext();
-            var existingChild = context.Children.FirstOrDefault(c => c.Id == message.Id);            
-
+            
             if (existingChild == null)
             {
                 AddError("Criança não encontrado.");
@@ -65,7 +64,7 @@ namespace Universal.EBI.Childs.API.Application.Commands
                                     Id = existingChild.Id
                                 });
 
-                                //await _mediatorHandler.PublishEvents_v2(context);
+                                await _mediatorHandler.PublishEvents(context);
                                 await transaction.CommitAsync(cancellationToken);
                             }
                             else
@@ -87,8 +86,7 @@ namespace Universal.EBI.Childs.API.Application.Commands
                         AddError($"{ex.GetType().Name} : Houve um erro ao persistir os dados.");
                     }
                     catch (Exception ex)
-                    {
-                        //await transaction.RollbackToSavepointAsync("RegisterChild");
+                    {                        
                         await transaction.RollbackAsync(cancellationToken);
                         AddError($"{ex.GetType().Name} : {ex.Message}");
                     }

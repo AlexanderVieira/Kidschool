@@ -35,10 +35,13 @@ namespace Universal.EBI.Childs.API.Application.Commands
         {
             if (!message.IsValid()) return message.ValidationResult;
 
-            message.ChildRequest.Responsibles.ToList().ForEach(r => r.CreatedDate = DateTime.Now.ToLocalTime());
-            var child = _mapper.Map<Child>(message.ChildRequest);            
+            var child = _mapper.Map<Child>(message.ChildRequest);
+            child.FullName = $"{message.ChildRequest.FirstName} {message.ChildRequest.LastName}";
+            child.CreatedDate = DateTime.Now.ToLocalTime();
             child.Address.ChildId = child.Id;
             child.Phones.ToList().ForEach(c => c.Child = child);
+            child.Responsibles.ToList().ForEach(r => r.FullName = $"{r.FirstName} {r.LastName}");
+            child.Responsibles.ToList().ForEach(r => r.CreatedDate = DateTime.Now.ToLocalTime());
             child.Responsibles.ToList().ForEach(r => r.Address.ResponsibleId = r.Id);            
             child.Responsibles.ToList().ForEach(r => r.Phones.ToList().ForEach(p => p.Responsible = r));
 
@@ -59,30 +62,8 @@ namespace Universal.EBI.Childs.API.Application.Commands
                             if (ValidationResult.IsValid)
                             {
                                 //transaction.CreateSavepoint("RegisterChild");                                
-
-                                child.AddEvent(new RegisteredChildEvent(new ChildRequestDto
-                                {
-                                    Id = message.ChildRequest.Id,
-                                    FirstName = message.ChildRequest.FirstName,
-                                    LastName = message.ChildRequest.LastName,
-                                    FullName = child.FullName,
-                                    AddressEmail = message.ChildRequest.AddressEmail,
-                                    NumberCpf = message.ChildRequest.NumberCpf,
-                                    BirthDate = message.ChildRequest.BirthDate,
-                                    GenderType = message.ChildRequest.GenderType,
-                                    AgeGroupType = message.ChildRequest.AgeGroupType,
-                                    PhotoUrl = message.ChildRequest.PhotoUrl,
-                                    Excluded = message.ChildRequest.Excluded,
-                                    CreatedBy = message.ChildRequest.CreatedBy,
-                                    CreatedDate = child.CreatedDate,
-                                    LastModifiedBy = message.ChildRequest.LastModifiedBy,
-                                    LastModifiedDate = message.ChildRequest.LastModifiedDate,
-                                    Phones = message.ChildRequest.Phones,
-                                    Address = message.ChildRequest.Address,
-                                    Responsibles = message.ChildRequest.Responsibles
-                                }));
-
-                                await _mediatorHandler.PublishEvents_v2(context);
+                                child.AddEvent(new RegisteredChildEvent(_mapper.Map<ChildRequestDto>(child)));
+                                await _mediatorHandler.PublishEvents(context);
                                 await transaction.CommitAsync(cancellationToken);
                             }
                             else
@@ -104,8 +85,7 @@ namespace Universal.EBI.Childs.API.Application.Commands
                         AddError($"{ex.GetType().Name} : Houve um erro ao persistir os dados.");
                     }
                     catch (Exception ex)
-                    {
-                        //await transaction.RollbackToSavepointAsync("RegisterChild");
+                    {                        
                         await transaction.RollbackAsync(cancellationToken);
                         AddError($"{ex.GetType().Name} : {ex.Message}");                                        
                     }
