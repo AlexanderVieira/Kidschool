@@ -1,6 +1,7 @@
 version: '3.8'
 services: 
-  database:
+  childrendb:
+    container_name: childrendb
     image: mongo
     restart: always 
     environment: 
@@ -9,7 +10,7 @@ services:
     ports:
       - 27017:27017
     volumes: 
-      - my_data:/data/db 
+      - mongo_data:/data/db 
   
 volumes: 
-  my_data: 
+  mongo_data: 

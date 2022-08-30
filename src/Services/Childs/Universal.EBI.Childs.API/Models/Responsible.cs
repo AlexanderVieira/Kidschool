@@ -5,7 +5,7 @@ using Universal.EBI.Core.DomainObjects.Models.Enums;
 
 namespace Universal.EBI.Childs.API.Models
 {
-    public class Responsible : Entity 
+    public class Responsible : Entity, ICloneable
     {       
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -26,6 +26,10 @@ namespace Universal.EBI.Childs.API.Models
             Children = new List<Child>();
             Phones = new List<Phone>();
         }
-                
+
+        public object Clone()
+        {
+            return MemberwiseClone();
+        }
     }
 }

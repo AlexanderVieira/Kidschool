@@ -16,6 +16,7 @@ namespace Universal.EBI.Childs.API.Models.Interfaces
         Task<bool> ActivateChild(Child child);
         Task<bool> InactivateChild(Child child);
         Task<bool> AddResponsible(Child child);
+        Task<bool> DeleteResponsible(Child child);
         Task<IDbContextTransaction> CriarTransacao();
         Task<IDbContextTransaction> CriarTransacao(IsolationLevel isolation);
         Task<ChildDbContext> GetContext();

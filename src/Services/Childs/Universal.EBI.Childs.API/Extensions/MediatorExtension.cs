@@ -2,8 +2,6 @@
 using MongoDB.Driver;
 using System.Linq;
 using System.Threading.Tasks;
-using Universal.EBI.Childs.API.Data;
-using Universal.EBI.Childs.API.Models;
 using Universal.EBI.Core.DomainObjects;
 using Universal.EBI.Core.Mediator.Interfaces;
 

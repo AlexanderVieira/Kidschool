@@ -15,17 +15,18 @@ using Universal.EBI.Childs.API.Models;
 using Universal.EBI.Childs.API.Models.Interfaces;
 using Universal.EBI.Core.Mediator.Interfaces;
 using Universal.EBI.Core.Messages;
+using Universal.EBI.WebAPI.Core.Extensions;
 
 namespace Universal.EBI.Childs.API.Application.Commands.Handlers
 {
-    public class AddResponsibleCommandHandler : CommandHandler, IRequestHandler<AddResponsibleCommand, ValidationResult>
+    public class DeleteResponsibleCommandHandler : CommandHandler, IRequestHandler<DeleteResponsibleCommand, ValidationResult>
     {
         private readonly IChildRepository _childRepository;
         private readonly IChildQueries _childQueries;
         private readonly IMediatorHandler _mediatorHandler;
         private readonly IMapper _mapper;
 
-        public AddResponsibleCommandHandler(IChildRepository childRepository, 
+        public DeleteResponsibleCommandHandler(IChildRepository childRepository, 
                                          IChildQueries childQueries, 
                                          IMediatorHandler mediatorHandler, 
                                          IMapper mapper)
@@ -36,11 +37,11 @@ namespace Universal.EBI.Childs.API.Application.Commands.Handlers
             _mapper = mapper;
         }
 
-        public async Task<ValidationResult> Handle(AddResponsibleCommand message, CancellationToken cancellationToken)
+        public async Task<ValidationResult> Handle(DeleteResponsibleCommand message, CancellationToken cancellationToken)
         {
             if (!message.IsValid()) return message.ValidationResult;            
             
-            var recoveredChild = await _childRepository.GetChildById(message.Request.ChildId);
+            var recoveredChild = await _childQueries.GetChildById(message.Request.ChildId);
             if (recoveredChild == null)
             {
                 AddError("Criança não encontrada.");
@@ -48,27 +49,35 @@ namespace Universal.EBI.Childs.API.Application.Commands.Handlers
             }                       
                         
             var responsible = _mapper.Map<Responsible>(message.Request.ResponsibleDto);
-            responsible.CreatedDate = DateTime.Now.ToLocalTime();
-            responsible.FullName = $"{responsible.FirstName} {responsible.LastName}";
-
+           
             var aux = new List<Responsible>();
-            foreach (var item in recoveredChild.Responsibles)
-            {
-                aux.Add(item);
-            }
-            aux.Add(responsible);
-            var updateChild = new Child();
-            updateChild = (Child)recoveredChild.Clone();
-            updateChild.Responsibles.Clear();
-            updateChild.Responsibles.Add(responsible);                        
-            updateChild.Address.ChildId = message.Request.ChildId;
-            updateChild.Phones.ToList().ForEach(c => c.Child = updateChild);
-            updateChild.Responsibles.ToList().ForEach(r => r.Address.ResponsibleId = r.Id);
-            updateChild.Responsibles.ToList().ForEach(r => r.Address.Responsible = r);
-            updateChild.Responsibles.ToList().ForEach(r => r.Phones.ToList().ForEach(p => p.Responsible = r));
-
-            recoveredChild.Responsibles = aux;
+            var existsResponsible = recoveredChild.Responsibles.Contains(responsible);            
+            if (!existsResponsible) { AddError("Responsável não encontrado."); return ValidationResult; }
             
+            aux.Add(responsible);
+            //recoveredChild.Responsibles.Remove(responsible);
+            //var aux1 = new List<Responsible>();
+            //aux1.AddRange(recoveredChild.Responsibles);
+
+            //var updateChild = new Child();
+            //updateChild = (Child)recoveredChild.Clone();            
+            //updateChild.Responsibles.Remove(responsible);
+
+            //updateChild.Responsibles.Clear();
+            //updateChild.Responsibles = aux1;
+            //updateChild.Address.ChildId = message.Request.ChildId;
+            //updateChild.Phones.ToList().ForEach(c => c.Child = updateChild);
+            //updateChild.Responsibles.ToList().ForEach(r => r.Address.ResponsibleId = r.Id);
+            //updateChild.Responsibles.ToList().ForEach(r => r.Address.Responsible = r);
+            //updateChild.Responsibles.ToList().ForEach(r => r.Phones.ToList().ForEach(p => p.Responsible = r));
+
+            var toRemoveResponsibleFromChild = new Child();
+            toRemoveResponsibleFromChild = (Child)recoveredChild.Clone();
+            toRemoveResponsibleFromChild.Responsibles = aux;
+
+            recoveredChild.Responsibles.Remove(responsible);
+            //recoveredChild.Responsibles = aux;
+
             var context = await _childRepository.GetContext();
             var strategy = context.Database.CreateExecutionStrategy();
 
@@ -78,14 +87,14 @@ namespace Universal.EBI.Childs.API.Application.Commands.Handlers
                 {
                     try
                     {
-                        var result = await _childRepository.AddResponsible(updateChild);
+                        var result = await _childRepository.DeleteResponsible(toRemoveResponsibleFromChild);
                         if (result)
                         {
                             ValidationResult = await PersistData(_childRepository.UnitOfWork);
-
+                            
                             if (ValidationResult.IsValid)
                             {
-                                updateChild.AddEvent(new AddedResponsibleEvent(_mapper.Map<ChildRequestDto>(recoveredChild)));
+                                toRemoveResponsibleFromChild.AddEvent(new DeletedResponsibleEvent(_mapper.Map<ChildRequestDto>(recoveredChild)));
                                 await _mediatorHandler.PublishEvents(context);
                                 await transaction.CommitAsync(cancellationToken);
                             }

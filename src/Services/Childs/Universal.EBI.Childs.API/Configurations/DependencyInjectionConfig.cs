@@ -1,10 +1,6 @@
-﻿using FluentValidation.Results;
-using MediatR;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Universal.EBI.Childs.API.Application.AutoMapper;
-using Universal.EBI.Childs.API.Application.Commands;
-using Universal.EBI.Childs.API.Application.Events;
 using Universal.EBI.Childs.API.Application.Queries;
 using Universal.EBI.Childs.API.Application.Queries.Interfaces;
 using Universal.EBI.Childs.API.Data;

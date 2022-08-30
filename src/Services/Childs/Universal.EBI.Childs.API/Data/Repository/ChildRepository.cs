@@ -6,6 +6,8 @@ using Universal.EBI.Core.Data.Interfaces;
 using Universal.EBI.Childs.API.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Universal.EBI.Childs.API.Data.Repository
 {
@@ -71,6 +73,16 @@ namespace Universal.EBI.Childs.API.Data.Repository
             _context.Responsibles.AddRange(child.Responsibles);
             var childUpdated = _context.Children.Update(child);
             return Task.FromResult(childUpdated.State.ToString() == "Modified");
+        }
+
+        public Task<bool> DeleteResponsible(Child child)
+        {
+            //var addressRemoved = _context.Addresses.Remove(child.Responsibles[0].Address);
+            //_context.Phones.RemoveRange(child.Responsibles[0].Phones);            
+            _context.Database.ExecuteSqlInterpolated($"DELETE FROM ChildResponsible WHERE (ResponsiblesId = {child.Responsibles[0].Id}) AND (ChildrenId = {child.Id})");
+            var responsibleRemoved = _context.Responsibles.Remove(child.Responsibles[0]);
+            var childUpdated = _context.Children.Update(child);
+            return Task.FromResult(responsibleRemoved.State.ToString().Equals("Deleted"));            
         }
 
         public async Task<IDbContextTransaction> CriarTransacao()

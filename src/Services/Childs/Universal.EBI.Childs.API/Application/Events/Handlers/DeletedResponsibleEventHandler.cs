@@ -10,20 +10,20 @@ using Universal.EBI.MessageBus.Interfaces;
 
 namespace Universal.EBI.Childs.API.Application.Events.Handlers
 {
-    public class InactivatedChildEventHandler : INotificationHandler<InactivatedChildEvent>
+    public class DeletedResponsibleEventHandler : INotificationHandler<DeletedResponsibleEvent>
     {
         private readonly IMessageBus _bus;
         private readonly IMapper _mapper;
         private readonly ISincDatabase _sinc;
 
-        public InactivatedChildEventHandler(IMessageBus bus, IMapper mapper, ISincDatabase sinc)
+        public DeletedResponsibleEventHandler(IMessageBus bus, IMapper mapper, ISincDatabase sinc)
         {
             _bus = bus;
             _mapper = mapper;
             _sinc = sinc;
         }
 
-        public Task Handle(InactivatedChildEvent notification, CancellationToken cancellationToken)
+        public Task Handle(DeletedResponsibleEvent notification, CancellationToken cancellationToken)
         {
             try
             {

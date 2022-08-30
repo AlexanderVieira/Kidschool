@@ -7,7 +7,7 @@ using Universal.EBI.Childs.API.Models;
 using Universal.EBI.Childs.API.Models.Interfaces;
 using Universal.EBI.MessageBus.Interfaces;
 
-namespace Universal.EBI.Childs.API.Application.Events
+namespace Universal.EBI.Childs.API.Application.Events.Handlers
 {
     public class DeleteChildEventHandler : INotificationHandler<DeletedChildEvent>
     {

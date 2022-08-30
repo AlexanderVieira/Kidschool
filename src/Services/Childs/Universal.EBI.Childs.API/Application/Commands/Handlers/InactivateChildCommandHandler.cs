@@ -14,7 +14,7 @@ using Universal.EBI.Childs.API.Models.Interfaces;
 using Universal.EBI.Core.Mediator.Interfaces;
 using Universal.EBI.Core.Messages;
 
-namespace Universal.EBI.Childs.API.Application.Commands
+namespace Universal.EBI.Childs.API.Application.Commands.Handlers
 {
     public class InactivateChildCommandHandler : CommandHandler, IRequestHandler<InactivateChildCommand, ValidationResult>
     {

@@ -2,7 +2,7 @@
 
 namespace Universal.EBI.Childs.API.Models
 {
-    public class Address
+    public class Address : ICloneable
     {
         public Guid Id { get; set; }
         public string PublicPlace { get; set; }
@@ -20,6 +20,11 @@ namespace Universal.EBI.Childs.API.Models
 
         public Address() 
         {
-        }       
+        }
+
+        public object Clone()
+        {
+            return MemberwiseClone();   
+        }
     }
 }

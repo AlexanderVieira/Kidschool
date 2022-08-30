@@ -23,8 +23,8 @@ namespace Universal.EBI.Childs.API.Data
         public ChildDbContext(DbContextOptions<ChildDbContext> options, IMediatorHandler mediatorHandler) : base(options)
         {
             _mediatorHandler = mediatorHandler;
-            //ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTrackingWithIdentityResolution;
-            //ChangeTracker.AutoDetectChangesEnabled = true;
+            ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.TrackAll;
+            ChangeTracker.AutoDetectChangesEnabled = true;
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

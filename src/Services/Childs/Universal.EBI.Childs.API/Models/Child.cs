@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Universal.EBI.Core.DomainObjects;
 using Universal.EBI.Core.DomainObjects.Interfaces;
 using Universal.EBI.Core.DomainObjects.Models.Enums;
@@ -34,7 +35,12 @@ namespace Universal.EBI.Childs.API.Models
 
         public object Clone()
         {
-            return MemberwiseClone();
+
+            var child = (Child)MemberwiseClone();
+            child.Address = (Address)Address.Clone();
+            Responsibles.ToList().ForEach(r => r.Clone());
+            child.Responsibles = Responsibles;
+            return child;
         }
     }
 }

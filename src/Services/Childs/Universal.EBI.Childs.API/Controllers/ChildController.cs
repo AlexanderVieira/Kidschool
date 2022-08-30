@@ -125,8 +125,13 @@ namespace Universal.EBI.Childs.API.Controllers
             {
                 if (request == null) return CustomResponse();
                 
+                //request.FullName = $"{request.FirstName} {request.LastName}";
                 request.CreatedBy = _user.GetUserEmail();
+                //request.CreatedDate = DateTime.Now.ToLocalTime();
                 request.Responsibles.ToList().ForEach(r => r.CreatedBy = _user.GetUserEmail());
+                //request.Responsibles.ToList().ForEach(r => r.CreatedDate = DateTime.Now.ToLocalTime());
+                //request.Responsibles.ToList().ForEach(r => r.FullName = $"{r.FirstName} {r.LastName}");
+
                 var command = new RegisterChildCommand(request);                
                 ValidationResult = await _mediator.SendCommand(command);
                 if (!ValidationResult.IsValid) return CustomResponse(ValidationResult);
@@ -244,6 +249,30 @@ namespace Universal.EBI.Childs.API.Controllers
                 if (!ValidationResult.IsValid) return CustomResponse(ValidationResult);
 
                 AddMessageSuccess("Responsável adicionado com sucesso.");
+                return CustomResponse(StatusCodes.Status200OK);
+            }
+            catch (Exception ex)
+            {
+                AddProcessingErrors(ex.Message);
+                return CustomResponse();
+            }
+        }
+
+
+        [HttpPut("api/child/delete/responsible")]
+        public async Task<IActionResult> DeleteResponsible([FromBody] DeleteResponsibleRequestDto request)
+        {
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
+            try
+            {
+                if (request == null) return CustomResponse();
+
+                //request.ResponsibleDto.CreatedBy = _user.GetUserEmail();
+                var command = new DeleteResponsibleCommand(request);
+                ValidationResult = await _mediator.SendCommand(command);
+                if (!ValidationResult.IsValid) return CustomResponse(ValidationResult);
+
+                AddMessageSuccess("Responsável excluído com sucesso.");
                 return CustomResponse(StatusCodes.Status200OK);
             }
             catch (Exception ex)

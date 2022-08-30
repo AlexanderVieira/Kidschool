@@ -8,7 +8,7 @@ using Universal.EBI.Childs.API.Models;
 using Universal.EBI.Childs.API.Models.Interfaces;
 using Universal.EBI.MessageBus.Interfaces;
 
-namespace Universal.EBI.Childs.API.Application.Events
+namespace Universal.EBI.Childs.API.Application.Events.Handlers
 {
     public class AddedResponsibleEventHandler : INotificationHandler<AddedResponsibleEvent>
     {
@@ -28,8 +28,8 @@ namespace Universal.EBI.Childs.API.Application.Events
             try
             {
                 var child = _mapper.Map<Child>(notification.ChildRequest);                
-                var result = _sinc.UpdateChild(child).Result;
-                if (!result) throw new ArgumentException("Erro ao tentar sincronizar base de dados.");
+                var result = _sinc.CreateChild(child).Result;
+                //if (!result) throw new ArgumentException("Erro ao tentar sincronizar base de dados.");
             }
             catch (MongoException)
             {
