@@ -1,4 +1,5 @@
 ﻿using System;
+using Universal.EBI.Childs.API.Application.DTOs;
 using Universal.EBI.Childs.API.Application.Validations;
 using Universal.EBI.Core.Messages;
 namespace Universal.EBI.Childs.API.Application.Commands

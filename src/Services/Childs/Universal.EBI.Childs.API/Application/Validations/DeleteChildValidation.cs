@@ -1,5 +1,4 @@
-﻿using Universal.EBI.Core.DomainObjects;
-using FluentValidation;
+﻿using FluentValidation;
 using Universal.EBI.Childs.API.Application.Commands;
 using System;
 

@@ -2,16 +2,16 @@
 using Universal.EBI.Responsibles.API.Models.Interfaces;
 using System.Threading.Tasks;
 using System;
-using Universal.EBI.Core.Data.Interfaces;
 using Universal.EBI.Core.DomainObjects.Models;
+using Universal.EBI.Core.Data.Interfaces;
 
 namespace Universal.EBI.Responsibles.API.Data.Repository
 {
     public class ResponsibleRepository : IResponsibleRepository
     {
-        private readonly IResponsibleContext _context;        
+        private readonly IResponsibleContext _context;
 
-        public IUnitOfWork UnitOfWork => _context;
+        public IUnitOfWork UnitOfWork => throw new NotImplementedException();
 
         public ResponsibleRepository(IResponsibleContext context)
         {
@@ -51,6 +51,6 @@ namespace Universal.EBI.Responsibles.API.Data.Repository
         public void Dispose()
         {
             //_context?.Commit().Dispose();
-        }
+        }        
     }
 }

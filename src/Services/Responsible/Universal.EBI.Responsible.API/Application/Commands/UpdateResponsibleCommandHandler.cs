@@ -64,7 +64,7 @@ namespace Universal.EBI.Responsibles.API.Application.Commands
                 Childs = message.Childs
             });
 
-            return await PersistData(_responsibleRepository.UnitOfWork, success);
+            return await PersistData(_responsibleRepository.UnitOfWork);
         }
     }
 }

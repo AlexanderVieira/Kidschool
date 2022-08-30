@@ -15,6 +15,11 @@ namespace Universal.EBI.Core.Mediator
             _mediator = mediator;
         }
 
+        public async Task<object> SendQuery<T>(T query) where T : Query
+        {
+            return await _mediator.Send(query);
+        }
+
         public async Task PublishEvent<T>(T myEvent) where T : Event
         {
             await _mediator.Publish(myEvent);

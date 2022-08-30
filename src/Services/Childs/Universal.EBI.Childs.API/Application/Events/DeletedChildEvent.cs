@@ -6,6 +6,5 @@ namespace Universal.EBI.Childs.API.Application.Events
     public class DeletedChildEvent : Event
     {
         public Guid Id { get; set; }        
-       
     }
 }

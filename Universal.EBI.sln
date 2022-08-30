@@ -59,6 +59,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4.7.ClassRoom", "4.7.ClassR
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Universal.EBI.Classrooms.API", "src\Services\Classroom\Universal.EBI.Classroom.API\Universal.EBI.Classrooms.API.csproj", "{EBA31504-D836-42C4-AEEA-9EC2EFFF10B0}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2BD5497A-5A57-4B98-B097-424FF3929678}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

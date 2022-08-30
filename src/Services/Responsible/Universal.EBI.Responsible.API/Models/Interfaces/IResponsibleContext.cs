@@ -4,7 +4,7 @@ using Universal.EBI.Core.DomainObjects.Models;
 
 namespace Universal.EBI.Responsibles.API.Models.Interfaces
 {
-    public interface IResponsibleContext : IUnitOfWork
+    public interface IResponsibleContext
     {        
         IMongoCollection<Responsible> Responsibles { get; }
     }

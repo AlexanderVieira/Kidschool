@@ -2,8 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Universal.EBI.Childs.API.Models;
 using Universal.EBI.Core.DomainObjects;
-using Universal.EBI.Core.DomainObjects.Models;
 using Universal.EBI.Core.DomainObjects.Models.Enums;
 
 namespace Universal.EBI.Childs.API.Data
@@ -31,14 +31,14 @@ namespace Universal.EBI.Childs.API.Data
                     FullName = "Jonathan de Sales da Silva",
                     Address = new Address(),
                     AgeGroupType = (AgeGroupType)Enum.Parse(typeof(AgeGroupType), "Juniors", true),
-                    BirthDate = new DateTime(2012, 8, 29).Date,
+                    BirthDate = new DateTime(2012, 8, 29).Date.ToLocalTime(),
                     Cpf = null,
                     Email = null,
                     GenderType = (GenderType)Enum.Parse(typeof(GenderType), "M", true),
-                    CreatedDate = DateTime.Now,
+                    CreatedDate = DateTime.Now.ToLocalTime(),
                     CreatedBy = "Admin",
-                    HoraryOfEntry = null,
-                    HoraryOfExit = null,
+                    //HoraryOfEntry = null,
+                    //HoraryOfExit = null,
                     LastModifiedDate = null,
                     LastModifiedBy = null,
                     Excluded = false,
@@ -46,37 +46,37 @@ namespace Universal.EBI.Childs.API.Data
                     { 
                         new Responsible 
                         { 
-                            Id = Guid.NewGuid(), 
-                            FirstName = "Alexander", 
-                            LastName = "Vieira da Silva", 
+                            Id = Guid.NewGuid(),
+                            FirstName = "Alexander",
+                            LastName = "Vieira da Silva",
                             FullName = "Alexander Vieira da Silva",
                             Address= new Address(),
-                            BirthDate = new DateTime(1976,10,18).Date,
+                            BirthDate = new DateTime(1976,10,18).Date.ToLocalTime(),
                             Cpf = new Cpf("30641168780"),
                             Email = new Email("alexander@teste.com"),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.Now.ToLocalTime(),
                             CreatedBy = "Admin",
                             Excluded = false,
                             GenderType = (GenderType)Enum.Parse(typeof(GenderType), "M", true),
                             KinshipType = (KinshipType)Enum.Parse(typeof(KinshipType), "Dad", true),
                             Phones = new List<Phone>
-                            { 
-                                new Phone 
-                                { 
-                                    Id = Guid.NewGuid(), 
-                                    Number = "21966296441", 
-                                    PhoneType = (PhoneType)Enum.Parse(typeof(PhoneType), "CellPhone", true) 
-                                } 
+                            {
+                                new Phone
+                                {
+                                    Id = Guid.NewGuid(),
+                                    Number = "21966296441",
+                                    PhoneType = (PhoneType)Enum.Parse(typeof(PhoneType), "CellPhone", true)
+                                }
                             },
                             LastModifiedDate = null,
                             LastModifiedBy = null,
                             PhotoUrl = null,
-                            Children = new List<Child>()
+                            //Children = new List<Child>()
                         }
                     },
                     Phones = new List<Phone>(),
                     PhotoUrl = null,
-                    ClassroomId = null
+                    //ClassroomId = null
                     
                 },
                 new Child()
@@ -87,14 +87,14 @@ namespace Universal.EBI.Childs.API.Data
                     FullName = "Miguel Gonçalves",
                     Address = new Address(),
                     AgeGroupType = (AgeGroupType)Enum.Parse(typeof(AgeGroupType), "Juniors", true),
-                    BirthDate = new DateTime(2015, 1, 01).Date,
+                    BirthDate = new DateTime(2015, 1, 01).Date.ToLocalTime(),
                     Cpf = null,
                     Email = null,
                     GenderType = (GenderType)Enum.Parse(typeof(GenderType), "M", true),
-                    CreatedDate = DateTime.Now,
+                    CreatedDate = DateTime.Now.ToLocalTime(),
                     CreatedBy = "Admin",
-                    HoraryOfEntry = null,
-                    HoraryOfExit = null,
+                    //HoraryOfEntry = null,
+                    //HoraryOfExit = null,
                     LastModifiedDate = null,
                     LastModifiedBy = null,
                     Excluded = false,
@@ -107,10 +107,10 @@ namespace Universal.EBI.Childs.API.Data
                             LastName = "Campanha",
                             FullName = "Diego Campanha",
                             Address= new Address(),
-                            BirthDate = new DateTime(1984,1,01).Date,
+                            BirthDate = new DateTime(1984,1,01).Date.ToLocalTime(),
                             Cpf = new Cpf("46526258719"),
                             Email = new Email("diego@teste.com"),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.Now.ToLocalTime(),
                             CreatedBy = "Admin",
                             Excluded = false,
                             GenderType = (GenderType)Enum.Parse(typeof(GenderType), "M", true),
@@ -127,12 +127,12 @@ namespace Universal.EBI.Childs.API.Data
                             LastModifiedDate = null,
                             LastModifiedBy = null,
                             PhotoUrl = null,
-                            Children = new List<Child>()
+                            //Children = new List<Child>()
                         }
                     },
                     Phones = new List<Phone>(),
                     PhotoUrl = null,
-                    ClassroomId = null
+                    //ClassroomId = null
 
                 },
                 new Child()
@@ -143,14 +143,14 @@ namespace Universal.EBI.Childs.API.Data
                     FullName = "Guilherme Gonçalves Dias",
                     Address = new Address(),
                     AgeGroupType = (AgeGroupType)Enum.Parse(typeof(AgeGroupType), "Juniors", true),
-                    BirthDate = new DateTime(2014, 2, 01).Date,
+                    BirthDate = new DateTime(2014, 2, 01).Date.ToLocalTime(),
                     Cpf = null,
                     Email = null,
                     GenderType = (GenderType)Enum.Parse(typeof(GenderType), "M", true),
-                    CreatedDate = DateTime.Now,
+                    CreatedDate = DateTime.Now.ToLocalTime(),
                     CreatedBy = "Admin",
-                    HoraryOfEntry = null,
-                    HoraryOfExit = null,
+                    //HoraryOfEntry = null,
+                    //HoraryOfExit = null,
                     LastModifiedDate = null,
                     LastModifiedBy = null,
                     Excluded = false,
@@ -163,10 +163,10 @@ namespace Universal.EBI.Childs.API.Data
                             LastName = "Gonçalves Dias",
                             FullName = "Rodrigo Gonçalves Dias",
                             Address= new Address(),
-                            BirthDate = new DateTime(1976,10,18).Date,
+                            BirthDate = new DateTime(1976,10,18).Date.ToLocalTime(),
                             Cpf = new Cpf("66736913799"),
                             Email = new Email("rodrigo@teste.com"),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.Now.ToLocalTime(),
                             CreatedBy = "Admin",
                             Excluded = false,
                             GenderType = (GenderType)Enum.Parse(typeof(GenderType), "M", true),
@@ -183,12 +183,12 @@ namespace Universal.EBI.Childs.API.Data
                             LastModifiedDate = null,
                             LastModifiedBy = null,
                             PhotoUrl = null,
-                            Children = new List<Child>()
+                            //Children = new List<Child>()
                         }
                     },
                     Phones = new List<Phone>(),
                     PhotoUrl = null,
-                    ClassroomId = null
+                    //ClassroomId = null
 
                 }
             };

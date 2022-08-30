@@ -14,7 +14,7 @@ namespace Universal.EBI.Core.DomainObjects
 
         public Cpf(string number)
         {
-            if (!CpfValid(number)) throw new DomainException("Resources.MSG_ERRO_CPF_INVALIDO");
+            if (!CpfValid(number)) throw new DomainException("CPF inválido.");
             Number = number;
         }
 

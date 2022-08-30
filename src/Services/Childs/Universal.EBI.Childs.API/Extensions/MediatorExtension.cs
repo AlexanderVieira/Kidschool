@@ -1,29 +1,26 @@
-﻿using MongoDB.Driver;
+﻿using Microsoft.EntityFrameworkCore;
+using MongoDB.Driver;
 using System.Linq;
 using System.Threading.Tasks;
-using Universal.EBI.Childs.API.Data;
-using Universal.EBI.Core.DomainObjects.Models;
+using Universal.EBI.Core.DomainObjects;
 using Universal.EBI.Core.Mediator.Interfaces;
 
 namespace Universal.EBI.Childs.API.Extensions
 {
     public static class MediatorExtension
-    {
-        public static async Task PublishEvents<T>(this IMediatorHandler mediator, T context) where T : ChildContext
+    {        
+        public static async Task PublishEvents<T>(this IMediatorHandler mediator, T context) where T : DbContext
         {
-            //FilterDefinition<Child> filter = Builders<Child>.Filter.ElemMatch(x => x.Notifications, y => y.AggregateId == System.Guid.Empty);
-            FilterDefinition<Child> filter = Builders<Child>.Filter.Where(x => x.Notifications != null && x.Notifications.Any());
-            var domainEntities = await context
-                                        .Childs
-                                        .Find(filter)
-                                        .ToListAsync();
+            var domainEntities = context.ChangeTracker
+                .Entries<Entity>()
+                .Where(x => x.Entity.Notifications != null && x.Entity.Notifications.Any());
 
             var domainEvents = domainEntities
-                .SelectMany(x => x.Notifications)
+                .SelectMany(x => x.Entity.Notifications)
                 .ToList();
 
             domainEntities.ToList()
-                .ForEach(entity => entity.ClearEvent());
+                .ForEach(e => e.Entity.ClearEvent());
 
             var tasks = domainEvents
                 .Select(async (domainEvent) =>

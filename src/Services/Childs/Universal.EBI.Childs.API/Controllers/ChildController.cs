@@ -4,13 +4,14 @@ using System.Net;
 using System.Threading.Tasks;
 using Universal.EBI.Core.Mediator.Interfaces;
 using Universal.EBI.Childs.API.Application.Commands;
-using Universal.EBI.Childs.API.Application.Queries.Interfaces;
-using Universal.EBI.Childs.API.Models;
 using Universal.EBI.WebAPI.Core.AspNetUser.Interfaces;
 using Universal.EBI.WebAPI.Core.Controllers;
 using Universal.EBI.Childs.API.Application.DTOs;
 using System.Linq;
-using System.Collections.Generic;
+using Universal.EBI.Childs.API.Application.Queries;
+using Microsoft.AspNetCore.Http;
+using FluentValidation.Results;
+using Universal.EBI.Childs.API.Application.Validations;
 
 namespace Universal.EBI.Childs.API.Controllers
 {
@@ -18,142 +19,275 @@ namespace Universal.EBI.Childs.API.Controllers
     {
         private readonly IMediatorHandler _mediator;
         private readonly IAspNetUser _user;
-        private readonly IChildQueries _childQueries;
 
-        public ChildController(IMediatorHandler mediator, IAspNetUser user, IChildQueries childQueries)
+        public ChildController(IMediatorHandler mediator, IAspNetUser user)
         {
             _mediator = mediator;
             _user = user;
-            _childQueries = childQueries;
         }
 
-        [HttpGet("api/childs")]
-        public async Task<PagedResult<ChildDto>> GetChilds([FromQuery] int ps = 8, [FromQuery] int page = 1, [FromQuery] string q = null)
+        [HttpGet("api/children")]
+        public async Task<IActionResult> GetChildrenPaged([FromQuery] int ps = 8, [FromQuery] int page = 1, [FromQuery] string q = null)
         {
-            var pagedResult = await _childQueries.GetChilds(ps, page, q);
-            //var pagedResultDto = new PagedResult<ChildDto>();
-            var childrenDto = new List<ChildDto>();
-            ResponsibleDto responsibleDto;
-            var pagedResultDto = new PagedResult<ChildDto>
-            {
-                List = new List<ChildDto>(),
-                PageIndex = pagedResult.PageIndex,
-                PageSize = pagedResult.PageSize,
-                Query = pagedResult.Query,
-                TotalResults = pagedResult.TotalResults
-            };
-            
-            for (int i = 0; i < pagedResult.List.ToList().Count; i++)
-            {
-                var item = pagedResult.List.ToList()[i];
-                var responsibles = item.Responsibles.ToList();
-                var childDto = new ChildDto
-                {
-                    Id = item.Id,
-                    FirstName = item.FirstName,
-                    LastName = item.LastName,
-                    FullName = item.FullName,
-                    BirthDate = item.BirthDate.Date.ToShortDateString(),
-                    GenderType = item.GenderType.ToString(),
-                    AgeGroupType = item.AgeGroupType.ToString(),
-                    Cpf = item.Cpf != null ? item.Cpf.Number : null,
-                    Email = item.Email != null ? item.Email.Address : null,
-                    Excluded = item.Excluded,
-                    Address = new AddressDto(),
-                    Phones = new List<PhoneDto>(),
-                    PhotoUrl = item.PhotoUrl,
-                    Responsibles = new List<ResponsibleDto>()
-
-                };
-
-                for (int j = 0; j < responsibles.Count; j++)
-                {
-                    responsibleDto = new ResponsibleDto
-                    {
-                        Id = responsibles[j].Id,
-                        FirstName = responsibles[j].FirstName,
-                        LastName = responsibles[j].LastName,
-                        FullName = responsibles[j].FullName,
-                        BirthDate = responsibles[j].BirthDate.ToShortDateString(),
-                        Cpf = responsibles[j].Cpf.Number,
-                        Email = responsibles[j].Email.Address,
-                        GenderType = responsibles[j].GenderType.ToString(),
-                        KinshipType = responsibles[j].KinshipType.ToString(),
-                        Excluded = responsibles[j].Excluded,
-                        PhotoUrl = responsibles[j].PhotoUrl,
-                        Address = new AddressDto
-                        {
-                            Id = responsibles[j].Address.Id,
-                            PublicPlace = responsibles[j].Address.PublicPlace,
-                            Number = responsibles[j].Address.Number,
-                            Complement = responsibles[j].Address.Complement,
-                            District = responsibles[j].Address.District,
-                            City = responsibles[j].Address.City,
-                            State = responsibles[j].Address.State,
-                            Country = responsibles[j].Address.Country,
-                            ZipCode = responsibles[j].Address.ZipCode
-                        },
-                        Phones = new List<PhoneDto>()
-                    };
-
-                    var phones = responsibles[j].Phones.ToList();
-                    for (int k = 0; k < phones.Count; k++)
-                    {
-                        var phoneDto = new PhoneDto
-                        {
-                            Id = phones[k].Id,
-                            Number = phones[k].Number,
-                            PhoneType = phones[k].PhoneType.ToString()
-                        };
-                        responsibleDto.Phones.Add(phoneDto);
-                    }
-
-                    childDto.Responsibles.Add(responsibleDto);
-
-                }
-
-                childrenDto.Add(childDto);
-
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
+            try
+            {                
+                var response = (GetChildrenPagedQueryResponse)await _mediator.SendQuery(new GetChildrenPagedQuery() 
+                { 
+                    PageSize = ps,  
+                    PageIndex = page, 
+                    Query = q 
+                });
+                return (response.pagedResult == null) || 
+                       (response.pagedResult.List == null) || 
+                       (response.pagedResult.List.Count() == 0) ? 
+                       ProcessingMassage(StatusCodes.Status404NotFound,
+                                         "Não existem dados para exibição.") : CustomResponse(response.pagedResult);
             }
-
-            pagedResultDto.List = childrenDto;
-
-            return pagedResultDto;
+            catch (Exception)
+            {
+                AddProcessingErrors("Sistema indisponível no momento. Tente mais tarde.");
+                return CustomResponse();
+            }
         }
 
-        [HttpGet("api/child/{id}")]
+        [HttpGet("api/children-inactives")]
+        public async Task<IActionResult> GetChildrenInactives([FromQuery] int ps = 8, [FromQuery] int page = 1, [FromQuery] string q = null)
+        {
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
+            try
+            {
+                var response = (GetChildrenPagedInactiveQueryResponse)await _mediator.SendQuery(new GetChildrenPagedInactiveQuery()
+                {
+                    PageSize = ps,
+                    PageIndex = page,
+                    Query = q
+                });
+                return (response.pagedResult == null) ||
+                       (response.pagedResult.List == null) ||
+                       (response.pagedResult.List.Count() == 0) ?
+                       ProcessingMassage(StatusCodes.Status404NotFound,
+                                         "Não existem dados para exibição.") : CustomResponse(response.pagedResult);
+            }
+            catch (Exception)
+            {
+                AddProcessingErrors("Sistema indisponível no momento. Tente mais tarde.");
+                return CustomResponse();
+            }
+        }
+
+        [HttpGet("api/child/{id:guid}")]
         public async Task<IActionResult> GetChildById(Guid id)
         {
-            var child = await _childQueries.GetChildById(id);
-            return child == null ? NotFound() : CustomResponse(child);
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
+            try
+            {                
+                if (!ExcuteValidation(new GetChildByIdQueryValidation(), 
+                                      new GetChildByIdQuery { Id = id })) return CustomResponse(ValidationResult);
+                var response = (GetChildByIdQueryResponse)await _mediator.SendQuery(new GetChildByIdQuery { Id = id });               
+                return response.Child == null ? 
+                        ProcessingMassage(StatusCodes.Status404NotFound,
+                                          "Não existem dados para exibição.") : CustomResponse(response.Child);
+            }
+            catch (Exception ex)
+            {
+                AddProcessingErrors(ex.Message);
+                return CustomResponse();
+            }
         }
 
         [HttpGet("api/child/{cpf:length(11)}", Name = "GetChildByCpf")]
         public async Task<ActionResult> GetChildByCpf(string cpf)
         {
-            var child = await _childQueries.GetChildByCpf(cpf);
-            return child == null ? NotFound() : CustomResponse(child);
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
+            try
+            {                
+                if (!ExcuteValidation(new GetChildByCpfQueryValidation(), 
+                                      new GetChildByCpfQuery { Cpf = cpf })) return CustomResponse(ValidationResult);
+                var response = (GetChildByCpfQueryResponse)await _mediator.SendQuery(new GetChildByCpfQuery { Cpf = cpf });
+                return response.Child == null ? 
+                        ProcessingMassage(StatusCodes.Status404NotFound,
+                                          "Não existem dados para exibição.") : CustomResponse(response.Child);
+            }
+            catch (Exception ex)
+            {
+                AddProcessingErrors(ex.Message);
+                return CustomResponse();
+            }
         }
 
         [HttpPost("api/child/create")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        public async Task<ActionResult> CreateChild([FromBody] RegisterChildCommand command)
-        {            
-            return CustomResponse(await _mediator.SendCommand(command));
+        public async Task<ActionResult> CreateChild([FromBody] ChildRequestDto request)
+        {
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
+            try
+            {
+                if (request == null) return CustomResponse();
+                
+                //request.FullName = $"{request.FirstName} {request.LastName}";
+                request.CreatedBy = _user.GetUserEmail();
+                //request.CreatedDate = DateTime.Now.ToLocalTime();
+                request.Responsibles.ToList().ForEach(r => r.CreatedBy = _user.GetUserEmail());
+                //request.Responsibles.ToList().ForEach(r => r.CreatedDate = DateTime.Now.ToLocalTime());
+                //request.Responsibles.ToList().ForEach(r => r.FullName = $"{r.FirstName} {r.LastName}");
+
+                var command = new RegisterChildCommand(request);                
+                ValidationResult = await _mediator.SendCommand(command);
+                if (!ValidationResult.IsValid) return CustomResponse(ValidationResult);
+                
+                AddMessageSuccess("Criança adicionada com sucesso.");                
+                return CustomResponse(StatusCodes.Status201Created);
+            }
+            catch (Exception ex)
+            {
+                AddProcessingErrors(ex.Message);
+                return CustomResponse();
+            }
+            
         }
         
         [HttpPut("api/child/update")]
-        public async Task<IActionResult> UpdateChild([FromBody] UpdateChildCommand command)
+        public async Task<IActionResult> UpdateChild([FromBody] ChildRequestDto request)
         {
-            return CustomResponse(await _mediator.SendCommand(command));
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
+            try
+            {
+                if (request == null) return CustomResponse();                
+                
+                request.LastModifiedBy = _user.GetUserEmail();                
+                var command = new UpdateChildCommand(request);                
+                ValidationResult = await _mediator.SendCommand(command);
+                if (!ValidationResult.IsValid) return CustomResponse(ValidationResult);
+
+                AddMessageSuccess("Criança atualizada com sucesso.");
+                return CustomResponse(StatusCodes.Status200OK);
+            }
+            catch (Exception ex)
+            {
+                AddProcessingErrors(ex.Message);
+                return CustomResponse();
+            }
         }
         
         [HttpDelete("api/child/delete/{id}")]
         public async Task<IActionResult> DeleteChild(Guid id)
         {
-            var command = new DeleteChildCommand { Id = id };
-            return CustomResponse(await _mediator.SendCommand(command));
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
+            try
+            {
+                ValidationResult = await _mediator.SendCommand(new DeleteChildCommand { Id = id });
+                if (!ValidationResult.IsValid) return CustomResponse(ValidationResult);
+
+                AddMessageSuccess("Criança excluída com sucesso.");
+                return CustomResponse(StatusCodes.Status204NoContent);                
+            }
+            catch (Exception ex)
+            {
+                AddProcessingErrors(ex.Message);
+                return CustomResponse();
+            }
         }
-       
+
+        [HttpPut("api/child/Inactivate")]
+        public async Task<IActionResult> InactivateChild([FromBody] ChildRequestDto request)
+        {
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
+            try
+            {
+                if (request == null) return CustomResponse();
+
+                request.LastModifiedBy = _user.GetUserEmail();                
+                var command = new InactivateChildCommand(request);
+                ValidationResult = await _mediator.SendCommand(command);
+                if (!ValidationResult.IsValid) return CustomResponse(ValidationResult);
+
+                AddMessageSuccess("Criança inativada com sucesso.");
+                return CustomResponse(StatusCodes.Status200OK);
+            }
+            catch (Exception ex)
+            {
+                AddProcessingErrors(ex.Message);
+                return CustomResponse();
+            }
+        }
+
+        [HttpPut("api/child/Activate")]
+        public async Task<IActionResult> ActivateChild([FromBody] ChildRequestDto request)
+        {
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
+            try
+            {
+                if (request == null) return CustomResponse();
+
+                request.LastModifiedBy = _user.GetUserEmail();                
+                var command = new ActivateChildCommand(request);
+                ValidationResult = await _mediator.SendCommand(command);
+                if (!ValidationResult.IsValid) return CustomResponse(ValidationResult);
+
+                AddMessageSuccess("Criança ativada com sucesso.");
+                return CustomResponse(StatusCodes.Status200OK);
+            }
+            catch (Exception ex)
+            {
+                AddProcessingErrors(ex.Message);
+                return CustomResponse();
+            }
+        }
+
+        [HttpPut("api/child/add/responsible")]
+        public async Task<IActionResult> AddResponsible([FromBody] AddResponsibleRequestDto request)
+        {
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
+            try
+            {
+                if (request == null) return CustomResponse();
+
+                request.ResponsibleDto.CreatedBy = _user.GetUserEmail();                
+                var command = new AddResponsibleCommand(request);
+                ValidationResult = await _mediator.SendCommand(command);
+                if (!ValidationResult.IsValid) return CustomResponse(ValidationResult);
+
+                AddMessageSuccess("Responsável adicionado com sucesso.");
+                return CustomResponse(StatusCodes.Status200OK);
+            }
+            catch (Exception ex)
+            {
+                AddProcessingErrors(ex.Message);
+                return CustomResponse();
+            }
+        }
+
+
+        [HttpPut("api/child/delete/responsible")]
+        public async Task<IActionResult> DeleteResponsible([FromBody] DeleteResponsibleRequestDto request)
+        {
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
+            try
+            {
+                if (request == null) return CustomResponse();
+
+                //request.ResponsibleDto.CreatedBy = _user.GetUserEmail();
+                var command = new DeleteResponsibleCommand(request);
+                ValidationResult = await _mediator.SendCommand(command);
+                if (!ValidationResult.IsValid) return CustomResponse(ValidationResult);
+
+                AddMessageSuccess("Responsável excluído com sucesso.");
+                return CustomResponse(StatusCodes.Status200OK);
+            }
+            catch (Exception ex)
+            {
+                AddProcessingErrors(ex.Message);
+                return CustomResponse();
+            }
+        }
+
+        protected override bool ExcuteValidation<TV, TE>(TV validation, TE entity)
+        {
+            ValidationResult = validation.Validate(entity);
+            if (ValidationResult.IsValid) return true;
+            return false;
+        }
+
     }
 }

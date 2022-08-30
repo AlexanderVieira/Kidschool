@@ -12,6 +12,6 @@ namespace Universal.EBI.Core.DomainObjects.Models
         public Guid? ClassroomId { get; set; }
         public virtual Address Address { get; set; }        
         public virtual Classroom Classroom { get; set; }
-        public virtual ICollection<Phone> Phones { get; set; }
+        public virtual IList<Phone> Phones { get; set; }
     }
 }

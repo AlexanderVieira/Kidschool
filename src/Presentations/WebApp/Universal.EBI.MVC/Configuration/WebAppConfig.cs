@@ -68,7 +68,7 @@ namespace Universal.EBI.MVC.Configuration
                 SupportedCultures = supportedCultures,
                 SupportedUICultures = supportedCultures
             });
-
+ 
             app.UseMiddleware<ExceptionMiddleware>();
 
             app.UseEndpoints(endpoints =>

@@ -89,7 +89,7 @@ namespace Universal.EBI.Educators.API.Data
             return success;
         }
 
-        public Task<bool> Commit(bool commited)
+        public Task<bool> Commit(string savePoint)
         {
             throw new System.NotImplementedException();
         }

@@ -14,6 +14,7 @@ namespace Universal.EBI.Classrooms.API.Data
     public class ClassroomContext : IClassroomContext
     {
         private readonly IMediatorHandler _mediatorHandler;
+        public IMongoCollection<Classroom> Classrooms { get; }
 
         public ClassroomContext(IConfiguration configuration, IMediatorHandler mediatorHandler)
         {            
@@ -34,21 +35,6 @@ namespace Universal.EBI.Classrooms.API.Data
 
             Classrooms = database.GetCollection<Classroom>(configuration.GetValue<string>("DatabaseSettings:CollectionName"));
             //ClassroomContextSeed.SeedData(Classrooms);
-        }
-
-        public IMongoCollection<Classroom> Classrooms { get; }
-
-        public async Task<bool> Commit()
-        {
-            await _mediatorHandler.PublishEvents(this);
-            return true;
-        }
-
-        public async Task<bool> Commit(bool success)
-        {
-            if (success) await _mediatorHandler.PublishEvents(this);
-            return success;
-        }        
-    }
-    
+        }    
+    }    
 }
