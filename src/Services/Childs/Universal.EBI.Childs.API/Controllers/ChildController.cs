@@ -189,7 +189,7 @@ namespace Universal.EBI.Childs.API.Controllers
             }
         }
 
-        [HttpPut("api/child/Inactivate")]
+        [HttpPut("api/child/inactivate")]
         public async Task<IActionResult> InactivateChild([FromBody] ChildRequestDto request)
         {
             if (!ModelState.IsValid) return CustomResponse(ModelState);
@@ -212,7 +212,7 @@ namespace Universal.EBI.Childs.API.Controllers
             }
         }
 
-        [HttpPut("api/child/Activate")]
+        [HttpPut("api/child/activate")]
         public async Task<IActionResult> ActivateChild([FromBody] ChildRequestDto request)
         {
             if (!ModelState.IsValid) return CustomResponse(ModelState);
