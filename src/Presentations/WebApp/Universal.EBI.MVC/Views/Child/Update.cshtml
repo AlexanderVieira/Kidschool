@@ -1,10 +1,10 @@
-﻿@model Universal.EBI.MVC.Models.ChildRequestViewModel
+﻿@model Universal.EBI.MVC.Models.ChildResponseViewModel
 
 @{
-    ViewData["Title"] = "Criar";
+    ViewData["Title"] = "Atualizar";
     Layout = "~/Views/Shared/_Layout.cshtml";
     //var collection = Model.LastName.Split(" ");
-    var fullName = $"{Model.FirstName} {Model.LastName}";
+    var fulName = $"{Model.FirstName} {Model.LastName}";
 }
 
 <section style="background-color: #eee;">
@@ -15,12 +15,12 @@
                     <ol class="breadcrumb mb-0">
                         <li class="breadcrumb-item"><a href="#">Cadastros</a></li>
                         <li class="breadcrumb-item"><a href="#">Criança</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Criar</li>
+                        <li class="breadcrumb-item active" aria-current="page">Atualizar</li>
                     </ol>
                 </nav>
             </div>
         </div>
-        <form class="row g-4 mt-2" asp-controller="Child" asp-action="Create" method="post">
+        <form class="row g-4 mt-2" asp-controller="Child" asp-action="Update" method="post">
             <input type="hidden" asp-for="@Model.Id" value="@Model.Id" />
             <input type="hidden" asp-for="@Model.CreatedDate" value="@Model.CreatedDate" />
             <input type="hidden" asp-for="@Model.CreatedBy" value="@Model.CreatedBy" />
@@ -33,7 +33,7 @@
                         <div class="card-body text-center">
                             <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar"
                                  class="rounded-circle img-fluid mt-2" style="width: 150px;">
-                            <h5 class="my-3">@fullName</h5>
+                            <h5 class="my-3">@fulName</h5>
                             <hr>
                             <div class="row">
                                 @if (Model.Excluded == true)
@@ -55,12 +55,15 @@
                                         </div>
                                     </div>
                                 }
-
+                                @*<a onClick="$.post('/Child/AddResponsible/?childId=@Model.Id');"><i class="fas fa-2x fa-plus-circle" style="margin-left:5px"></i></a>*@
+                                @*<input type="button" class="btn btn-outline-danger ms-1" value="Adicionar Responsável" onClick="$.get('/Child/AddResponsible/?childId=@Model.Id');" />*@
+                                @Html.ActionLink("Adicionar Responsável", "AddResponsible", "Child", new { childId = Model.Id }, new { @class = "btn btn-success ms-1" })
                             </div>
                             <hr>
                             <div class="d-flex justify-content-center mb-2">
-                                <button type="submit" class="btn btn-primary">Criar</button>
-                                @Html.ActionLink("Listagem", "GetChildren", "Child", new { q = "" }, new { @class = "btn btn-outline-primary ms-1" })
+                                <button type="submit" class="btn btn-primary">Atualizar</button>
+                                @Html.ActionLink("Detahes", "Details", "Child", new { id = Model.Id }, new { @class = "btn btn-outline-primary ms-1" })
+                                @Html.ActionLink("Listagem", "GetChildren", "Child", null, new { @class = "btn btn-outline-success ms-1" })
                             </div>
                         </div>
                     </div>
@@ -105,16 +108,15 @@
                     </div>
                 </div>
                 <div class="col-lg-8">
-                    <div class="accordion accordion-borderless" id="accordionFlushExampleX-0">
+                    <div class="accordion" id="accordionPanelsStayOpenExample">
                         <div class="accordion-item">
-                            <h2 class="accordion-header" id="flush-headingOneX-0">
-                                <button class="accordion-button" type="button" data-mdb-toggle="collapse"
-                                        data-mdb-target="#flush-collapseOneX-0" aria-expanded="true" aria-controls="flush-collapseOneX-0">
-                                    Info Criança
+                            <h2 class="accordion-header" id="headingOne">
+                                <button id="accordion-btn-child" class="accordion-button" type="button" data-mdb-toggle="collapse"
+                                        data-mdb-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                                    Info Criança #1
                                 </button>
                             </h2>
-                            <div id="flush-collapseOneX-0" class="accordion-collapse collapse show"
-                                 aria-labelledby="flush-headingOneX-0" data-mdb-parent="#accordionFlushExampleX-0">
+                            <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne">
                                 <div class="accordion-body">
                                     <div class="card mb-4">
                                         <div class="card-body">
@@ -163,7 +165,7 @@
                                             <div class="row">
                                                 <div class="col-sm-6">
                                                     <div class="input-group">
-                                                        <label class="input-group-text" for="inputGroupSelect01">Género</label>
+                                                        <label class="input-group-text" for="inputGroupSelect01">Gênero</label>
                                                         <select asp-for="@Model.GenderType" class="form-select" id="inputGroupSelect01">
                                                             <option selected>Selecione...</option>
                                                             <option value="M">Masculino</option>
@@ -194,8 +196,8 @@
                                                         <input type="hidden" asp-for="@Model.Phones[i].Id" value="@Model.Phones[i].Id" />
                                                         <div class="col-sm-6">
                                                             <div class="input-group">
-                                                                <label class="input-group-text" for="inputGroupSelect03">Telefone</label>
-                                                                <select asp-for="@Model.Phones[i].PhoneType" class="form-select" id="inputGroupSelect03">
+                                                                <label class="input-group-text" for="inputGroupSelect03-@i">Telefone</label>
+                                                                <select asp-for="@Model.Phones[i].PhoneType" class="form-select" id="inputGroupSelect03-@i">
                                                                     <option selected>Selecione...</option>
                                                                     <option value="Residential">Residencial</option>
                                                                     <option value="Commercial">Comercial</option>
@@ -205,36 +207,36 @@
                                                         </div>
                                                         <div class="col-sm-6">
                                                             <div class="input-group form-outline">
-                                                                <input asp-for="@Model.Phones[i].Number" class="form-control" id="number" aria-describedby="inputGroupPrepend4" />
-                                                                <label for="number" class="form-label">Número</label>
+                                                                <input asp-for="@Model.Phones[i].Number" class="form-control" id="phoneNumber-@i" aria-describedby="inputGroupPrepend04-@i" />
+                                                                <label for="phoneNumber-@i" class="form-label">Número</label>
                                                             </div>
                                                         </div>
                                                     }
                                                 }
 
-                                                @if (Model != null && Model.Phones.ToList().Count == 0)
-                                                {
-                                                    @for (int i = 0; i < Model.Phones.ToList().Count; i++)
-                                                    {
-                                                        <div class="col-sm-6">
-                                                            <div class="input-group">
-                                                                <label class="input-group-text" for="inputGroupSelect03">Telefone</label>
-                                                                <select asp-for="@Model.Phones[i].PhoneType" class="form-select" id="inputGroupSelect03">
-                                                                    <option selected>Selecione...</option>
-                                                                    <option value="Residential">Residencial</option>
-                                                                    <option value="Commercial">Comercial</option>
-                                                                    <option value="CellPhone">Celular</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-sm-6">
-                                                            <div class="input-group form-outline">
-                                                                <input asp-for="@Model.Phones[i].Number" class="form-control" id="number" aria-describedby="inputGroupPrepend4" />
-                                                                <label for="number" class="form-label">Número</label>
-                                                            </div>
-                                                        </div>
-                                                    }
-                                                }
+                                                @*@if (Model != null && Model.Phones.ToList().Count == 0)
+                                {
+                                    @for (int i = 0; i < Model.Phones.ToList().Count; i++)
+                                    {
+                                        <div class="col-sm-6">
+                                            <div class="input-group">
+                                                <label class="input-group-text" for="inputGroupSelect03-@i">Telefone</label>
+                                                <select asp-for="@Model.Phones[i].PhoneType" class="form-select" id="inputGroupSelect03-@i">
+                                                    <option selected>Selecione...</option>
+                                                    <option value="Residential">Residencial</option>
+                                                    <option value="Commercial">Comercial</option>
+                                                    <option value="CellPhone">Celular</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="input-group form-outline">
+                                                <input asp-for="@Model.Phones[i].Number" class="form-control" id="phoneNumber-@i" aria-describedby="inputGroupPrepend04-@i" />
+                                                <label for="phoneNumber-@i" class="form-label">Número</label>
+                                            </div>
+                                        </div>
+                                    }
+                                }*@
 
                                             </div>
                                         </div>
@@ -303,40 +305,39 @@
                                 </div>
                             </div>
                         </div>
-                        @if (Model != null && Model.Responsibles.ToList().Count > 0)
+                        @if (Model != null && Model.Responsibles.ToList().Count >= 0)
                         {
                             @for (int i = 0; i < Model.Responsibles.ToList().Count; i++)
                             {
                                 var count = i + 1;
                                 <input type="hidden" asp-for="@Model.Responsibles[i].Id" value="@Model.Responsibles[i].Id" />
-                                <input type="hidden" asp-for="@Model.Responsibles[i].CreatedDate" value="@Model.Responsibles[i].CreatedDate" />
-                                <input type="hidden" asp-for="@Model.Responsibles[i].CreatedBy" value="@Model.Responsibles[i].CreatedBy" />
-                                <input type="hidden" asp-for="@Model.Responsibles[i].LastModifiedDate" value="@Model.Responsibles[i].LastModifiedDate" />
-                                <input type="hidden" asp-for="@Model.Responsibles[i].LastModifiedBy" value="@Model.Responsibles[i].LastModifiedBy" />
                                 <input type="hidden" asp-for="@Model.Responsibles[i].FullName" value="@Model.Responsibles[i].FullName" />
+                                <input type="hidden" asp-for="@Model.Responsibles[i].CreatedBy" value="@Model.Responsibles[i].CreatedBy" />
+                                <input type="hidden" asp-for="@Model.Responsibles[i].CreatedDate" value="@Model.Responsibles[i].CreatedDate" />
+                                <input type="hidden" asp-for="@Model.Responsibles[i].LastModifiedBy" value="@Model.Responsibles[i].LastModifiedBy" />
+                                <input type="hidden" asp-for="@Model.Responsibles[i].LastModifiedDate" value="@Model.Responsibles[i].LastModifiedDate" />
                                 <div class="accordion-item">
-                                    <h2 class="accordion-header" id="flush-headingTwoX-@i">
-                                        <button class="accordion-button collapsed" type="button" data-mdb-toggle="collapse"
-                                                data-mdb-target="#flush-collapseTwoX-@i" aria-expanded="false" aria-controls="flush-collapseTwoX-@i">
+                                    <h2 class="accordion-header" id="headingTwo-@i">
+                                        <button id="accordion-btn-responsible-@i" class="accordion-button collapsed" type="button" data-mdb-toggle="collapse"
+                                                data-mdb-target="#panelsStayOpen-collapseTwo-@i" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo-@i" onclick="mostrar_esconder('panelsStayOpen-collapseTwo-@i')">
                                             Responsável #@count
                                         </button>
                                     </h2>
-                                    <div id="flush-collapseTwoX-@i" class="accordion-collapse collapse" aria-labelledby="flush-headingTwoX-@i"
-                                         data-mdb-parent="#accordionFlushExampleX-@i">
+                                    <div id="panelsStayOpen-collapseTwo-@i" class="accordion-collapse collapse" aria-labelledby="headingTwo-@i">
                                         <div class="accordion-body">
                                             <div class="card mb-4">
                                                 <div class="card-body">
                                                     <div class="row">
                                                         <div class="col-sm-6">
                                                             <div class="input-group form-outline text-muted mb-0">
-                                                                <input asp-for="@Model.Responsibles[i].FirstName" class="form-control" id="reponsible-firstname" aria-describedby="inputGroupPrepend13" />
-                                                                <label for="reponsible-firstname" class="form-label">Primeiro nome</label>
+                                                                <input asp-for="@Model.Responsibles[i].FirstName" class="form-control" id="reponsibleFirstname-@i" aria-describedby="inputGroupPrepend13-@i" />
+                                                                <label for="reponsibleFirstname-@i" class="form-label">Primeiro nome</label>
                                                             </div>
                                                         </div>
                                                         <div class="col-sm-6">
                                                             <div class="input-group form-outline">
-                                                                <input asp-for="@Model.Responsibles[i].LastName" class="form-control" id="reponsible-lastname" aria-describedby="inputGroupPrepend14" />
-                                                                <label for="reponsible-lastname" class="form-label">Sobrenome</label>
+                                                                <input asp-for="@Model.Responsibles[i].LastName" class="form-control" id="reponsibleLastname-@i" aria-describedby="inputGroupPrepend14-@i" />
+                                                                <label for="reponsibleLastname-@i" class="form-label">Sobrenome</label>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -344,14 +345,14 @@
                                                     <div class="row">
                                                         <div class="col-sm-4">
                                                             <div class="input-group form-outline">
-                                                                <input asp-for="@Model.Responsibles[i].Email" class="form-control" id="reponsible-email" aria-describedby="inputGroupPrepend15" />
-                                                                <label for="reponsible-email" class="form-label">E-mail</label>
+                                                                <input asp-for="@Model.Responsibles[i].Email" class="form-control" id="reponsibleEmail-@i" aria-describedby="inputGroupPrepend15-@i" />
+                                                                <label for="reponsibleEmail-@i" class="form-label">E-mail</label>
                                                             </div>
                                                         </div>
                                                         <div class="col-sm-4">
                                                             <div class="input-group form-outline">
-                                                                <input asp-for="@Model.Responsibles[i].Cpf" class="form-control" id="reponsible-cpf" aria-describedby="inputGroupPrepend16" />
-                                                                <label for="reponsible-cpf" class="form-label">CPF</label>
+                                                                <input asp-for="@Model.Responsibles[i].Cpf" class="form-control" id="reponsibleCpf-@i" aria-describedby="inputGroupPrepend16-@i" />
+                                                                <label for="reponsibleCpf-@i" class="form-label">CPF</label>
                                                             </div>
                                                         </div>
                                                         <div class="col-sm-4">
@@ -371,8 +372,8 @@
                                                     <div class="row">
                                                         <div class="col-sm-6">
                                                             <div class="input-group">
-                                                                <label class="input-group-text" for="inputGroupSelect04">Género</label>
-                                                                <select asp-for="@Model.Responsibles[i].GenderType" class="form-select" id="inputGroupSelect04">
+                                                                <label class="input-group-text" for="inputGroupSelect04-@i">Género</label>
+                                                                <select asp-for="@Model.Responsibles[i].GenderType" class="form-select" id="inputGroupSelect04-@i">
                                                                     <option selected>Selecione...</option>
                                                                     <option value="M">Masculino</option>
                                                                     <option value="F">Feminino</option>
@@ -381,8 +382,8 @@
                                                         </div>
                                                         <div class="col-sm-6">
                                                             <div class="input-group">
-                                                                <label class="input-group-text" for="inputGroupSelect05">Parentesco</label>
-                                                                <select asp-for="@Model.Responsibles[i].KinshipType" class="form-select" id="inputGroupSelect05">
+                                                                <label class="input-group-text" for="inputGroupSelect05-@i">Parentesco</label>
+                                                                <select asp-for="@Model.Responsibles[i].KinshipType" class="form-select" id="inputGroupSelect05-@i">
                                                                     <option selected>Selecione...</option>
                                                                     <option value="Dad">Pai</option>
                                                                     <option value="Mom">Mãe</option>
@@ -405,8 +406,8 @@
                                                                 <input type="hidden" asp-for="@Model.Responsibles[i].Phones[j].Id" value="@Model.Responsibles[i].Phones[j].Id" />
                                                                 <div class="col-sm-6">
                                                                     <div class="input-group">
-                                                                        <label class="input-group-text" for="inputGroupSelect06">Telefone</label>
-                                                                        <select asp-for="@Model.Responsibles[i].Phones[j].PhoneType" class="form-select" id="inputGroupSelect06">
+                                                                        <label class="input-group-text" for="inputGroupSelect06-@i">Telefone</label>
+                                                                        <select asp-for="@Model.Responsibles[i].Phones[j].PhoneType" class="form-select" id="inputGroupSelect06-@i">
                                                                             <option selected>Selecione...</option>
                                                                             <option value="Residential">Residencial</option>
                                                                             <option value="Commercial">Comercial</option>
@@ -416,36 +417,36 @@
                                                                 </div>
                                                                 <div class="col-sm-6">
                                                                     <div class="input-group form-outline">
-                                                                        <input asp-for="@Model.Responsibles[i].Phones[j].Number" class="form-control" id="reponsible-phoneNumber" aria-describedby="inputGroupPrepend17" />
-                                                                        <label for="reponsible-phoneNumber" class="form-label">Número</label>
+                                                                        <input asp-for="@Model.Responsibles[i].Phones[j].Number" class="form-control" id="reponsiblePhoneNumber-@i" aria-describedby="inputGroupPrepend17-@i" />
+                                                                        <label for="reponsiblePhoneNumber-@i" class="form-label">Número</label>
                                                                     </div>
                                                                 </div>
                                                             }
                                                         }
 
-                                                        @if (Model != null && Model.Phones.ToList().Count == 0)
-                                                        {
-                                                            @for (int j = 0; j < Model.Responsibles[i].Phones.ToList().Count; j++)
-                                                            {
-                                                                <div class="col-sm-6">
-                                                                    <div class="input-group">
-                                                                        <label class="input-group-text" for="inputGroupSelect06">Telefone</label>
-                                                                        <select asp-for="@Model.Responsibles[i].Phones[j].PhoneType" class="form-select" id="inputGroupSelect06">
-                                                                            <option selected>Selecione...</option>
-                                                                            <option value="Residential">Residencial</option>
-                                                                            <option value="Commercial">Comercial</option>
-                                                                            <option value="CellPhone">Celular</option>
-                                                                        </select>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-sm-6">
-                                                                    <div class="input-group form-outline">
-                                                                        <input asp-for="@Model.Responsibles[i].Phones[j].Number" class="form-control" id="reponsible-phoneNumber" aria-describedby="inputGroupPrepend18" />
-                                                                        <label for="reponsible-phoneNumber" class="form-label">Número</label>
-                                                                    </div>
-                                                                </div>
-                                                            }
-                                                        }
+                                                        @*@if (Model != null && Model.Phones.ToList().Count == 0)
+                                        {
+                                            @for (int j = 0; j < Model.Responsibles[i].Phones.ToList().Count; j++)
+                                            {
+                                                <div class="col-sm-6">
+                                                    <div class="input-group">
+                                                        <label class="input-group-text" for="inputGroupSelect06">Telefone</label>
+                                                        <select asp-for="@Model.Responsibles[i].Phones[j].PhoneType" class="form-select" id="inputGroupSelect06">
+                                                            <option selected>Selecione...</option>
+                                                            <option value="Residential">Residencial</option>
+                                                            <option value="Commercial">Comercial</option>
+                                                            <option value="CellPhone">Celular</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <div class="input-group form-outline">
+                                                        <input asp-for="@Model.Responsibles[i].Phones[j].Number" class="form-control" id="reponsible-phoneNumber" aria-describedby="inputGroupPrepend18" />
+                                                        <label for="reponsible-phoneNumber" class="form-label">Número</label>
+                                                    </div>
+                                                </div>
+                                            }
+                                        }*@
 
                                                     </div>
                                                 </div>
@@ -456,14 +457,14 @@
                                                         <input type="hidden" asp-for="@Model.Responsibles[i].Address.Id" value="@Model.Responsibles[i].Address.Id" />
                                                         <div class="col-sm-9">
                                                             <div class="input-group form-outline">
-                                                                <input asp-for="@Model.Responsibles[i].Address.PublicPlace" class="form-control" id="reponsible-publicPlace" aria-describedby="inputGroupPrepend19" />
-                                                                <label for="reponsible-publicPlace" class="form-label">Logradouro</label>
+                                                                <input asp-for="@Model.Responsibles[i].Address.PublicPlace" class="form-control" id="reponsiblePblicPlace-@i" aria-describedby="inputGroupPrepend19-@i" />
+                                                                <label for="reponsiblePublicPlace-@i" class="form-label">Logradouro</label>
                                                             </div>
                                                         </div>
                                                         <div class="col-sm-3">
                                                             <div class="input-group form-outline">
-                                                                <input asp-for="@Model.Responsibles[i].Address.Number" class="form-control" id="reponsible-number" aria-describedby="inputGroupPrepend20" />
-                                                                <label for="reponsible-number" class="form-label">Número</label>
+                                                                <input asp-for="@Model.Responsibles[i].Address.Number" class="form-control" id="reponsibleNumber-@i" aria-describedby="inputGroupPrepend20-@i" />
+                                                                <label for="reponsibleNumber-@i" class="form-label">Número</label>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -471,20 +472,20 @@
                                                     <div class="row">
                                                         <div class="col-sm-4">
                                                             <div class="input-group form-outline">
-                                                                <input asp-for="@Model.Responsibles[i].Address.Complement" class="form-control" id="reponsible-complement" aria-describedby="inputGroupPrepend21" />
-                                                                <label for="reponsible-complement" class="form-label">Complemento</label>
+                                                                <input asp-for="@Model.Responsibles[i].Address.Complement" class="form-control" id="reponsibleComplement-@i" aria-describedby="inputGroupPrepend21-@i" />
+                                                                <label for="reponsibleComplement-@i" class="form-label">Complemento</label>
                                                             </div>
                                                         </div>
                                                         <div class="col-sm-4">
                                                             <div class="input-group form-outline">
-                                                                <input asp-for="@Model.Responsibles[i].Address.District" class="form-control" id="reponsible-district" aria-describedby="inputGroupPrepend22" />
-                                                                <label for="reponsible-district" class="form-label">Bairro</label>
+                                                                <input asp-for="@Model.Responsibles[i].Address.District" class="form-control" id="reponsibleDistrict-@i" aria-describedby="inputGroupPrepend22-@i" />
+                                                                <label for="reponsibleDistrict-@i" class="form-label">Bairro</label>
                                                             </div>
                                                         </div>
                                                         <div class="col-sm-4">
                                                             <div class="input-group form-outline">
-                                                                <input asp-for="@Model.Responsibles[i].Address.City" class="form-control" id="reponsible-city" aria-describedby="inputGroupPrepend23" />
-                                                                <label for="reponsible-city" class="form-label">Cidade</label>
+                                                                <input asp-for="@Model.Responsibles[i].Address.City" class="form-control" id="reponsibleCity-@i" aria-describedby="inputGroupPrepend23-@i" />
+                                                                <label for="reponsibleCity-@i" class="form-label">Cidade</label>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -492,20 +493,20 @@
                                                     <div class="row">
                                                         <div class="col-sm-6">
                                                             <div class="input-group form-outline">
-                                                                <input asp-for="@Model.Responsibles[i].Address.State" class="form-control" id="reponsible-state" aria-describedby="inputGroupPrepend24" />
-                                                                <label for="reponsible-state" class="form-label">Estado</label>
+                                                                <input asp-for="@Model.Responsibles[i].Address.State" class="form-control" id="reponsibleState-@i" aria-describedby="inputGroupPrepend24-@i" />
+                                                                <label for="reponsibleState-@i" class="form-label">Estado</label>
                                                             </div>
                                                         </div>
                                                         <div class="col-sm-4">
                                                             <div class="input-group form-outline">
-                                                                <input asp-for="@Model.Responsibles[i].Address.Country" class="form-control" id="reponsible-country" aria-describedby="inputGroupPrepend25" />
-                                                                <label for="reponsible-country" class="form-label">País</label>
+                                                                <input asp-for="@Model.Responsibles[i].Address.Country" class="form-control" id="reponsibleCountry-@i" aria-describedby="inputGroupPrepend25-@i" />
+                                                                <label for="reponsibleCountry-@i" class="form-label">País</label>
                                                             </div>
                                                         </div>
                                                         <div class="col-sm-2">
                                                             <div class="input-group form-outline">
-                                                                <input asp-for="@Model.Responsibles[i].Address.ZipCode" class="form-control" id="reponsible-zipCode" aria-describedby="inputGroupPrepend26" />
-                                                                <label for="reponsible-zipCode" class="form-label">CEP</label>
+                                                                <input asp-for="@Model.Responsibles[i].Address.ZipCode" class="form-control" id="reponsibleZipCode-@i" aria-describedby="inputGroupPrepend26-@i" />
+                                                                <label for="reponsibleZipCode-@i" class="form-label">CEP</label>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -524,9 +525,8 @@
 </section>
 
 <script>
-
     function seedCheck() {
-        alert($('#flexSwitchCheck').prop('checked'));
+        
         if ($('#flexSwitchCheck').prop('checked') == true) {
             $('#flexSwitchCheck').val(true);
         }
@@ -534,6 +534,7 @@
             $('#flexSwitchCheck').val(false);
         }
     }
+   
 </script>
 
 <!-- MDB -->

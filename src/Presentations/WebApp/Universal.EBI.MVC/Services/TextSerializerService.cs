@@ -34,6 +34,7 @@ namespace Universal.EBI.MVC.Services
                 case 401:
                 case 403:
                 case 404:
+                    break;
                 case 500:
                     throw new CustomHttpRequestException(response.StatusCode);
 
@@ -41,7 +42,7 @@ namespace Universal.EBI.MVC.Services
                     return false;
             }
 
-            response.EnsureSuccessStatusCode();
+            //response.EnsureSuccessStatusCode();
             return true;
         }
 

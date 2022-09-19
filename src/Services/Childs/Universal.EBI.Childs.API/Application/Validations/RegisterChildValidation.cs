@@ -22,11 +22,11 @@ namespace Universal.EBI.Childs.API.Application.Validations
                 .NotEmpty()
                 .WithMessage("O sobrenome da criança não foi informado.");            
 
-            RuleFor(c => c.ChildRequest.NumberCpf)
+            RuleFor(c => c.ChildRequest.Cpf)
                 .Must(ValidationUtils.HasValidCpf)
                 .WithMessage("O CPF informado não é válido.");
 
-            RuleFor(c => c.ChildRequest.AddressEmail)
+            RuleFor(c => c.ChildRequest.Email)
                 .Must(ValidationUtils.HasValidEmail)
                 .WithMessage("O e-mail informado não é válido.");
 
@@ -60,10 +60,10 @@ namespace Universal.EBI.Childs.API.Application.Validations
                         if (item.Id == Guid.Empty) context.AddFailure("Id do responsável inválido");
                         if (string.IsNullOrEmpty(item.FirstName)) context.AddFailure("O nome do responsável não foi informado.");
                         if (string.IsNullOrEmpty(item.LastName)) context.AddFailure("O Sobrenome do responsável não foi informado.");
-                        if (string.IsNullOrEmpty(item.AddressEmail)) context.AddFailure("O e-mail do responsável não foi informado.");
-                        if (!Email.EmailValid(item.AddressEmail)) context.AddFailure("E-mail do responsável inválido.");
-                        if (string.IsNullOrEmpty(item.NumberCpf)) context.AddFailure("O CPF do responsável não foi informado.");
-                        if (!Cpf.CpfValid(item.NumberCpf)) context.AddFailure("CPF do responsável inválido.");
+                        if (string.IsNullOrEmpty(item.Email)) context.AddFailure("O e-mail do responsável não foi informado.");
+                        if (!Email.EmailValid(item.Email)) context.AddFailure("E-mail do responsável inválido.");
+                        if (string.IsNullOrEmpty(item.Cpf)) context.AddFailure("O CPF do responsável não foi informado.");
+                        if (!Cpf.CpfValid(item.Cpf)) context.AddFailure("CPF do responsável inválido.");
                         if (item.Address == null) context.AddFailure("Endereço do responsável não foi informado.");
                         if (!string.IsNullOrWhiteSpace(item.BirthDate.Date.ToShortDateString()))
                         {

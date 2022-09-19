@@ -49,7 +49,7 @@ namespace Universal.EBI.Childs.API.Application.Commands.Handlers
             }
 
             var child = _mapper.Map<Child>(message.ChildRequest);
-            child.LastModifiedDate = DateTime.Now.ToLocalTime();
+            child.LastModifiedDate = DateTime.Now;
             child.Address.ChildId = child.Id;
             child.Phones.ToList().ForEach(c => c.Child = child);
             child.Responsibles.ToList().ForEach(r => r.Address.ResponsibleId = r.Id);
@@ -96,8 +96,8 @@ namespace Universal.EBI.Childs.API.Application.Commands.Handlers
                                     FirstName = message.ChildRequest.FirstName,
                                     LastName = message.ChildRequest.LastName,
                                     FullName = child.FullName,
-                                    AddressEmail = message.ChildRequest.AddressEmail,
-                                    NumberCpf = message.ChildRequest.NumberCpf,
+                                    Email = message.ChildRequest.Email,
+                                    Cpf = message.ChildRequest.Cpf,
                                     BirthDate = message.ChildRequest.BirthDate,
                                     GenderType = message.ChildRequest.GenderType,
                                     AgeGroupType = message.ChildRequest.AgeGroupType,

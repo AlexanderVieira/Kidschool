@@ -1,0 +1,134 @@
+﻿@using NSE.WebApp.MVC.Extensions
+@model PagedResult<ChildResponseDesignViewModel>
+
+@{
+    ViewData["Title"] = "Crianças";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!--Main layout-->
+<main>
+    <div class="container">
+        <!--Navbar-->
+        <nav class="navbar navbar-expand-lg navbar-expand mdb-color lighten-3 mt-3 mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand">@ViewData["Title"]</a>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" asp-action="Create"><i class="fas fa-2x fa-plus-circle"></i></a>
+                        </li>
+                        @*<li class="nav-item">
+                                <a class="nav-link" href="#">Feature</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Pricing</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link disabled">Disabled</a>
+                            </li>*@
+                    </ul>
+                </div>
+                <form class="d-flex input-group w-auto" asp-controller="Child" asp-action="GetChildren" asp-route-ps="8" asp-route-page="1" method="get">                   
+                    <div class="input-group form-outline">
+                        <input type="text" class="form-control rounded" id="q" name="q" aria-describedby="search-addon" />
+                        <label for="q" class="form-label">Buscar Criança por nome</label>
+                        <span class="input-group-text border-0" id="search-addon">
+                            <button type="submit"><i class="fas fa-search"></i></button>
+                        </span>
+                    </div>                   
+                </form>
+            </div>
+        </nav>
+        <!--/.Navbar-->
+        <!--Section: Products v.3-->
+        <section class="text-center mb-4">
+            <!--Grid row-->
+            <div class="row wow fadeIn">
+                <!--Grid column-->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <!--Card-->
+                    @if (Model != null && Model.List.ToList().Count > 0)
+                    {
+                        @foreach (var child in Model.List.OrderBy(p => p.FullName))
+                        {
+
+                            @*<div class="col">*@
+                            <div class="card mb-3">
+                                <div class="row g-0">
+                                    <div class="col-md-4" style="display:inline; vertical-align:middle;">
+                                        <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp"
+                                             alt="Avatar"
+                                             class="img-fluid rounded-start" />
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="card-body">
+                                            <h5 class="card-title">@child.FullName</h5>
+                                            <p class="card-text">
+                                                @child.BirthDate
+                                            </p>
+                                            <p class="card-text">
+                                                @if (@child.GenderType == "M")
+                                                {
+                                                    <small class="text-muted">Masculino</small>
+                                                }
+                                                else
+                                                {
+                                                    <small class="text-muted">Feminino</small>
+                                                }
+                                            </p>
+                                        </div>
+
+                                        <div class="card-footer">
+                                            <div class="float-lg-end">
+                                                <a asp-controller="Child" asp-action="Details" asp-route-id="@child.Id" class="img-wrap">
+                                                    <i class="fas fa-2x fa-info-circle me-2"></i>
+                                                </a>
+                                                <a asp-controller="Child" asp-action="Update" asp-route-id="@child.Id" class="img-wrap">
+                                                    <i class="fas fa-2x fa-user-edit me-2"></i>
+                                                </a>
+                                                <a asp-controller="Child" asp-action="Delete" asp-route-id="@child.Id" class="img-wrap">
+                                                    <i class="fas fa-2x fa-trash-alt"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @*</div>*@
+
+                        }
+
+                    }
+                    <!--Card-->
+
+                </div>
+                <!--Grid column-->
+
+            </div>
+            @if (Model == null || Model.List.ToList().Count == 0)
+            {
+
+
+                <div class="row mt-3 g-4">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <p class="card-text">
+                                <strong>Não existem dados para exibição.</strong>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <vc:paginacao model-paged="@Model"></vc:paginacao>
+            }
+        </section>
+        <!--Section: Products v.3-->
+
+       
+
+    </div>
+</main>
+<!--Main layout-->

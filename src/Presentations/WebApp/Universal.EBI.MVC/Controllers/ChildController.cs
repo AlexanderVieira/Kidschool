@@ -1,100 +1,381 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Universal.EBI.Core.Comunication;
 using Universal.EBI.MVC.Extensions;
 using Universal.EBI.MVC.Models;
 using Universal.EBI.MVC.Services.Interfaces;
+using Universal.EBI.WebAPI.Core.AspNetUser.Interfaces;
 
 namespace Universal.EBI.MVC.Controllers
 {
     public class ChildController : BaseController
     {
         private readonly IReportBffService _bffService;
+        private readonly IAspNetUser _user;
 
-        public ChildController(IReportBffService bffService)
+        public ChildController(IReportBffService bffService, IAspNetUser user)
         {
             _bffService = bffService;
+            _user = user;
         }
 
-        // GET: ChildController
         [HttpGet]
         [Route("children")]
-        public async Task<IActionResult> GetChildren([FromQuery] int ps = 8, [FromQuery] int page = 1, [FromQuery] string q = null)
+        public async Task<ActionResult> GetChildren([FromQuery] int ps = 8, [FromQuery] int page = 1, [FromQuery] string q = null)
         {
-            var pagedResultChildren = await _bffService.GetChildren(ps, page, q);
-            ViewBag.Search = q;
-            pagedResultChildren.ReferenceAction = "Edit";
-            TempDataExtension.Put(TempData, "Children", pagedResultChildren);
-            return RedirectToAction("Edit", "Classroom");
-            //return View(children);
+            try
+            {
+                var response = await _bffService.GetChildren(ps, page, q);
+
+                if (response.Value is not ResponseResult)
+                {
+                    ViewBag.Search = q;
+                    var pagedResult = (PagedResult<ChildResponseDesignViewModel>)response.Value;
+                    pagedResult.ReferenceAction = "Edit";
+                    TempDataExtension.Put(TempData, "Children", pagedResult);
+                    return View("Index", pagedResult);
+                }
+
+                if (HasResponseErrors((ResponseResult)response.Value)) TempData["Errors"] =
+                    ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage)).ToList();
+                               
+                var rs = (ResponseResult)response.Value;
+                if (rs.Status == 404)
+                {
+                    var pagedResult = new PagedResult<ChildResponseDesignViewModel> 
+                    { 
+                        List = new List<ChildResponseDesignViewModel>(), 
+                        PageSize = ps, 
+                        PageIndex = page, 
+                        Query = q, 
+                        ReferenceAction = "GetChildren", 
+                        TotalResults = ps * page 
+                    };
+                    return View("Index", pagedResult);
+                }
+                return RedirectToAction("Error", "Home", new { id = rs.Status });
+
+            }
+            catch (Exception ex)
+            {
+                var response = new ResponseResult();
+                response.Errors.Messages.Add(ex.Message);
+                if (HasResponseErrors(response)) TempData["Erros"] =
+                    ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage)).ToList();
+                return RedirectToAction("Error", "Home", new { id = 500 });
+            }            
         }
 
-        // GET: ChildController/Details/5
-        public ActionResult Details(Guid id)
+        [HttpGet]
+        [Route("children/inactives")]
+        public async Task<ActionResult> GetChildrenInactives([FromQuery] int ps = 8, [FromQuery] int page = 1, [FromQuery] string q = null)
         {
-            return View();
+            try
+            {
+                var response = await _bffService.GetChildrenInactives(ps, page, q);
+
+                if (response.Value is not ResponseResult)
+                {
+                    ViewBag.Search = q;
+                    var pagedResult = (PagedResult<ChildResponseDesignViewModel>)response.Value;
+                    pagedResult.ReferenceAction = "Edit";
+                    TempDataExtension.Put(TempData, "Children", pagedResult);
+                    return View("Index", pagedResult);
+                }
+
+                if (HasResponseErrors((ResponseResult)response.Value)) TempData["Errors"] =
+                    ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage)).ToList();
+
+                var rs = (ResponseResult)response.Value;
+                return RedirectToAction("Error", "Home", new { id = rs.Status });
+
+            }
+            catch (Exception ex)
+            {
+                var response = new ResponseResult();
+                response.Errors.Messages.Add(ex.Message);
+                if (HasResponseErrors(response)) TempData["Erros"] =
+                    ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage)).ToList();
+                return RedirectToAction("Error", "Home", new { id = 500 });
+            }
         }
 
-        // GET: ChildController/Create
+        [HttpGet]
+        [Route("child/details/{cpf:length(11)}")]
+        public async Task<ActionResult> GetchildByCpf(string cpf)
+        {            
+            try
+            {
+                var response = await _bffService.GetChildByCpf(cpf);
+                return View();
+            }
+            catch (Exception)
+            {
+                return View();
+            }
+        }
+                
+        [HttpGet]
+        [Route("child/details/{id:guid}")]
+        public async Task<ActionResult> Details(Guid id)
+        {            
+            try
+            {
+                if (Guid.Empty == id)
+                {
+                    return View();
+                }
+                var response = await _bffService.GetChildById(id);
+                if (response != null)
+                {
+                    return View(response);
+                }
+                return RedirectToAction("Error", "Home", new { id = 404 });
+            }
+            catch (Exception ex)
+            {
+                var response = new ResponseResult();
+                response.Errors.Messages.Add(ex.Message);
+                if (HasResponseErrors(response)) TempData["Erros"] =
+                    ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage)).ToList();
+                return RedirectToAction("Error", "Home", new { id = 500 });
+            }
+        }
+                
+        [HttpGet]
+        [Route("child/create")]
         public ActionResult Create()
         {
-            return View();
+            var vmChild = new ChildRequestViewModel();           
+            return View(vmChild);
         }
-
-        // POST: ChildController/Create
+                
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(ChildViewModel vmChild)
+        [Route("child/create")]
+        public async Task<ActionResult> Create(ChildRequestViewModel request)
+        {
+            if (!ModelState.IsValid) return View(request);
+            try
+            {
+                request.Id = Guid.NewGuid();
+                request.FullName = $"{request.FirstName} {request.LastName}";
+                request.CreatedBy = _user.GetUserEmail();
+                request.CreatedDate = DateTime.Now;
+                request.Address.Id = Guid.NewGuid();
+                request.Phones.ToList().ForEach(c => c.Id = Guid.NewGuid());
+                                
+                request.Responsibles.ToList().ForEach(r => r.Id = Guid.NewGuid());
+                request.Responsibles.ToList().ForEach(r => r.FullName = $"{request.FirstName} {request.LastName}");
+                request.Responsibles.ToList().ForEach(r => r.CreatedDate = DateTime.Now);
+                request.Responsibles.ToList().ForEach(r => r.CreatedBy = _user.GetUserEmail());
+                request.Responsibles.ToList().ForEach(r => r.Address.Id = Guid.NewGuid());
+                request.Responsibles.ToList().ForEach(r => r.Phones.ToList().ForEach(p => p.Id = Guid.NewGuid()));                
+
+                var response = await _bffService.CreateChild(request);
+                if (HasResponseErrors(response)) 
+                {
+                    TempData["Errors"] = ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage)).ToList();
+                    return View(request);
+                }
+                var vmChild = _bffService.GetChildById(request.Id);
+                if (vmChild != null)
+                {
+                    return View(nameof(Details), vmChild);
+                }
+                return RedirectToAction("Error", "Home", new { id = 500 });
+            }
+            catch(Exception ex)
+            {
+                var response = new ResponseResult();
+                response.Errors.Messages.Add(ex.Message);
+                if (HasResponseErrors(response)) TempData["Erros"] =
+                    ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage)).ToList();
+                return RedirectToAction("Error", "Home", new { id = 500 });
+            }
+        }
+                
+        [HttpGet]
+        [Route("child/update/{id:guid}")]
+        public async Task<ActionResult> Update([FromRoute] Guid id)
         {
             try
             {
-                return RedirectToAction(nameof(Details));
+                if (Guid.Empty == id)
+                {
+                    return View();
+                }
+                var response = await _bffService.GetChildById(id);
+                if (response != null)
+                {
+                    return View(response);
+                }
+                return RedirectToAction("Error", "Home", new { id = 404 });
             }
-            catch
+            catch (Exception ex)
+            {
+                var response = new ResponseResult();
+                response.Errors.Messages.Add(ex.Message);
+                if (HasResponseErrors(response)) TempData["Erros"] =
+                    ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage)).ToList();
+                return RedirectToAction("Error", "Home", new { id = 500 });
+            }
+        }
+                
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("child/update/{id:guid}")]
+        public async Task<ActionResult> Update([FromRoute] Guid id, ChildRequestViewModel request)
+        {
+            if (!ModelState.IsValid) return View(request);
+            try
+            {
+                request.LastModifiedDate = DateTime.Now;
+                request.LastModifiedBy = _user.GetUserEmail();                
+                request.Responsibles.ToList().ForEach(r => r.LastModifiedDate = DateTime.Now);
+                request.Responsibles.ToList().ForEach(r => r.LastModifiedBy = _user.GetUserEmail());
+
+                var response = await _bffService.UpdateChild(request);
+                if (HasResponseErrors(response))
+                {
+                    TempData["Errors"] = ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage)).ToList();
+                    return View(request);
+                }
+                var vmChild = _bffService.GetChildById(id);
+                if (vmChild != null)
+                {
+                    return View(nameof(Details), vmChild);
+                }
+                return RedirectToAction("Error", "Home", new { id = 500 });
+            }
+            catch(Exception ex)
+            {
+                var response = new ResponseResult();
+                response.Errors.Messages.Add(ex.Message);
+                if (HasResponseErrors(response)) TempData["Erros"] =
+                    ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage)).ToList();
+                return RedirectToAction("Error", "Home", new { id = 500 });
+            }
+        }
+                
+        [HttpGet]
+        [Route("child/delete/{id:guid}")]
+        public async Task<ActionResult> Delete([FromRoute] Guid id)
+        {
+            if (Guid.Empty == id)
             {
                 return View();
             }
+            var response = await _bffService.GetChildById(id);
+            if (response != null)
+            {
+                return View(nameof(Details), response);
+            }
+            return RedirectToAction("Error", "Home", new { id = 404 });
         }
-
-        // GET: ChildController/Edit/5
-        public ActionResult Edit(Guid id)
-        {
-            return View();
-        }
-
-        // POST: ChildController/Edit/5
+                
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Guid id, ChildViewModel vmChild)
+        [Route("child/delete/{id:guid}")]
+        public async Task<ActionResult> ConfirmDeletion(Guid id)
         {
             try
             {
-                return RedirectToAction(nameof(Details));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: ChildController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: ChildController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, ChildViewModel vmChild)
-        {
-            try
-            {
+                if (Guid.Empty == id)
+                {
+                    return View();
+                }
+                var response = await _bffService.DeleteChild(id);
+                if (HasResponseErrors(response))
+                {
+                    TempData["Errors"] = ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage)).ToList();
+                    return View();
+                }
                 return RedirectToAction(nameof(GetChildren));
             }
+            catch(Exception ex)
+            {
+                var response = new ResponseResult();
+                response.Errors.Messages.Add(ex.Message);
+                if (HasResponseErrors(response)) TempData["Erros"] =
+                    ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage)).ToList();
+                return RedirectToAction("Error", "Home", new { id = 500 });
+            }
+        }
+
+        [HttpPut]
+        [ValidateAntiForgeryToken]
+        [Route("child/ativate")]
+        public ActionResult ActivateChild([FromBody] ChildViewModel vmChild)
+        {
+            try
+            {
+                return RedirectToAction(nameof(Details));
+            }
             catch
             {
                 return View();
+            }
+        }
+
+        [HttpPut]
+        [ValidateAntiForgeryToken]
+        [Route("child/inativate")]
+        public ActionResult InactivateChild([FromBody] ChildViewModel vmChild)
+        {
+            try
+            {
+                return RedirectToAction(nameof(Details));
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        [HttpGet]        
+        [Route("child/add-responsible/{childId:guid}")]
+        public ActionResult AddResponsible([FromRoute] Guid childId)
+        {
+            if (Guid.Empty == childId)
+            {
+                return View();
+            }
+            var request = new AddResponsibleRequestViewModel();                       
+            return View(request);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("child/add-responsible/{childId:guid}")]
+        public async Task<ActionResult> AddResponsible([FromRoute] Guid childId, AddResponsibleRequestViewModel request)
+        {
+            if (!ModelState.IsValid) return View(request);
+            try
+            {
+                request.ResponsibleViewModel = new ResponsibleRequestViewModel
+                {
+                    CreatedBy = _user.GetUserEmail(),
+                    CreatedDate = DateTime.Now
+                };
+                var response = await _bffService.AddResponsible(request);
+                if (HasResponseErrors(response))
+                {
+                    TempData["Errors"] = ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage)).ToList();
+                    return View(request);
+                }
+                return View(nameof(Details), new { id = request.ChildId });
+            }
+            catch (Exception ex)
+            {
+                var response = new ResponseResult();
+                response.Errors.Messages.Add(ex.Message);
+                if (HasResponseErrors(response)) TempData["Erros"] =
+                    ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage)).ToList();
+                return RedirectToAction("Error", "Home", new { id = 500 });
             }
         }
     }

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Universal.EBI.BFF.Report.API.Models
+namespace Universal.EBI.MVC.Models
 {
-    public class ResponsibleRequestDto
+    public class ResponsibleResponseViewModel
     {
         public Guid Id { get; set; }
         public string FirstName { get; set; }
@@ -20,10 +20,10 @@ namespace Universal.EBI.BFF.Report.API.Models
         public DateTime? CreatedDate { get; set; }
         public string LastModifiedBy { get; set; }
         public DateTime? LastModifiedDate { get; set; }
-        public AddressRequestDto Address { get; set; }
-        public IList<PhoneRequestDto> Phones { get; set; }        
+        public AddressResponseViewModel Address { get; set; }
+        public IList<PhoneResponseViewModel> Phones { get; set; }        
 
-        public ResponsibleRequestDto()
+        public ResponsibleResponseViewModel()
         {
         }
     }

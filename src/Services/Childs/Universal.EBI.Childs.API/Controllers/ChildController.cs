@@ -27,20 +27,21 @@ namespace Universal.EBI.Childs.API.Controllers
         }
 
         [HttpGet("api/children")]
-        public async Task<IActionResult> GetChildrenPaged([FromQuery] int ps = 8, [FromQuery] int page = 1, [FromQuery] string q = null)
+        public async Task<IActionResult> GetChildren([FromQuery] int ps = 8, [FromQuery] int page = 1, [FromQuery] string q = null)
         {
             if (!ModelState.IsValid) return CustomResponse(ModelState);
             try
-            {                
-                var response = (GetChildrenPagedQueryResponse)await _mediator.SendQuery(new GetChildrenPagedQuery() 
-                { 
-                    PageSize = ps,  
-                    PageIndex = page, 
-                    Query = q 
+            {
+                var response = (GetChildrenPagedQueryResponse)await _mediator.SendQuery(new GetChildrenPagedQuery()
+                {
+                    PageSize = ps,
+                    PageIndex = page,
+                    Query = q
                 });
-                return (response.pagedResult == null) || 
-                       (response.pagedResult.List == null) || 
-                       (response.pagedResult.List.Count() == 0) ? 
+                //var response = new GetChildrenPagedQueryResponse(new PagedResult<ChildDesignedQueryResponseDto>());
+                return (response.pagedResult == null) ||
+                       (response.pagedResult.List == null) ||
+                       (response.pagedResult.List.Count() == 0) ?
                        ProcessingMassage(StatusCodes.Status404NotFound,
                                          "Não existem dados para exibição.") : CustomResponse(response.pagedResult);
             }
@@ -123,14 +124,9 @@ namespace Universal.EBI.Childs.API.Controllers
             if (!ModelState.IsValid) return CustomResponse(ModelState);
             try
             {
-                if (request == null) return CustomResponse();
-                
-                //request.FullName = $"{request.FirstName} {request.LastName}";
-                request.CreatedBy = _user.GetUserEmail();
-                //request.CreatedDate = DateTime.Now.ToLocalTime();
-                request.Responsibles.ToList().ForEach(r => r.CreatedBy = _user.GetUserEmail());
-                //request.Responsibles.ToList().ForEach(r => r.CreatedDate = DateTime.Now.ToLocalTime());
-                //request.Responsibles.ToList().ForEach(r => r.FullName = $"{r.FirstName} {r.LastName}");
+                if (request == null) return CustomResponse();                               
+                request.CreatedBy = _user.GetUserEmail();                
+                request.Responsibles.ToList().ForEach(r => r.CreatedBy = _user.GetUserEmail());                
 
                 var command = new RegisterChildCommand(request);                
                 ValidationResult = await _mediator.SendCommand(command);
@@ -155,7 +151,9 @@ namespace Universal.EBI.Childs.API.Controllers
             {
                 if (request == null) return CustomResponse();                
                 
-                request.LastModifiedBy = _user.GetUserEmail();                
+                request.LastModifiedBy = _user.GetUserEmail();
+                request.Responsibles.ToList().ForEach(r => r.LastModifiedBy = _user.GetUserEmail());
+
                 var command = new UpdateChildCommand(request);                
                 ValidationResult = await _mediator.SendCommand(command);
                 if (!ValidationResult.IsValid) return CustomResponse(ValidationResult);

@@ -9,8 +9,8 @@ namespace Universal.EBI.Childs.API.Application.AutoMapper
         public DtoToDomainMappingProfile()
         {
             CreateMap<ChildRequestDto, Child>()
-                .ForPath(c => c.Cpf, opt => opt.MapFrom(s => s.NumberCpf))
-                .ForPath(c => c.Email, opt => opt.MapFrom(s => s.AddressEmail));
+                .ForPath(c => c.Cpf, opt => opt.MapFrom(s => s.Cpf))
+                .ForPath(c => c.Email, opt => opt.MapFrom(s => s.Email));
                 //.ForPath(c => c.AgeGroupType, opt => opt.MapFrom(s => s.AgeGroupType))
                 //.ForPath(c => c.GenderType, opt => opt.MapFrom(s => s.GenderType));
 
@@ -20,8 +20,8 @@ namespace Universal.EBI.Childs.API.Application.AutoMapper
             //.ForPath(c => c.PhoneType, opt => opt.MapFrom(s => s.PhoneType));
 
             CreateMap<ResponsibleRequestDto, Responsible>()
-                .ForPath(c => c.Cpf, opt => opt.MapFrom(s => s.NumberCpf))
-                .ForPath(c => c.Email, opt => opt.MapFrom(s => s.AddressEmail))
+                .ForPath(c => c.Cpf, opt => opt.MapFrom(s => s.Cpf))
+                .ForPath(c => c.Email, opt => opt.MapFrom(s => s.Email))
                 .ForPath(c => c.KinshipType, opt => opt.MapFrom(s => s.KinshipType));
                 //.ForPath(c => c.GenderType, opt => opt.MapFrom(s => s.GenderType));
 
