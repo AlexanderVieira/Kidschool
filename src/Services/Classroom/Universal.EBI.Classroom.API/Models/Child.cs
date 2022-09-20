@@ -1,22 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
-using Universal.EBI.Classrooms.API.Models.Enums;
+using Universal.EBI.Core.DomainObjects.Models.Enums;
 
 namespace Universal.EBI.Classrooms.API.Models
 {
-    public class Child : Person
+    public class Child
     {
-        public string HoraryOfEntry { get; set; }
-        public string HoraryOfExit { get; set; }
-        public AgeGroupType AgeGroupType { get; set; }              
-        public ICollection<Phone> Phones { get; set; }        
-        public ICollection<Responsible> Responsibles { get; set; }
+        public Guid Id { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string FullName { get; set; }
+        //public bool Excluded { get; set; }
+        //public Email Email { get; set; }
+        //public Cpf Cpf { get; set; }
+        //public string PhotoUrl { get; set; }
+        public DateTime BirthDate { get; set; }
+        public AgeGroupType AgeGroupType { get; set; }
+        public GenderType GenderType { get; set; }
+        //public virtual Address Address { get; set; }
+        //public virtual IList<Phone> Phones { get; set; }
+        public virtual IList<Responsible> Responsibles { get; set; }
 
         public Child()
         {
-            Phones = new HashSet<Phone>();
-            Responsibles = new HashSet<Responsible>();
+            Responsibles = new List<Responsible>();
+            //Phones = new List<Phone>();
         }
-                
+
     }
 }

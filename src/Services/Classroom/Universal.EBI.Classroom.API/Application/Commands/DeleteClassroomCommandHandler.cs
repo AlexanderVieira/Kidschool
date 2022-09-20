@@ -1,27 +1,31 @@
 ﻿using FluentValidation.Results;
 using MediatR;
+using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Universal.EBI.Classrooms.API.Application.Events;
 using Universal.EBI.Classrooms.API.Application.Queries.Interfaces;
+using Universal.EBI.Classrooms.API.Models;
 using Universal.EBI.Classrooms.API.Models.Interfaces;
-using Universal.EBI.Core.DomainObjects.Models;
 using Universal.EBI.Core.Messages;
+using Universal.EBI.WebAPI.Core.AspNetUser.Interfaces;
 
 namespace Universal.EBI.Classrooms.API.Application.Commands
 {
-    public class DeleteClassroomCommandHandler : CommandHandler, 
-                                                 IRequestHandler<DeleteClassroomCommand, ValidationResult>, 
+    public class DeleteClassroomCommandHandler : CommandHandler,
+                                                 IRequestHandler<DeleteClassroomCommand, ValidationResult>,
                                                  IRequestHandler<DeleteChildClassroomCommand, ValidationResult>
     {
         private readonly IClassroomRepository _classroomRepository;
         private readonly IClassroomQueries _classroomQueries;
+        private readonly IAspNetUser _user;
 
-        public DeleteClassroomCommandHandler(IClassroomRepository classroomRepository, IClassroomQueries classroomQueries)
+        public DeleteClassroomCommandHandler(IClassroomRepository classroomRepository, IClassroomQueries classroomQueries, IAspNetUser user)
         {
             _classroomRepository = classroomRepository;
             _classroomQueries = classroomQueries;
+            _user = user;
         }
 
         public async Task<ValidationResult> Handle(DeleteClassroomCommand message, CancellationToken cancellationToken)
@@ -32,24 +36,33 @@ namespace Universal.EBI.Classrooms.API.Application.Commands
 
             if (existingClassroom == null)
             {
-                AddError("Criança não encontrado.");
+                AddError("Sala não encontrada.");
                 return ValidationResult;
             }
 
             var success = await _classroomRepository.DeleteClassroom(existingClassroom.Id);
 
+            if (!success)
+            {
+                AddError("Houve um erro ao persistir os dados...");
+                return ValidationResult;
+            }
             existingClassroom.AddEvent(new DeletedClassroomEvent
             {
                 AggregateId = message.Id,
                 Id = message.Id
             });
 
-             return await PersistData(_classroomRepository.UnitOfWork);
+            return ValidationResult;
+            //return await PersistData(_classroomRepository.UnitOfWork);
         }
 
         public async Task<ValidationResult> Handle(DeleteChildClassroomCommand message, CancellationToken cancellationToken)
         {
             if (!message.IsValid()) return message.ValidationResult;
+
+            message.LastModifiedDate = message.LastModifiedDate ?? DateTime.Now.ToShortDateString();
+            message.LastModifiedBy = message.LastModifiedBy ?? _user.GetUserEmail();
 
             var existingClassroom = await _classroomQueries.GetClassroomById(message.ClassroomId);
 
@@ -67,6 +80,9 @@ namespace Universal.EBI.Classrooms.API.Application.Commands
                 }
             }
 
+            existingClassroom.LastModifiedDate = DateTime.Parse(message.LastModifiedDate);
+            existingClassroom.LastModifiedBy = message.LastModifiedBy;
+
             var success = await _classroomRepository.UpdateClassroom(existingClassroom);
 
             existingClassroom.AddEvent(new DeletedChildClassroomEvent
@@ -76,7 +92,8 @@ namespace Universal.EBI.Classrooms.API.Application.Commands
                 ChildId = message.ChildId
             });
 
-            return await PersistData(_classroomRepository.UnitOfWork);
+            return ValidationResult;
+            //return await PersistData(_classroomRepository.UnitOfWork);
         }
     }
 }

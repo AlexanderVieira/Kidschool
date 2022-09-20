@@ -44,17 +44,9 @@ namespace Universal.EBI.Classrooms.API.Services
 
         private async Task<ResponseMessage> RegisterClassroom(RegisteredClassroomIntegrationEvent message)
         {            
-            var classroomCommand = new RegisterClassroomCommand
+            var classroomCommand = new RegisterClassroomCommand(new ClassroomDto() { Id = message.Id })
             {
-                AggregateId = message.Id,
-                Educator = ConvertToEducatorDto(message.Educator),
-                Church = message.Church,
-                Region = message.Region,
-                ClassroomType = message.ClassroomType,
-                Actived = message.Actived,
-                MeetingTime = message.MeetingTime,
-                //Childs = message.Childs
-
+                AggregateId = message.Id                
             };
 
             ValidationResult sucesso;

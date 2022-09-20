@@ -2,7 +2,6 @@
 using Universal.EBI.Classrooms.API.Models.Interfaces;
 using System.Threading.Tasks;
 using System;
-using Universal.EBI.Core.Data.Interfaces;
 using Universal.EBI.Classrooms.API.Models;
 
 namespace Universal.EBI.Classrooms.API.Data.Repository
@@ -10,9 +9,7 @@ namespace Universal.EBI.Classrooms.API.Data.Repository
     public class ClassroomRepository : IClassroomRepository
     {
         private readonly IClassroomContext _context;
-
-        public IUnitOfWork UnitOfWork => throw new NotImplementedException();
-
+                
         public ClassroomRepository(IClassroomContext context)
         {
             _context = context;

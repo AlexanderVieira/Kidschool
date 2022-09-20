@@ -52,7 +52,7 @@ namespace Universal.EBI.Classrooms.API.Application.Queries
         {
             return await _context
                             .Classrooms
-                            .Find(c => c.CreatedDate.Date == date.Date && c.MeetingTime == meetingTime)
+                            .Find(c => c.CreatedDate == date && c.MeetingTime == meetingTime)
                             .FirstOrDefaultAsync();
         }
     }

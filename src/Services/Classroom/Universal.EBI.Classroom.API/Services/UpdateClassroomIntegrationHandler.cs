@@ -5,6 +5,7 @@ using FluentValidation.Results;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Universal.EBI.Classrooms.API.Application.Commands;
+using Universal.EBI.Classrooms.API.Application.DTOs;
 using Universal.EBI.Core.Mediator.Interfaces;
 using Universal.EBI.Core.Messages;
 using Universal.EBI.Core.Messages.Integration.Classroom;
@@ -41,11 +42,9 @@ namespace Universal.EBI.Classrooms.API.Services
 
         private async Task<ResponseMessage> UpdateClassroom(UpdatedClassroomIntegrationEvent message)
         {            
-            var ChildCommand = new UpdateClassroomCommand
+            var ChildCommand = new UpdateClassroomCommand(new ClassroomDto() { Id = message.Id })
             {
-                AggregateId = message.Id,
-                Id = message.Id,
-               
+                AggregateId = message.Id
             };
             ValidationResult sucesso;
 

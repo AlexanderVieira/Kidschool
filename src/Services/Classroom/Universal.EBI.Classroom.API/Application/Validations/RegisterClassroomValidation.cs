@@ -9,7 +9,7 @@ namespace Universal.EBI.Classrooms.API.Application.Validations
     {
         public RegisterClassroomValidation()
         {
-            RuleFor(c => c.Id)
+            RuleFor(c => c.ClassroomDto.Id)
                 .NotEqual(Guid.Empty)
                 .WithMessage("Id da sala inválido.");
 

@@ -9,9 +9,9 @@ namespace Universal.EBI.Classrooms.API.Application.Validations
     {
         public UpdateClassroomValidation()
         {
-            RuleFor(c => c.Id)
+            RuleFor(c => c.ClassroomDto.Id)
                 .NotEqual(Guid.Empty)
-                .WithMessage("Id da criança inválido.");
+                .WithMessage("Id da sala inválido.");
 
             //RuleFor(c => c.FirstName)
             //    .NotEmpty()

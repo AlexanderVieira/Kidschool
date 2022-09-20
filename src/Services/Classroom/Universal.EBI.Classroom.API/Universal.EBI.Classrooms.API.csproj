@@ -13,11 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="Models\Address.cs" />
-    <Compile Remove="Models\Child.cs" />
     <Compile Remove="Models\Person.cs" />
-    <Compile Remove="Models\Phone.cs" />
-    <Compile Remove="Models\Responsible.cs" />
   </ItemGroup>
 
   <ItemGroup>

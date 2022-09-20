@@ -23,19 +23,19 @@ namespace Universal.EBI.Classrooms.API.Application.Events
 
         public Task Handle(RegisteredClassroomEvent notification, CancellationToken cancellationToken)
         {
-            //return Task.CompletedTask;
-            return _bus.PublishAsync(new RegisteredClassroomIntegrationEvent
-            {
-                AggregateId = notification.Id,
-                Educator = ToConvertEducator(notification.Educator),
-                Church = notification.Church,
-                Region = notification.Region,
-                ClassroomType = notification.ClassroomType,
-                Actived = notification.Actived,
-                MeetingTime = notification.MeetingTime,
-                //Childs = notification.Childs
+            return Task.CompletedTask;
+            //return _bus.PublishAsync(new RegisteredClassroomIntegrationEvent
+            //{
+            //    AggregateId = notification.Id,
+            //    Educator = ToConvertEducator(notification.Educator),
+            //    Church = notification.Church,
+            //    Region = notification.Region,
+            //    ClassroomType = notification.ClassroomType,
+            //    Actived = notification.Actived,
+            //    MeetingTime = notification.MeetingTime,
+            //    //Childs = notification.Childs
 
-            });
+            //});
         }
 
         public Educator ToConvertEducator(EducatorDto educatorDto)

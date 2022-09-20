@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Universal.EBI.Core.Data.Interfaces;
 
 namespace Universal.EBI.Classrooms.API.Models.Interfaces
 {
-    public interface IClassroomRepository : IRepository<Classroom>
+    public interface IClassroomRepository
     {
         Task CreateClassroom(Classroom Classroom);
         Task<bool> UpdateClassroom(Classroom Classroom);

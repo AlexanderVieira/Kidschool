@@ -10,10 +10,10 @@ namespace Universal.EBI.Classrooms.API.Configurations
     {
         public static void AddMessageBusConfiguration(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddMessageBus(configuration.GetMessageQueueConnection("MessageBus"))
-                    .AddHostedService<RegisterClassroomIntegrationHandler>()
-                    .AddHostedService<UpdateClassroommIntegrationHandler>()
-                    .AddHostedService<DeleteClassroomIntegrationHandler>();
+            services.AddMessageBus(configuration.GetMessageQueueConnection("MessageBus"));
+                    //.AddHostedService<RegisterClassroomIntegrationHandler>()
+                    //.AddHostedService<UpdateClassroommIntegrationHandler>()
+                    //.AddHostedService<DeleteClassroomIntegrationHandler>();
         }
     }
 }

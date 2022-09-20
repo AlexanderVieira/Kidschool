@@ -8,6 +8,8 @@ using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 using Universal.EBI.Classrooms.API.Models;
+using Universal.EBI.Core.DomainObjects;
+using Universal.EBI.Core.DomainObjects.Models.Enums;
 
 namespace Universal.EBI.Classrooms.API.Data
 {
@@ -22,11 +24,35 @@ namespace Universal.EBI.Classrooms.API.Data
 
             if (!BsonClassMap.IsClassMapRegistered(typeof(Classroom)))
             {
+                BsonClassMap.RegisterClassMap<Entity>(map =>
+                {
+                    map.SetIsRootClass(true);
+                    map.AutoMap();
+                    map.MapProperty(t => t.Id).SetSerializer(new GuidSerializer(BsonType.String));
+                    map.UnmapProperty(c => c.Notifications);                    
+                });
+
                 BsonClassMap.RegisterClassMap<Classroom>(map =>
                 {
                     map.AutoMap();
-                    map.MapProperty(x => x.Id).SetSerializer(new GuidSerializer(BsonType.String));
-                    
+                    map.MapCreator(c => new Classroom());
+                    map.MapProperty(c => c.ClassroomType).SetSerializer(new EnumSerializer<ClassroomType>(BsonType.String));
+                });
+
+                BsonClassMap.RegisterClassMap<Responsible>(map =>
+                {
+                    map.AutoMap();
+                    map.MapCreator(c => new Responsible());                    
+                    map.MapProperty(r => r.KinshipType).SetSerializer(new EnumSerializer<KinshipType>(BsonType.String));
+                    map.MapProperty(r => r.GenderType).SetSerializer(new EnumSerializer<GenderType>(BsonType.String));                    
+                });
+
+                BsonClassMap.RegisterClassMap<Phone>(map =>
+                {
+                    map.AutoMap();
+                    map.MapCreator(c => new Phone());
+                    map.MapProperty(p => p.Id).SetSerializer(new GuidSerializer(BsonType.String));
+                    map.MapProperty(p => p.PhoneType).SetSerializer(new EnumSerializer<PhoneType>(BsonType.String));
                 });
             }
 
