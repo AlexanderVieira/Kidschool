@@ -71,8 +71,20 @@ namespace Universal.EBI.BFF.Report.API.Services
         public async Task<ActionResult> GetChildren(int pageSize, int pageIndex, string query = null)
         {
             var response = await _httpClient.GetAsync($"/api/children?ps={pageSize}&page={pageIndex}&q={query}");
-            if (!response.IsSuccessStatusCode) return new ObjectResult(await DeserializeResponseObject<ResponseResult>(response));
-            return new ObjectResult(await DeserializeResponseObject<PagedResult<ChildDesignedQueryResponseDto>>(response));
+            if (!response.IsSuccessStatusCode)  
+            {
+                var objResultError = new ObjectResult(await DeserializeResponseObject<ResponseResult>(response))
+                {
+                    StatusCode = (int)response.StatusCode
+                };
+                return objResultError; 
+            }
+
+            var objResult = new ObjectResult(await DeserializeResponseObject<PagedResult<ChildDesignedQueryResponseDto>>(response))
+            {
+                StatusCode = (int)response.StatusCode
+            };
+            return objResult;
         }
 
         public async Task<ActionResult> GetChildrenInactives(int pageSize, int pageIndex, string query = null)

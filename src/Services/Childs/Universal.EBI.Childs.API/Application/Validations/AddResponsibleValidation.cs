@@ -21,11 +21,11 @@ namespace Universal.EBI.Childs.API.Application.Validations
                 .NotEmpty()
                 .WithMessage("O sobrenome da criança não foi informado.");
 
-            RuleFor(c => c.Request.ResponsibleDto.NumberCpf)
+            RuleFor(c => c.Request.ResponsibleDto.Cpf)
                 .Must(ValidationUtils.HasValidCpf)
                 .WithMessage("O CPF informado não é válido.");
 
-            RuleFor(c => c.Request.ResponsibleDto.AddressEmail)
+            RuleFor(c => c.Request.ResponsibleDto.Email)
                 .Must(ValidationUtils.HasValidEmail)
                 .WithMessage("O e-mail informado não é válido.");
 

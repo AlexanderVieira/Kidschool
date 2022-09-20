@@ -21,7 +21,7 @@ namespace Universal.EBI.Childs.API.Configurations
             services.AddDbContext<ChildDbContext>(options =>
             {
                 options.UseSqlServer(configuration.GetConnectionString("ChildConnection"));
-                if (env.IsDevelopment()) options.EnableSensitiveDataLogging();
+                //if (env.IsDevelopment()) options.EnableSensitiveDataLogging();
             });
 
 

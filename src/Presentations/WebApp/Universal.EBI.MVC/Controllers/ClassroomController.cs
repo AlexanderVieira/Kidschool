@@ -53,7 +53,7 @@ namespace Universal.EBI.MVC.Controllers
                 vmClassroom.CreatedDate = DateTime.Now.ToString();
                 vmClassroom.CreatedBy = "CurrentUser";
 
-                if (!ModelState.IsValid) return View(vmClassroom);
+                if (ModelState.IsValid) return View(vmClassroom);
 
                 var response = await _bffService.CreateClassroom(vmClassroom);
                 if (HasResponseErrors(response)) return View(vmClassroom);
@@ -85,8 +85,8 @@ namespace Universal.EBI.MVC.Controllers
             //vmClassroom.MeetingTime = vmEducatorClassroom.MeetingTime;
             vmClassroom.Childs = new List<ChildViewModel>();
             vmClassroom.Childs.Add(new ChildViewModel { Id = Guid.NewGuid() });
-            vmClassroom.Childs[0].Responsibles = new List<ResponsibleViewModel>();
-            vmClassroom.Childs[0].Responsibles.Add(new ResponsibleViewModel { Id = Guid.NewGuid() });
+            //vmClassroom.Childs[0].Responsibles = new List<ResponsibleViewModel>();
+            //vmClassroom.Childs[0].Responsibles.Add(new ResponsibleViewModel { Id = Guid.NewGuid() });
             vmClassroom.Educator = vmEducator;
 
             return View(vmClassroom);

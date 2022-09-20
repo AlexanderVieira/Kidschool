@@ -35,15 +35,59 @@ namespace Universal.EBI.Childs.API.Application.Commands.Handlers
         {
             if (!message.IsValid()) return message.ValidationResult;
 
+            message.ChildRequest.Id = Guid.NewGuid();
+            message.ChildRequest.FullName = $"{message.ChildRequest.FirstName} {message.ChildRequest.LastName}";
+            //message.ChildRequest.CreatedBy = _user.GetUserEmail();
+            message.ChildRequest.CreatedDate = DateTime.Now;
+            if (message.ChildRequest.Address.Id == Guid.Empty)
+            {
+                message.ChildRequest.Address = null;
+            }
+            else
+            {
+                message.ChildRequest.Address.Id = Guid.NewGuid();
+            }            
+
+            if (message.ChildRequest.Phones[0].Id == Guid.Empty)
+            {
+                message.ChildRequest.Phones = null;
+            }
+            else
+            {
+                message.ChildRequest.Phones.ToList().ForEach(c => c.Id = Guid.NewGuid());
+            }            
+
+            message.ChildRequest.Responsibles.ToList().ForEach(r => r.Id = Guid.NewGuid());
+            message.ChildRequest.Responsibles.ToList().ForEach(r => r.FullName = $"{message.ChildRequest.FirstName} {message.ChildRequest.LastName}");
+            message.ChildRequest.Responsibles.ToList().ForEach(r => r.CreatedDate = DateTime.Now);
+            //message.ChildRequest.Responsibles.ToList().ForEach(r => r.CreatedBy = _user.GetUserEmail());
+            message.ChildRequest.Responsibles.ToList().ForEach(r => r.Address.Id = Guid.NewGuid());
+            message.ChildRequest.Responsibles.ToList().ForEach(r => r.Phones.ToList().ForEach(p => p.Id = Guid.NewGuid()));
+
             var child = _mapper.Map<Child>(message.ChildRequest);
-            child.FullName = $"{message.ChildRequest.FirstName} {message.ChildRequest.LastName}";
-            child.CreatedDate = DateTime.Now.ToLocalTime();
-            child.Address.ChildId = child.Id;
-            child.Phones.ToList().ForEach(c => c.Child = child);
-            child.Responsibles.ToList().ForEach(r => r.FullName = $"{r.FirstName} {r.LastName}");
-            child.Responsibles.ToList().ForEach(r => r.CreatedDate = DateTime.Now.ToLocalTime());
-            child.Responsibles.ToList().ForEach(r => r.Address.ResponsibleId = r.Id);            
-            child.Responsibles.ToList().ForEach(r => r.Phones.ToList().ForEach(p => p.Responsible = r));
+
+            if (child.Address != null)            
+            {
+                child.Address.ChildId = child.Id;
+            }
+
+            if (child.Phones.Count > 0)            
+            {
+                child.Phones.ToList().ForEach(c => c.Child = child);
+            }
+            else
+            {
+                child.Phones = null;
+            }
+
+            //child.FullName = $"{message.ChildRequest.FirstName} {message.ChildRequest.LastName}";
+            //child.CreatedDate = DateTime.Now.ToLocalTime();
+            //child.Address.ChildId = child.Id;
+            //child.Phones.ToList().ForEach(c => c.Child = child);
+            //child.Responsibles.ToList().ForEach(r => r.FullName = $"{r.FirstName} {r.LastName}");
+            //child.Responsibles.ToList().ForEach(r => r.CreatedDate = DateTime.Now.ToLocalTime());
+            //child.Responsibles.ToList().ForEach(r => r.Address.ResponsibleId = r.Id);            
+            //child.Responsibles.ToList().ForEach(r => r.Phones.ToList().ForEach(p => p.Responsible = r));            
 
             var context = await _childRepository.GetContext();
             var strategy = context.Database.CreateExecutionStrategy();

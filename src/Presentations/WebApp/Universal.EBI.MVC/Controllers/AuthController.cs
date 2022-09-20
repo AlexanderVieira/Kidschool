@@ -67,7 +67,7 @@ namespace Universal.EBI.MVC.Controllers
         public async Task<IActionResult> Logout()
         {
             await _authService.Logout();
-            return RedirectToAction("Index", "Catalog");
+            return RedirectToAction("Index", "Home");
         }    
        
     }

@@ -10,8 +10,8 @@ namespace Universal.EBI.BFF.Report.API.Models
         public string LastName { get; set; }
         public string FullName { get; set; }
         public bool Excluded { get; set; }
-        public string AddressEmail { get; set; }
-        public string NumberCpf { get; set; }
+        public string Email { get; set; }
+        public string Cpf { get; set; }
         public string PhotoUrl { get; set; }
         public DateTime BirthDate { get; set; }
         public string GenderType { get; set; }        

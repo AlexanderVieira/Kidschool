@@ -15,7 +15,7 @@ namespace Universal.EBI.Childs.API.Data
     public class ChildDbContext : DbContext, IUnitOfWork
     {
         private readonly IMediatorHandler _mediatorHandler;
-        public DbSet<Child> Children { get; set; }
+        public DbSet<Child> Children { get; set; } 
         public DbSet<Responsible> Responsibles { get; set; }
         public DbSet<Address> Addresses { get; set; }
         public DbSet<Phone> Phones { get; set; }

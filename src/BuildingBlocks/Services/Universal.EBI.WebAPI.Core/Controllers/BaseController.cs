@@ -31,7 +31,7 @@ namespace Universal.EBI.WebAPI.Core.Controllers
 
             if (result is int) return MessageHandler(result);
 
-            return BadRequest(new ResponseResult
+            return StatusCode(StatusCodes.Status500InternalServerError, new ResponseResult
             {
                 Title = "Opa! Ocorreu um erro.",
                 Status = StatusCodes.Status500InternalServerError,
@@ -120,7 +120,7 @@ namespace Universal.EBI.WebAPI.Core.Controllers
                     });                    
 
                 case 201:
-                    return Ok(new ResponseResult
+                    return StatusCode(StatusCodes.Status201Created, new ResponseResult
                     {
                         Title = "Opa! Sucesso.",
                         Status = StatusCodes.Status201Created,
@@ -129,7 +129,7 @@ namespace Universal.EBI.WebAPI.Core.Controllers
                     });                   
 
                 case 204:
-                    return Ok(new ResponseResult
+                    return StatusCode(StatusCodes.Status204NoContent, new ResponseResult
                     {
                         Title = "Opa! Sucesso.",
                         Status = StatusCodes.Status204NoContent,
@@ -154,7 +154,7 @@ namespace Universal.EBI.WebAPI.Core.Controllers
                     });
 
                 case 403:
-                    return new ObjectResult(new ResponseResult
+                    return StatusCode(StatusCodes.Status403Forbidden, new ResponseResult
                     {
                         Title = "Opa! Ocorreu um erro.",
                         Status = StatusCodes.Status403Forbidden,
