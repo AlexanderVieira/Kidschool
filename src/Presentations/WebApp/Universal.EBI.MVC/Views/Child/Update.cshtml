@@ -57,11 +57,15 @@
                                 }
                                 @*<a onClick="$.post('/Child/AddResponsible/?childId=@Model.Id');"><i class="fas fa-2x fa-plus-circle" style="margin-left:5px"></i></a>*@
                                 @*<input type="button" class="btn btn-outline-danger ms-1" value="Adicionar Responsável" onClick="$.get('/Child/AddResponsible/?childId=@Model.Id');" />*@
-                                @Html.ActionLink("Adicionar Responsável", "AddResponsible", "Child", new { childId = Model.Id }, new { @class = "btn btn-success ms-1" })
+                                @*@Html.ActionLink("Adicionar Responsável", "AddResponsible", "Child", new { childId = Model.Id }, new { @class = "btn btn-success ms-1" })*@
                             </div>
                             <hr>
                             <div class="d-flex justify-content-center mb-2">
-                                <button type="submit" class="btn btn-primary">Atualizar</button>
+                                @Html.ActionLink("Adicionar Responsável", "AddResponsible", "Child", new { childId = Model.Id }, new { @class = "btn btn-primary ms-1" })
+                            </div>
+                            <hr>
+                            <div class="d-flex justify-content-center mb-2">
+                                <button type="submit" class="btn btn-success">Atualizar</button>
                                 @Html.ActionLink("Detahes", "Details", "Child", new { id = Model.Id }, new { @class = "btn btn-outline-primary ms-1" })
                                 @Html.ActionLink("Listagem", "GetChildren", "Child", null, new { @class = "btn btn-outline-success ms-1" })
                             </div>
@@ -189,7 +193,7 @@
                                             <hr>
                                             <div class="row">
 
-                                                @if (Model != null && Model.Phones.ToList().Count > 0)
+                                                @if (Model != null && Model.Phones.ToList().Count >= 0)
                                                 {
                                                     @for (int i = 0; i < Model.Phones.ToList().Count; i++)
                                                     {
@@ -215,93 +219,96 @@
                                                 }
 
                                                 @*@if (Model != null && Model.Phones.ToList().Count == 0)
-                                {
-                                    @for (int i = 0; i < Model.Phones.ToList().Count; i++)
-                                    {
-                                        <div class="col-sm-6">
-                                            <div class="input-group">
-                                                <label class="input-group-text" for="inputGroupSelect03-@i">Telefone</label>
-                                                <select asp-for="@Model.Phones[i].PhoneType" class="form-select" id="inputGroupSelect03-@i">
-                                                    <option selected>Selecione...</option>
-                                                    <option value="Residential">Residencial</option>
-                                                    <option value="Commercial">Comercial</option>
-                                                    <option value="CellPhone">Celular</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="input-group form-outline">
-                                                <input asp-for="@Model.Phones[i].Number" class="form-control" id="phoneNumber-@i" aria-describedby="inputGroupPrepend04-@i" />
-                                                <label for="phoneNumber-@i" class="form-label">Número</label>
-                                            </div>
-                                        </div>
-                                    }
-                                }*@
+                                                    {
+                                                        @for (int i = 0; i < Model.Phones.ToList().Count; i++)
+                                                        {
+                                                            <div class="col-sm-6">
+                                                                <div class="input-group">
+                                                                    <label class="input-group-text" for="inputGroupSelect03-@i">Telefone</label>
+                                                                    <select asp-for="@Model.Phones[i].PhoneType" class="form-select" id="inputGroupSelect03-@i">
+                                                                        <option selected>Selecione...</option>
+                                                                        <option value="Residential">Residencial</option>
+                                                                        <option value="Commercial">Comercial</option>
+                                                                        <option value="CellPhone">Celular</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-6">
+                                                                <div class="input-group form-outline">
+                                                                    <input asp-for="@Model.Phones[i].Number" class="form-control" id="phoneNumber-@i" aria-describedby="inputGroupPrepend04-@i" />
+                                                                    <label for="phoneNumber-@i" class="form-label">Número</label>
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                    }*@
 
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="card mb-4">
-                                        <div class="card-body">
-                                            <div class="row">
-                                                <div class="col-sm-9">
-                                                    <input type="hidden" asp-for="@Model.Address.Id" value="@Model.Address.Id" />
-                                                    <div class="input-group form-outline">
-                                                        <input asp-for="@Model.Address.PublicPlace" class="form-control" id="publicPlace" aria-describedby="inputGroupPrepend5" />
-                                                        <label for="publicPlace" class="form-label">Logradouro</label>
+                                    @if (@Model.Address != null)
+                                    {
+                                        <div class="card mb-4">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-sm-9">
+                                                        <input type="hidden" asp-for="@Model.Address.Id" value="@Model.Address.Id" />
+                                                        <div class="input-group form-outline">
+                                                            <input asp-for="@Model.Address.PublicPlace" class="form-control" id="publicPlace" aria-describedby="inputGroupPrepend5" />
+                                                            <label for="publicPlace" class="form-label">Logradouro</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <div class="input-group form-outline">
+                                                            <input asp-for="@Model.Address.Number" class="form-control" id="number" aria-describedby="inputGroupPrepend6" />
+                                                            <label for="number" class="form-label">Número</label>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-sm-3">
-                                                    <div class="input-group form-outline">
-                                                        <input asp-for="@Model.Address.Number" class="form-control" id="number" aria-describedby="inputGroupPrepend6" />
-                                                        <label for="number" class="form-label">Número</label>
+                                                <hr>
+                                                <div class="row">
+                                                    <div class="col-sm-4">
+                                                        <div class="input-group form-outline">
+                                                            <input asp-for="@Model.Address.Complement" class="form-control" id="complement" aria-describedby="inputGroupPrepend7" />
+                                                            <label for="complement" class="form-label">Complemento</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <div class="input-group form-outline">
+                                                            <input asp-for="@Model.Address.District" class="form-control" id="district" aria-describedby="inputGroupPrepend8" />
+                                                            <label for="district" class="form-label">Bairro</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <div class="input-group form-outline">
+                                                            <input asp-for="@Model.Address.City" class="form-control" id="city" aria-describedby="inputGroupPrepend9" />
+                                                            <label for="city" class="form-label">Cidade</label>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <hr>
-                                            <div class="row">
-                                                <div class="col-sm-4">
-                                                    <div class="input-group form-outline">
-                                                        <input asp-for="@Model.Address.Complement" class="form-control" id="complement" aria-describedby="inputGroupPrepend7" />
-                                                        <label for="complement" class="form-label">Complemento</label>
+                                                <hr>
+                                                <div class="row">
+                                                    <div class="col-sm-6">
+                                                        <div class="input-group form-outline">
+                                                            <input asp-for="@Model.Address.State" class="form-control" id="state" aria-describedby="inputGroupPrepend10" />
+                                                            <label for="state" class="form-label">Estado</label>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="col-sm-4">
-                                                    <div class="input-group form-outline">
-                                                        <input asp-for="@Model.Address.District" class="form-control" id="district" aria-describedby="inputGroupPrepend8" />
-                                                        <label for="district" class="form-label">Bairro</label>
+                                                    <div class="col-sm-4">
+                                                        <div class="input-group form-outline">
+                                                            <input asp-for="@Model.Address.Country" class="form-control" id="country" aria-describedby="inputGroupPrepend11" />
+                                                            <label for="country" class="form-label">País</label>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="col-sm-4">
-                                                    <div class="input-group form-outline">
-                                                        <input asp-for="@Model.Address.City" class="form-control" id="city" aria-describedby="inputGroupPrepend9" />
-                                                        <label for="city" class="form-label">Cidade</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <hr>
-                                            <div class="row">
-                                                <div class="col-sm-6">
-                                                    <div class="input-group form-outline">
-                                                        <input asp-for="@Model.Address.State" class="form-control" id="state" aria-describedby="inputGroupPrepend10" />
-                                                        <label for="state" class="form-label">Estado</label>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-4">
-                                                    <div class="input-group form-outline">
-                                                        <input asp-for="@Model.Address.Country" class="form-control" id="country" aria-describedby="inputGroupPrepend11" />
-                                                        <label for="country" class="form-label">País</label>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-2">
-                                                    <div class="input-group form-outline">
-                                                        <input asp-for="@Model.Address.ZipCode" class="form-control" id="zipCode" aria-describedby="inputGroupPrepend12" />
-                                                        <label for="zipCode" class="form-label">CEP</label>
+                                                    <div class="col-sm-2">
+                                                        <div class="input-group form-outline">
+                                                            <input asp-for="@Model.Address.ZipCode" class="form-control" id="zipCode" aria-describedby="inputGroupPrepend12" />
+                                                            <label for="zipCode" class="form-label">CEP</label>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -399,7 +406,7 @@
                                                     </div>
                                                     <hr>
                                                     <div class="row">
-                                                        @if (Model != null && Model.Responsibles[i].Phones.ToList().Count > 0)
+                                                        @if (Model != null && Model.Responsibles[i].Phones.ToList().Count >= 0)
                                                         {
                                                             @for (int j = 0; j < Model.Responsibles[i].Phones.ToList().Count; j++)
                                                             {
@@ -425,28 +432,28 @@
                                                         }
 
                                                         @*@if (Model != null && Model.Phones.ToList().Count == 0)
-                                        {
-                                            @for (int j = 0; j < Model.Responsibles[i].Phones.ToList().Count; j++)
-                                            {
-                                                <div class="col-sm-6">
-                                                    <div class="input-group">
-                                                        <label class="input-group-text" for="inputGroupSelect06">Telefone</label>
-                                                        <select asp-for="@Model.Responsibles[i].Phones[j].PhoneType" class="form-select" id="inputGroupSelect06">
-                                                            <option selected>Selecione...</option>
-                                                            <option value="Residential">Residencial</option>
-                                                            <option value="Commercial">Comercial</option>
-                                                            <option value="CellPhone">Celular</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-6">
-                                                    <div class="input-group form-outline">
-                                                        <input asp-for="@Model.Responsibles[i].Phones[j].Number" class="form-control" id="reponsible-phoneNumber" aria-describedby="inputGroupPrepend18" />
-                                                        <label for="reponsible-phoneNumber" class="form-label">Número</label>
-                                                    </div>
-                                                </div>
-                                            }
-                                        }*@
+                                                            {
+                                                                @for (int j = 0; j < Model.Responsibles[i].Phones.ToList().Count; j++)
+                                                                {
+                                                                    <div class="col-sm-6">
+                                                                        <div class="input-group">
+                                                                            <label class="input-group-text" for="inputGroupSelect06">Telefone</label>
+                                                                            <select asp-for="@Model.Responsibles[i].Phones[j].PhoneType" class="form-select" id="inputGroupSelect06">
+                                                                                <option selected>Selecione...</option>
+                                                                                <option value="Residential">Residencial</option>
+                                                                                <option value="Commercial">Comercial</option>
+                                                                                <option value="CellPhone">Celular</option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-sm-6">
+                                                                        <div class="input-group form-outline">
+                                                                            <input asp-for="@Model.Responsibles[i].Phones[j].Number" class="form-control" id="reponsible-phoneNumber" aria-describedby="inputGroupPrepend18" />
+                                                                            <label for="reponsible-phoneNumber" class="form-label">Número</label>
+                                                                        </div>
+                                                                    </div>
+                                                                }
+                                                            }*@
 
                                                     </div>
                                                 </div>
@@ -526,7 +533,7 @@
 
 <script>
     function seedCheck() {
-        
+
         if ($('#flexSwitchCheck').prop('checked') == true) {
             $('#flexSwitchCheck').val(true);
         }
@@ -534,7 +541,7 @@
             $('#flexSwitchCheck').val(false);
         }
     }
-   
+
 </script>
 
 <!-- MDB -->

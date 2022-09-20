@@ -90,6 +90,19 @@ namespace Universal.EBI.MVC.Controllers
                     ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage)).ToList();
 
                 var rs = (ResponseResult)response.Value;
+                if (rs.Status == 404)
+                {
+                    var pagedResult = new PagedResult<ChildResponseDesignViewModel>
+                    {
+                        List = new List<ChildResponseDesignViewModel>(),
+                        PageSize = ps,
+                        PageIndex = page,
+                        Query = q,
+                        ReferenceAction = "GetChildrenInactives",
+                        TotalResults = ps * page
+                    };
+                    return View("Index", pagedResult);
+                }
                 return RedirectToAction("Error", "Home", new { id = rs.Status });
 
             }
@@ -162,18 +175,18 @@ namespace Universal.EBI.MVC.Controllers
             try
             {
                 request.Id = Guid.NewGuid();
-                request.FullName = $"{request.FirstName} {request.LastName}";
-                request.CreatedBy = _user.GetUserEmail();
-                request.CreatedDate = DateTime.Now;
-                request.Address.Id = Guid.NewGuid();
-                request.Phones.ToList().ForEach(c => c.Id = Guid.NewGuid());
+                //request.FullName = $"{request.FirstName} {request.LastName}";
+                //request.CreatedBy = _user.GetUserEmail();
+                //request.CreatedDate = DateTime.Now;
+                //request.Address.Id = Guid.NewGuid();
+                //request.Phones.ToList().ForEach(c => c.Id = Guid.NewGuid());
                                 
                 request.Responsibles.ToList().ForEach(r => r.Id = Guid.NewGuid());
-                request.Responsibles.ToList().ForEach(r => r.FullName = $"{request.FirstName} {request.LastName}");
-                request.Responsibles.ToList().ForEach(r => r.CreatedDate = DateTime.Now);
-                request.Responsibles.ToList().ForEach(r => r.CreatedBy = _user.GetUserEmail());
-                request.Responsibles.ToList().ForEach(r => r.Address.Id = Guid.NewGuid());
-                request.Responsibles.ToList().ForEach(r => r.Phones.ToList().ForEach(p => p.Id = Guid.NewGuid()));                
+                //request.Responsibles.ToList().ForEach(r => r.FullName = $"{request.FirstName} {request.LastName}");
+                //request.Responsibles.ToList().ForEach(r => r.CreatedDate = DateTime.Now);
+                //request.Responsibles.ToList().ForEach(r => r.CreatedBy = _user.GetUserEmail());
+                //request.Responsibles.ToList().ForEach(r => r.Address.Id = Guid.NewGuid());
+                //request.Responsibles.ToList().ForEach(r => r.Phones.ToList().ForEach(p => p.Id = Guid.NewGuid()));                
 
                 var response = await _bffService.CreateChild(request);
                 if (HasResponseErrors(response)) 
@@ -184,7 +197,7 @@ namespace Universal.EBI.MVC.Controllers
                 var vmChild = _bffService.GetChildById(request.Id);
                 if (vmChild != null)
                 {
-                    return View(nameof(Details), vmChild);
+                    return View("Details", vmChild);
                 }
                 return RedirectToAction("Error", "Home", new { id = 500 });
             }
@@ -267,7 +280,7 @@ namespace Universal.EBI.MVC.Controllers
         {
             if (Guid.Empty == id)
             {
-                return View();
+                return RedirectToAction("Error", "Home", new { id = 404 });
             }
             var response = await _bffService.GetChildById(id);
             if (response != null)
@@ -286,15 +299,15 @@ namespace Universal.EBI.MVC.Controllers
             {
                 if (Guid.Empty == id)
                 {
-                    return View();
+                    return RedirectToAction("Error", "Home", new { id = 404 });
                 }
                 var response = await _bffService.DeleteChild(id);
                 if (HasResponseErrors(response))
                 {
                     TempData["Errors"] = ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage)).ToList();
-                    return View();
-                }
-                return RedirectToAction(nameof(GetChildren));
+                    return View(nameof(GetChildren));
+                }                
+                return RedirectToAction("Error", "Home", new { id = 404 });
             }
             catch(Exception ex)
             {

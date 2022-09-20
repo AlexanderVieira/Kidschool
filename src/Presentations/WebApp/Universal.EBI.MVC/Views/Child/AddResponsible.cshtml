@@ -5,190 +5,194 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="row d-flex justify-content-center mt-4">   
-    <div class="col-lg-8">
-        <div class="row">
-            <div class="col">
-                <nav aria-label="breadcrumb" class="bg-light rounded-3 p-3 mb-4">
-                    <ol class="breadcrumb mb-0">
-                        <li class="breadcrumb-item"><a href="#">Cadastros</a></li>
-                        <li class="breadcrumb-item"><a href="#">Criança</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Adicionar-responsável</li>
-                    </ol>
-                </nav>
-            </div>
-        </div>
+<main style="background-color: #eee;">
+    <div class="container py-2">
+        <div class="row d-flex justify-content-center mt-4">
+            <div class="col-lg-8">
+                <div class="row">
+                    <div class="col">
+                        <nav aria-label="breadcrumb" class="bg-light rounded-3 p-3 mb-4">
+                            <ol class="breadcrumb mb-0">
+                                <li class="breadcrumb-item"><a href="#">Cadastros</a></li>
+                                <li class="breadcrumb-item"><a href="#">Criança</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Adicionar-responsável</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
 
-        <form class="g-4" asp-controller="Child" asp-action="AddResponsible" method="post">
-            <input type="hidden" asp-for="@Model.ChildId" value="@Model.ChildId" />
-            <input type="hidden" asp-for="@Model.ResponsibleViewModel.Id" value="@Guid.NewGuid()" />
-            <div class="card mb-4">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="input-group form-outline text-muted mb-0">
-                                <input asp-for="@Model.ResponsibleViewModel.FirstName" class="form-control" id="reponsibleFirstname" aria-describedby="inputGroupPrepend13" />
-                                <label for="reponsibleFirstname" class="form-label">Primeiro nome</label>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="input-group form-outline">
-                                <input asp-for="@Model.ResponsibleViewModel.LastName" class="form-control" id="reponsibleLastname" aria-describedby="inputGroupPrepend14" />
-                                <label for="reponsibleLastname" class="form-label">Sobrenome</label>
-                            </div>
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="row">
-                        <div class="col-sm-4">
-                            <div class="input-group form-outline">
-                                <input asp-for="@Model.ResponsibleViewModel.Email" class="form-control" id="reponsibleEmail" aria-describedby="inputGroupPrepend15" />
-                                <label for="reponsibleEmail" class="form-label">E-mail</label>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="input-group form-outline">
-                                <input asp-for="@Model.ResponsibleViewModel.Cpf" class="form-control" id="reponsibleCpf" aria-describedby="inputGroupPrepend16" />
-                                <label for="reponsibleCpf" class="form-label">CPF</label>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <div class='input-group date' id='datepicker2'>
-                                    <input asp-for="@Model.ResponsibleViewModel.BirthDate" class="form-control" />
-                                    <span class="input-group-append">
-                                        <span class="input-group-text bg-white d-block">
-                                            <i class="fa fa-calendar"></i>
-                                        </span>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="input-group">
-                                <label class="input-group-text" for="inputGroupSelect04">Gênero</label>
-                                <select asp-for="@Model.ResponsibleViewModel.GenderType" class="form-select" id="inputGroupSelect04">
-                                    <option selected>Selecione...</option>
-                                    <option value="M">Masculino</option>
-                                    <option value="F">Feminino</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="input-group">
-                                <label class="input-group-text" for="inputGroupSelect05">Parentesco</label>
-                                <select asp-for="@Model.ResponsibleViewModel.KinshipType" class="form-select" id="inputGroupSelect05">
-                                    <option selected>Selecione...</option>
-                                    <option value="Dad">Pai</option>
-                                    <option value="Mom">Mãe</option>
-                                    <option value="Grandfather">Avô</option>
-                                    <option value="Grandmother">Avó</option>
-                                    <option value="Uncle">Tio</option>
-                                    <option value="Aunt">Tia</option>
-                                    <option value="Brother">Irmão</option>
-                                    <option value="Sister">Irmã</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="row">
-                        @if (Model != null && Model.ResponsibleViewModel.Phones.ToList().Count > 0)
-                        {
-                            @for (int j = 0; j < Model.ResponsibleViewModel.Phones.ToList().Count; j++)
-                            {
-                                <input type="hidden" asp-for="@Model.ResponsibleViewModel.Phones[j].Id" value="@Model.ResponsibleViewModel.Phones[j].Id" />
+                <form class="g-4" asp-controller="Child" asp-action="AddResponsible" method="post">
+                    <input type="hidden" asp-for="@Model.ChildId" value="@Model.ChildId" />
+                    <input type="hidden" asp-for="@Model.ResponsibleViewModel.Id" value="@Guid.NewGuid()" />
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <div class="row">
                                 <div class="col-sm-6">
-                                    <div class="input-group">
-                                        <label class="input-group-text" for="inputGroupSelect06">Telefone</label>
-                                        <select asp-for="@Model.ResponsibleViewModel.Phones[j].PhoneType" class="form-select" id="inputGroupSelect06">
-                                            <option selected>Selecione...</option>
-                                            <option value="Residential">Residencial</option>
-                                            <option value="Commercial">Comercial</option>
-                                            <option value="CellPhone">Celular</option>
-                                        </select>
+                                    <div class="input-group form-outline text-muted mb-0">
+                                        <input asp-for="@Model.ResponsibleViewModel.FirstName" class="form-control" id="reponsibleFirstname" aria-describedby="inputGroupPrepend13" />
+                                        <label for="reponsibleFirstname" class="form-label">Primeiro nome</label>
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="input-group form-outline">
-                                        <input asp-for="@Model.ResponsibleViewModel.Phones[j].Number" class="form-control" id="reponsiblePhoneNumber" aria-describedby="inputGroupPrepend17" />
-                                        <label for="reponsiblePhoneNumber" class="form-label">Número</label>
+                                        <input asp-for="@Model.ResponsibleViewModel.LastName" class="form-control" id="reponsibleLastname" aria-describedby="inputGroupPrepend14" />
+                                        <label for="reponsibleLastname" class="form-label">Sobrenome</label>
                                     </div>
                                 </div>
-                            }
-                        }
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="input-group form-outline">
+                                        <input asp-for="@Model.ResponsibleViewModel.Email" class="form-control" id="reponsibleEmail" aria-describedby="inputGroupPrepend15" />
+                                        <label for="reponsibleEmail" class="form-label">E-mail</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="input-group form-outline">
+                                        <input asp-for="@Model.ResponsibleViewModel.Cpf" class="form-control" id="reponsibleCpf" aria-describedby="inputGroupPrepend16" />
+                                        <label for="reponsibleCpf" class="form-label">CPF</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <div class='input-group date' id='datepicker2'>
+                                            <input asp-for="@Model.ResponsibleViewModel.BirthDate" class="form-control" />
+                                            <span class="input-group-append">
+                                                <span class="input-group-text bg-white d-block">
+                                                    <i class="fa fa-calendar"></i>
+                                                </span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="input-group">
+                                        <label class="input-group-text" for="inputGroupSelect04">Gênero</label>
+                                        <select asp-for="@Model.ResponsibleViewModel.GenderType" class="form-select" id="inputGroupSelect04">
+                                            <option selected>Selecione...</option>
+                                            <option value="M">Masculino</option>
+                                            <option value="F">Feminino</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="input-group">
+                                        <label class="input-group-text" for="inputGroupSelect05">Parentesco</label>
+                                        <select asp-for="@Model.ResponsibleViewModel.KinshipType" class="form-select" id="inputGroupSelect05">
+                                            <option selected>Selecione...</option>
+                                            <option value="Dad">Pai</option>
+                                            <option value="Mom">Mãe</option>
+                                            <option value="Grandfather">Avô</option>
+                                            <option value="Grandmother">Avó</option>
+                                            <option value="Uncle">Tio</option>
+                                            <option value="Aunt">Tia</option>
+                                            <option value="Brother">Irmão</option>
+                                            <option value="Sister">Irmã</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                @if (Model != null && Model.ResponsibleViewModel.Phones.ToList().Count > 0)
+                                {
+                                    @for (int j = 0; j < Model.ResponsibleViewModel.Phones.ToList().Count; j++)
+                                    {
+                                        <input type="hidden" asp-for="@Model.ResponsibleViewModel.Phones[j].Id" value="@Model.ResponsibleViewModel.Phones[j].Id" />
+                                        <div class="col-sm-6">
+                                            <div class="input-group">
+                                                <label class="input-group-text" for="inputGroupSelect06">Telefone</label>
+                                                <select asp-for="@Model.ResponsibleViewModel.Phones[j].PhoneType" class="form-select" id="inputGroupSelect06">
+                                                    <option selected>Selecione...</option>
+                                                    <option value="Residential">Residencial</option>
+                                                    <option value="Commercial">Comercial</option>
+                                                    <option value="CellPhone">Celular</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="input-group form-outline">
+                                                <input asp-for="@Model.ResponsibleViewModel.Phones[j].Number" class="form-control" id="reponsiblePhoneNumber" aria-describedby="inputGroupPrepend17" />
+                                                <label for="reponsiblePhoneNumber" class="form-label">Número</label>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                            </div>
+                        </div>
                     </div>
-                </div>
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <div class="row">
+                                <input type="hidden" asp-for="@Model.ResponsibleViewModel.Address.Id" value="@Model.ResponsibleViewModel.Address.Id" />
+                                <div class="col-sm-9">
+                                    <div class="input-group form-outline">
+                                        <input asp-for="@Model.ResponsibleViewModel.Address.PublicPlace" class="form-control" id="reponsiblePblicPlace" aria-describedby="inputGroupPrepend19" />
+                                        <label for="reponsiblePublicPlace" class="form-label">Logradouro</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="input-group form-outline">
+                                        <input asp-for="@Model.ResponsibleViewModel.Address.Number" class="form-control" id="reponsibleNumber" aria-describedby="inputGroupPrepend20" />
+                                        <label for="reponsibleNumber" class="form-label">Número</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="input-group form-outline">
+                                        <input asp-for="@Model.ResponsibleViewModel.Address.Complement" class="form-control" id="reponsibleComplement" aria-describedby="inputGroupPrepend21" />
+                                        <label for="reponsibleComplement" class="form-label">Complemento</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="input-group form-outline">
+                                        <input asp-for="@Model.ResponsibleViewModel.Address.District" class="form-control" id="reponsibleDistrict" aria-describedby="inputGroupPrepend22" />
+                                        <label for="reponsibleDistrict" class="form-label">Bairro</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="input-group form-outline">
+                                        <input asp-for="@Model.ResponsibleViewModel.Address.City" class="form-control" id="reponsibleCity" aria-describedby="inputGroupPrepend23" />
+                                        <label for="reponsibleCity" class="form-label">Cidade</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="input-group form-outline">
+                                        <input asp-for="@Model.ResponsibleViewModel.Address.State" class="form-control" id="reponsibleState" aria-describedby="inputGroupPrepend24" />
+                                        <label for="reponsibleState" class="form-label">Estado</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="input-group form-outline">
+                                        <input asp-for="@Model.ResponsibleViewModel.Address.Country" class="form-control" id="reponsibleCountry" aria-describedby="inputGroupPrepend25" />
+                                        <label for="reponsibleCountry" class="form-label">País</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2">
+                                    <div class="input-group form-outline">
+                                        <input asp-for="@Model.ResponsibleViewModel.Address.ZipCode" class="form-control" id="reponsibleZipCode" aria-describedby="inputGroupPrepend26" />
+                                        <label for="reponsibleZipCode" class="form-label">CEP</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center mb-2">
+                        <button type="submit" class="btn btn-primary">Adicionar</button>
+                        @Html.ActionLink("Detalhes", "Details", "Child", new { id = Model.ChildId }, new { @class = "btn btn-outline-primary ms-1" })
+                        @Html.ActionLink("Listagem", "GetChildren", "Child", null, new { @class = "btn btn-outline-success ms-1" })
+                    </div>
+                </form>
             </div>
-            <div class="card mb-4">
-                <div class="card-body">
-                    <div class="row">
-                        <input type="hidden" asp-for="@Model.ResponsibleViewModel.Address.Id" value="@Model.ResponsibleViewModel.Address.Id" />
-                        <div class="col-sm-9">
-                            <div class="input-group form-outline">
-                                <input asp-for="@Model.ResponsibleViewModel.Address.PublicPlace" class="form-control" id="reponsiblePblicPlace" aria-describedby="inputGroupPrepend19" />
-                                <label for="reponsiblePublicPlace" class="form-label">Logradouro</label>
-                            </div>
-                        </div>
-                        <div class="col-sm-3">
-                            <div class="input-group form-outline">
-                                <input asp-for="@Model.ResponsibleViewModel.Address.Number" class="form-control" id="reponsibleNumber" aria-describedby="inputGroupPrepend20" />
-                                <label for="reponsibleNumber" class="form-label">Número</label>
-                            </div>
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="row">
-                        <div class="col-sm-4">
-                            <div class="input-group form-outline">
-                                <input asp-for="@Model.ResponsibleViewModel.Address.Complement" class="form-control" id="reponsibleComplement" aria-describedby="inputGroupPrepend21" />
-                                <label for="reponsibleComplement" class="form-label">Complemento</label>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="input-group form-outline">
-                                <input asp-for="@Model.ResponsibleViewModel.Address.District" class="form-control" id="reponsibleDistrict" aria-describedby="inputGroupPrepend22" />
-                                <label for="reponsibleDistrict" class="form-label">Bairro</label>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="input-group form-outline">
-                                <input asp-for="@Model.ResponsibleViewModel.Address.City" class="form-control" id="reponsibleCity" aria-describedby="inputGroupPrepend23" />
-                                <label for="reponsibleCity" class="form-label">Cidade</label>
-                            </div>
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="input-group form-outline">
-                                <input asp-for="@Model.ResponsibleViewModel.Address.State" class="form-control" id="reponsibleState" aria-describedby="inputGroupPrepend24" />
-                                <label for="reponsibleState" class="form-label">Estado</label>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="input-group form-outline">
-                                <input asp-for="@Model.ResponsibleViewModel.Address.Country" class="form-control" id="reponsibleCountry" aria-describedby="inputGroupPrepend25" />
-                                <label for="reponsibleCountry" class="form-label">País</label>
-                            </div>
-                        </div>
-                        <div class="col-sm-2">
-                            <div class="input-group form-outline">
-                                <input asp-for="@Model.ResponsibleViewModel.Address.ZipCode" class="form-control" id="reponsibleZipCode" aria-describedby="inputGroupPrepend26" />
-                                <label for="reponsibleZipCode" class="form-label">CEP</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="d-flex justify-content-center mb-2">
-                <button type="submit" class="btn btn-primary">Adicionar</button>
-                @Html.ActionLink("Detalhes", "Details", "Child", new { id = Model.ChildId }, new { @class = "btn btn-outline-primary ms-1" })
-                @Html.ActionLink("Listagem", "GetChildren", "Child", null, new { @class = "btn btn-outline-success ms-1" })
-            </div>
-        </form>
-    </div>    
-</div>
+        </div>
+    </div>
+</main>  
