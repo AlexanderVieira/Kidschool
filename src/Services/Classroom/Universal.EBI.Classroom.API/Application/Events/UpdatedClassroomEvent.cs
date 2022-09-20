@@ -1,5 +1,5 @@
 ﻿using System;
-using Universal.EBI.Core.DomainObjects.Models;
+using Universal.EBI.Classrooms.API.Models;
 using Universal.EBI.Core.Messages;
 
 namespace Universal.EBI.Classrooms.API.Application.Events

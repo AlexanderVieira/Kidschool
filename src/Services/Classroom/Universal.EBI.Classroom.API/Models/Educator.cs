@@ -1,4 +1,5 @@
 ﻿using System;
+using Universal.EBI.Core.DomainObjects;
 using Universal.EBI.Core.DomainObjects.Models.Enums;
 
 namespace Universal.EBI.Classrooms.API.Models
@@ -10,8 +11,10 @@ namespace Universal.EBI.Classrooms.API.Models
         public string LastName { get; set; }
         public FunctionType FunctionType { get; set; }
         public string PhotoUrl { get; set; }        
-        public Guid ClassroomId { get; set; }
+        //public Guid ClassroomId { get; set; }
 
-    }   
-    
+        public Educator()
+        {
+        }
+    }
 }

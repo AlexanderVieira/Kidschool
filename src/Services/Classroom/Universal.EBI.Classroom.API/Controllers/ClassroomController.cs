@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Universal.EBI.Classrooms.API.Application.Commands;
+using Universal.EBI.Classrooms.API.Application.DTOs;
 using Universal.EBI.Classrooms.API.Application.Queries.Interfaces;
 using Universal.EBI.Core.Mediator.Interfaces;
 using Universal.EBI.WebAPI.Core.AspNetUser.Interfaces;
@@ -39,19 +41,15 @@ namespace Universal.EBI.Classrooms.API.Controllers
 
         [HttpPost("api/classroom/create")]        
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        public async Task<IActionResult> CreateClassroom([FromBody] RegisterClassroomCommand command)
-        {
-            //command.CreatedDate = DateTime.Now.ToString();
-            //command.CreatedBy = "Admin";
-            return CustomResponse(await _mediator.SendCommand(command));
+        public async Task<IActionResult> CreateClassroom([FromBody] ClassroomDto request)
+        {  
+            return CustomResponse(await _mediator.SendCommand(new RegisterClassroomCommand(request)));
         }        
 
         [HttpPut("api/Classroom/update")]
-        public async Task<IActionResult> UpdateClassroom([FromBody] UpdateClassroomCommand command)
-        {
-            command.LastModifiedDate = DateTime.UtcNow.ToShortDateString();
-            command.LastModifiedBy = "Admin";
-            return CustomResponse(await _mediator.SendCommand(command));
+        public async Task<IActionResult> UpdateClassroom([FromBody] ClassroomDto request)
+        {   
+            return CustomResponse(await _mediator.SendCommand(new UpdateClassroomCommand(request)));
         }
 
         [HttpDelete("api/classroom/delete/{id}")]
@@ -60,33 +58,35 @@ namespace Universal.EBI.Classrooms.API.Controllers
             var command = new DeleteClassroomCommand 
             {
                 Id = id,
-                LastModifiedDate = DateTime.UtcNow.ToShortDateString(),
-                LastModifiedBy = _user.Name
+                LastModifiedDate = DateTime.Now.ToShortDateString(),
+                LastModifiedBy = _user.GetUserEmail()
             };
             return CustomResponse(await _mediator.SendCommand(command));
         }
 
         [HttpPost("api/classroom/child/add")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        public async Task<IActionResult> AddChildsClassroom([FromBody] UpdateClassroomCommand command)
+        public async Task<IActionResult> AddChildsClassroom([FromBody] ClassroomDto request)
         {
-            if (command.Childs == null || command.Childs.Length <= 0)
+            if (request.Childs == null || request.Childs.Length <= 0)
             {
-                return CustomResponse(command);
-            }
-
-            command.LastModifiedDate = DateTime.UtcNow.ToShortDateString();
-            command.LastModifiedBy = _user.Name;
-
-            return CustomResponse(await _mediator.SendCommand(command));                   
+                return CustomResponse(request);
+            }           
+           
+            return CustomResponse(await _mediator.SendCommand(new AddChildClassroomCommand(request)));                   
 
         }
 
         [HttpPost("api/classroom/child/delete")]
-        public async Task<IActionResult> DeleteChildsClassromm([FromBody] DeleteChildClassroomCommand command)
+        public async Task<IActionResult> DeleteChildsClassromm([FromBody] DeleteChildClassroomDto request)
         {
-            command.LastModifiedDate = DateTime.UtcNow.ToShortDateString();
-            command.LastModifiedBy = _user.Name;
+            var command = new DeleteChildClassroomCommand
+            {
+                ChildId = request.ChildId,
+                ClassroomId = request.ClassroomId,
+                LastModifiedDate = request.LastModifiedDate ?? DateTime.Now.ToShortDateString(),
+                LastModifiedBy = request.LastModifiedBy ?? _user.GetUserEmail()
+            };
             return CustomResponse(await _mediator.SendCommand(command));
         }
     }

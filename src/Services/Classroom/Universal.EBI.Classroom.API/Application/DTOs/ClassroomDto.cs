@@ -15,16 +15,15 @@ namespace Universal.EBI.Classrooms.API.Application.DTOs
         public string ClassroomType { get; set; }      
         public string MeetingTime { get; set; }        
         public EducatorDto Educator { get; set; }
-        public Dictionary<string, ChildDto> Childs { get; set; }
+        public ChildDto[] Childs { get; set; }
         public bool Actived { get; set; }
         public string CreatedBy { get; set; }
-        public string CreatedDate { get; set; }
+        public DateTime? CreatedDate { get; set; }
         public string LastModifiedBy { get; set; }
-        public string LastModifiedDate { get; set; }
+        public DateTime? LastModifiedDate { get; set; }
 
         public ClassroomDto()
-        {
-            Childs = new Dictionary<string, ChildDto>();
+        {            
         }
 
         public Classroom ToConvertClassroom(ClassroomDto classroomDto)
@@ -39,25 +38,26 @@ namespace Universal.EBI.Classrooms.API.Application.DTOs
                 ClassroomType = (ClassroomType)Enum.Parse(typeof(ClassroomType), classroomDto.ClassroomType, true),                
                 Actived = classroomDto.Actived,
                 MeetingTime = classroomDto.MeetingTime,
-                CreatedDate = DateTime.Parse(classroomDto.CreatedDate),
+                CreatedDate = classroomDto.CreatedDate.Value,
                 CreatedBy = classroomDto.CreatedBy,
-                Children = new List<Core.DomainObjects.Models.Child> () 
+                LastModifiedDate = classroomDto.LastModifiedDate,
+                LastModifiedBy = classroomDto.LastModifiedBy,
+                Children = new List<Child> () 
             };
 
             var educator = classroomDto.Educator.ToConvertEducator(classroomDto.Educator);
             classroom.Educator = educator;
-
-            foreach (var item in classroomDto.Childs)
+            var dictionary = classroomDto.Childs.Length > 0 ? classroomDto.Childs.ToDictionary(c => c.Id.ToString()) : new Dictionary<string, ChildDto>();
+            foreach (var item in dictionary)
             {
-                if (classroomDto.Childs.TryGetValue(item.Key.ToString(), out ChildDto childDto))
+                if (dictionary.TryGetValue(item.Key.ToString(), out ChildDto childDto))
                 {
                     var child = childDto.ToConvertChild(childDto);
-                    classroom.Children.Add(child);                    
+                    classroom.Children.Add(child);
                 }
             }
             classroom.Children.ToArray();
-            return classroom;
-
+            return classroom;            
         }
         
     }

@@ -12,7 +12,7 @@ namespace Universal.EBI.Classrooms.API.Application.DTOs
         public string ZipCode { get; set; }
         public string City { get; set; }
         public string State { get; set; }
-        public Guid? ForeingKeyId { get; set; }
+        //public Guid? ForeingKeyId { get; set; }
 
     }
 }

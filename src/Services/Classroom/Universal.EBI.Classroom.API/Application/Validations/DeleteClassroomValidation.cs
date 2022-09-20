@@ -11,7 +11,7 @@ namespace Universal.EBI.Classrooms.API.Application.Validations
         {
             RuleFor(c => c.Id)
                 .NotEqual(Guid.Empty)
-                .WithMessage("Id da criança inválido.");
+                .WithMessage("Id da sala inválido.");
             
         }
         
