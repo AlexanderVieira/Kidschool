@@ -17,14 +17,14 @@ namespace Universal.EBI.BFF.Report.API.Controllers
         }        
 
         [HttpGet]
-        [Route("bff/classrooms")]
+        [Route("api/bff/classrooms")]
         public async Task<PagedResult<ClassroomDto>> GetClassrooms([FromQuery] int ps = 8, [FromQuery] int page = 1, [FromQuery] string q = null)
         {
             return await _classroomService.GetClassrooms(ps, page, q);
         }
 
         [HttpGet]
-        [Route("bff/classroom/{id}")]
+        [Route("api/bff/classroom/{id:guid}")]
         public async Task<IActionResult> GetClassroomById(Guid id)
         {
             var classroom = await _classroomService.GetClassroomById(id);
@@ -32,7 +32,7 @@ namespace Universal.EBI.BFF.Report.API.Controllers
         }
 
         [HttpPost]
-        [Route("bff/classroom/create")]
+        [Route("api/bff/classroom/create")]
         public async Task<IActionResult> CreateClassroom([FromBody] ClassroomDto classroomDto)
         {
             var response = await _classroomService.CreateClassroom(classroomDto);
@@ -40,7 +40,7 @@ namespace Universal.EBI.BFF.Report.API.Controllers
         }
 
         [HttpPut]
-        [Route("bff/classroom/update")]
+        [Route("api/bff/classroom/update")]
         public async Task<IActionResult> UpdateClassroom([FromBody] ClassroomDto classroomDto)
         {
             var response = await _classroomService.UpdateClassroom(classroomDto);
@@ -48,7 +48,7 @@ namespace Universal.EBI.BFF.Report.API.Controllers
         }
 
         [HttpPost]
-        [Route("bff/classroom/child/add")]
+        [Route("api/bff/classroom/child/add")]
         public async Task<IActionResult> AddChildsClassroom([FromBody] ClassroomDto classroomDto)
         {
             var response = await _classroomService.AddChildsClassroom(classroomDto);
@@ -56,7 +56,7 @@ namespace Universal.EBI.BFF.Report.API.Controllers
         }
 
         [HttpDelete]
-        [Route("bff/classroom/delete/{id}")]
+        [Route("api/bff/classroom/delete/{id:guid}")]
         public async Task<IActionResult> DeleteClassroom(Guid id)
         {
             var response = await _classroomService.DeleteClassroom(id);
@@ -64,7 +64,7 @@ namespace Universal.EBI.BFF.Report.API.Controllers
         }
 
         [HttpPost]
-        [Route("bff/classroom/child/delete")]
+        [Route("api/bff/classroom/child/delete")]
         public async Task<IActionResult> DeleteChildsClassroom([FromBody] DeleteChildClassroomDto deleteChildClassroomDto)
         {
             var response = await _classroomService.DeleteChildsClassroom(deleteChildClassroomDto);

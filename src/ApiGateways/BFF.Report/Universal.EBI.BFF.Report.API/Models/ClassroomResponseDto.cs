@@ -1,25 +1,21 @@
 ﻿using System;
 
-namespace Universal.EBI.MVC.Models
+namespace Universal.EBI.BFF.Report.API.Models
 {
-    public class EducatorClassroomTransportViewModel
+    public class ClassroomResponseDto
     {
-        public Guid ClassroomId { get; set; }
+        public Guid Id { get; set; }
         public string Region { get; set; }
         public string Church { get; set; }
         public string Lunch { get; set; }
         public string ClassroomType { get; set; }
         public string MeetingTime { get; set; }
+        public EducatorDto Educator { get; set; }
+        public ChildResponseDto[] Childs { get; set; }
         public bool Actived { get; set; }
         public string CreatedBy { get; set; }
         public DateTime? CreatedDate { get; set; }
         public string LastModifiedBy { get; set; }
         public DateTime? LastModifiedDate { get; set; }
-        
-        //Educador
-        public Guid EducatorId { get; set; }
-        public string EducatorFirstName { get; set; }
-        public string EducatorLastName { get; set; }
-        public string EducatorFunctionType { get; set; }
     }
 }

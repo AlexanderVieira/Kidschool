@@ -11,10 +11,7 @@ namespace Universal.EBI.Classrooms.API.Application.DTOs
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string FunctionType { get; set; }
-        public string PhotoUrl { get; set; }
-        //public List<PhoneDto> Phones { get; set; }
-        //public AddressDto Address { get; set; }
-        //public Guid ClassroomId { get; set; }
+        public string PhotoUrl { get; set; }        
 
         public Educator ToConvertEducator(EducatorDto educatorDto)
         {
@@ -22,52 +19,27 @@ namespace Universal.EBI.Classrooms.API.Application.DTOs
             {                
                 Id = educatorDto.Id,
                 FirstName = educatorDto.FirstName,
-                LastName = educatorDto.LastName,
-                //FullName = educatorDto.FullName,
-                //Email = educatorDto.Email == null ? null : new Email(educatorDto.Email.Address),
-                //Cpf = educatorDto.Cpf == null ? null : new Cpf(educatorDto.Cpf.Number),
-                //Phones = new List<Phone>(),
-                //Address = new Address(),
-                //BirthDate = string.IsNullOrWhiteSpace(educatorDto.BirthDate) ? DateTime.Now : DateTime.Parse(educatorDto.BirthDate).Date, 
-                //GenderType = string.IsNullOrWhiteSpace(educatorDto.GenderType) ? 0 : (GenderType)Enum.Parse(typeof(GenderType), educatorDto.GenderType, true),
+                LastName = educatorDto.LastName,                
                 FunctionType = (FunctionType)Enum.Parse(typeof(FunctionType), educatorDto.FunctionType, true),                
-                PhotoUrl = educatorDto.PhotoUrl,
-                //Excluded = educatorDto.Excluded,
-                //ClassroomId = educatorDto.ClassroomId
+                PhotoUrl = educatorDto.PhotoUrl,                
+            };
+            
+            return educator;
+        }
+
+        public EducatorDto ToConvertEducatorDto(Educator educator)
+        {
+            var educatorDto = new EducatorDto
+            {
+                Id = educator.Id,
+                FirstName = educator.FirstName,
+                LastName = educator.LastName,
+                FunctionType = educator.FunctionType.ToString(),
+                PhotoUrl = educator.PhotoUrl,
             };
 
-            //if (educatorDto.Address != null)
-            //{
-            //    educator.Address = new Address
-            //    {
-            //        Id = educatorDto.Address.Id,
-            //        PublicPlace = educatorDto.Address.PublicPlace,
-            //        Number = educatorDto.Address.Number,
-            //        Complement = educatorDto.Address.Complement,
-            //        District = educatorDto.Address.District,
-            //        City = educatorDto.Address.City,
-            //        State = educatorDto.Address.State,
-            //        ZipCode = educatorDto.Address.ZipCode,
-            //        EducatorId = educatorDto.Address.ForeingKeyId
-            //    };
-            //}            
-
-            //if (educatorDto.Phones != null)
-            //{
-            //    foreach (var phone in educatorDto.Phones)
-            //    {
-            //        educator.Phones.Add(new Phone
-            //        {
-            //            Id = phone.Id,
-            //            Number = phone.Number,
-            //            PhoneType = (PhoneType)Enum.Parse(typeof(PhoneType), phone.PhoneType, true),
-            //            EducatorId = phone.ForeingKeyId
-            //        });
-            //    }
-            //}            
-
-            return educator;
-        }        
+            return educatorDto;
+        }
 
     }   
     

@@ -332,26 +332,26 @@
                                             <div class="row col-md-12 mt-md-3">
                                                 <div class="col-md-4 mv-md-3">
                                                     <div class="input-group form-outline">
-                                                        <input asp-for="@Model.Childs[0].FirstName" class="form-control" id="firstname" aria-describedby="inputGroupPrepend3" required />
+                                                        <input asp-for="@Model.Children[0].FirstName" class="form-control" id="firstname" aria-describedby="inputGroupPrepend3" required />
                                                         <label for="firstname" class="form-label">Primeiro nome</label>
                                                     </div>
                                                     <div>
-                                                        <span asp-validation-for="@Model.Childs[0].FirstName" class="text-danger"></span>
+                                                        <span asp-validation-for="@Model.Children[0].FirstName" class="text-danger"></span>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-5 mb-md-3">
                                                     <div class="input-group form-outline">
-                                                        <input asp-for="@Model.Childs[0].LastName" class="form-control" id="lastname" required />
+                                                        <input asp-for="@Model.Children[0].LastName" class="form-control" id="lastname" required />
                                                         <label for="lastname" class="form-label">Sobrenome</label>
                                                     </div>
                                                     <div>
-                                                        <span asp-validation-for="@Model.Childs[0].LastName" class="text-danger"></span>
+                                                        <span asp-validation-for="@Model.Children[0].LastName" class="text-danger"></span>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3 mb-md-3">
                                                     <div class="form-group">
                                                         <div class='input-group date' id='datepicker5'>
-                                                            <input asp-for="@Model.Childs[0].BirthDate" class="form-control" />
+                                                            <input asp-for="@Model.Children[0].BirthDate" class="form-control" />
                                                             <span class="input-group-append">
                                                                 <span class="input-group-text bg-white d-block">
                                                                     <i class="fa fa-calendar"></i>
@@ -363,7 +363,7 @@
                                                 <div class="col-md-3">
                                                     <div class="input-group">
                                                         <label class="input-group-text" for="inputGroupSelect05">Sexo</label>
-                                                        <select asp-for="@Model.Childs[0].GenderType" class="form-select" id="inputGroupSelect05">
+                                                        <select asp-for="@Model.Children[0].GenderType" class="form-select" id="inputGroupSelect05">
                                                             <option selected>Selecione...</option>
                                                             <option value="M">Masculino</option>
                                                             <option value="F">Feminino</option>
@@ -373,7 +373,7 @@
                                                 <div class="col-md-3">
                                                     <div class="input-group">
                                                         <label class="input-group-text" for="inputGroupSelect05">Faixa Etária</label>
-                                                        <select asp-for="@Model.Childs[0].AgeGroupType" class="form-select" id="inputGroupSelect05">
+                                                        <select asp-for="@Model.Children[0].AgeGroupType" class="form-select" id="inputGroupSelect05">
                                                             <option selected>Selecione...</option>
                                                             <option value="Nursery">Berçário</option>
                                                             <option value="Maternal">Maternal</option>
@@ -382,24 +382,24 @@
                                                         </select>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-3">
+                                               @*<div class="col-md-3">
                                                     <div class="input-group form-outline">
-                                                        <input asp-for="@Model.Childs[0].HoraryOfEntry" class="form-control" id="firstname" aria-describedby="inputGroupPrepend3" required />
+                                                        <input asp-for="@Model.Children[0].HoraryOfEntry" class="form-control" id="firstname" aria-describedby="inputGroupPrepend3" required />
                                                         <label for="firstname" class="form-label">Horário de entrada</label>
                                                     </div>
                                                     <div>
-                                                        <span asp-validation-for="@Model.Childs[0].HoraryOfEntry" class="text-danger"></span>
+                                                        <span asp-validation-for="@Model.Children[0].HoraryOfEntry" class="text-danger"></span>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="input-group form-outline">
-                                                        <input asp-for="@Model.Childs[0].HoraryOfExit" class="form-control" id="lastname" required />
+                                                        <input asp-for="@Model.Children[0].HoraryOfExit" class="form-control" id="lastname" required />
                                                         <label for="lastname" class="form-label">Horário de saída</label>
                                                     </div>
                                                     <div>
-                                                        <span asp-validation-for="@Model.Childs[0].HoraryOfExit" class="text-danger"></span>
+                                                        <span asp-validation-for="@Model.Children[0].HoraryOfExit" class="text-danger"></span>
                                                     </div>
-                                                </div>
+                                                </div>*@
                                             </div>
                                         </div>
                                     </div>
@@ -482,26 +482,26 @@
                                             <div class="row col-md-12 mt-md-3">
                                                 <div class="col-md-4 mv-md-3">
                                                     <div class="input-group form-outline">
-                                                        <input asp-for="@Model.Childs[0].Responsibles[0].FirstName" class="form-control" id="firstname" aria-describedby="inputGroupPrepend3" required />
+                                                        <input asp-for="@Model.Children[0].Responsibles[0].FirstName" class="form-control" id="firstname" aria-describedby="inputGroupPrepend3" required />
                                                         <label for="firstname" class="form-label">Primeiro nome</label>
                                                     </div>
                                                     <div>
-                                                        <span asp-validation-for="@Model.Childs[0].Responsibles[0].FirstName" class="text-danger"></span>
+                                                        <span asp-validation-for="@Model.Children[0].Responsibles[0].FirstName" class="text-danger"></span>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-5 mb-md-3">
                                                     <div class="input-group form-outline">
-                                                        <input asp-for="@Model.Childs[0].Responsibles[0].LastName" class="form-control" id="lastname" required />
+                                                        <input asp-for="@Model.Children[0].Responsibles[0].LastName" class="form-control" id="lastname" required />
                                                         <label for="lastname" class="form-label">Sobrenome</label>
                                                     </div>
                                                     <div>
-                                                        <span asp-validation-for="@Model.Childs[0].Responsibles[0].LastName" class="text-danger"></span>
+                                                        <span asp-validation-for="@Model.Children[0].Responsibles[0].LastName" class="text-danger"></span>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3 mb-md-3">
                                                     <div class="form-group">
                                                         <div class='input-group date' id='datepicker6'>
-                                                            <input asp-for="@Model.Childs[0].Responsibles[0].BirthDate" class="form-control" />
+                                                            <input asp-for="@Model.Children[0].Responsibles[0].BirthDate" class="form-control" />
                                                             <span class="input-group-append">
                                                                 <span class="input-group-text bg-white d-block">
                                                                     <i class="fa fa-calendar"></i>
@@ -513,7 +513,7 @@
                                                 <div class="col-md-3">
                                                     <div class="input-group">
                                                         <label class="input-group-text" for="inputGroupSelect05">Sexo</label>
-                                                        <select asp-for="@Model.Childs[0].Responsibles[0].GenderType" class="form-select" id="inputGroupSelect05">
+                                                        <select asp-for="@Model.Children[0].Responsibles[0].GenderType" class="form-select" id="inputGroupSelect05">
                                                             <option selected>Selecione...</option>
                                                             <option value="M">Masculino</option>
                                                             <option value="F">Feminino</option>
@@ -523,7 +523,7 @@
                                                 <div class="col-md-3">
                                                     <div class="input-group">
                                                         <label class="input-group-text" for="inputGroupSelect05">Parentesco</label>
-                                                        <select asp-for="@Model.Childs[0].AgeGroupType" class="form-select" id="inputGroupSelect05">
+                                                        <select asp-for="@Model.Children[0].AgeGroupType" class="form-select" id="inputGroupSelect05">
                                                             <option selected>Selecione...</option>
                                                             <option value="Dad">Pai</option>
                                                             <option value="Mom">Mãe</option>
@@ -538,17 +538,17 @@
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="input-group form-outline">
-                                                        <input asp-for="@Model.Childs[0].Responsibles[0].Phones[0].Number" class="form-control" id="firstname" aria-describedby="inputGroupPrepend3" required />
+                                                        <input asp-for="@Model.Children[0].Responsibles[0].Phones[0].Number" class="form-control" id="firstname" aria-describedby="inputGroupPrepend3" required />
                                                         <label for="firstname" class="form-label">Telefone</label>
                                                     </div>
                                                     <div>
-                                                        <span asp-validation-for="@Model.Childs[0].Responsibles[0].Phones[0].Number" class="text-danger"></span>
+                                                        <span asp-validation-for="@Model.Children[0].Responsibles[0].Phones[0].Number" class="text-danger"></span>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="input-group">
                                                         <label class="input-group-text" for="inputGroupSelect01">Tipos telefones</label>
-                                                        <select asp-for="@Model.Childs[0].Responsibles[0].Phones[0].PhoneType" class="form-select" id="inputGroupSelect01">
+                                                        <select asp-for="@Model.Children[0].Responsibles[0].Phones[0].PhoneType" class="form-select" id="inputGroupSelect01">
                                                             <option selected>Selecione...</option>
                                                             <option value="Residential">Residencial</option>
                                                             <option value="Commercial">Comercial</option>

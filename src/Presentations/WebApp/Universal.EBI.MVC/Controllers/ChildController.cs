@@ -34,7 +34,7 @@ namespace Universal.EBI.MVC.Controllers
                 {
                     ViewBag.Search = q;
                     var pagedResult = (PagedResult<ChildResponseDesignViewModel>)response.Value;
-                    pagedResult.ReferenceAction = "Edit";
+                    pagedResult.ReferenceAction = "GetChildren";
                     TempDataExtension.Put(TempData, "Children", pagedResult);
                     return View("Index", pagedResult);
                 }
@@ -81,8 +81,8 @@ namespace Universal.EBI.MVC.Controllers
                 {
                     ViewBag.Search = q;
                     var pagedResult = (PagedResult<ChildResponseDesignViewModel>)response.Value;
-                    pagedResult.ReferenceAction = "Edit";
-                    TempDataExtension.Put(TempData, "Children", pagedResult);
+                    pagedResult.ReferenceAction = "GetChildrenInactives";
+                    TempDataExtension.Put(TempData, "ChildrenInactives", pagedResult);
                     return View("Index", pagedResult);
                 }
 

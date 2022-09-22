@@ -23,5 +23,8 @@ namespace Universal.EBI.MVC.Services.Interfaces
         Task<ResponseResult> AddResponsible(AddResponsibleRequestViewModel request);
         Task<ResponseResult> DeleteResponsible(DeleteResponsibleRequestViewModel request);
         Task<ResponseResult> CreateClassroom(ClassroomViewModel classroom);
+        Task<ResponseResult> UpdateClassroom(ClassroomViewModel classroom);
+        Task<ClassroomViewModel> GetClassroomById(Guid id);
+        Task<ObjectResult> GetClassrooms(int pageSize, int pageIndex, string query = null);
     }
 }

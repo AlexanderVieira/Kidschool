@@ -63,7 +63,7 @@ namespace Universal.EBI.Classrooms.API.Application.Commands
                     MeetingTime = message.ClassroomDto.MeetingTime,
                     CreatedDate = message.ClassroomDto.CreatedDate.Value.ToShortDateString(),
                     CreatedBy = message.ClassroomDto.CreatedBy,
-                    LastModifiedDate = message.ClassroomDto.LastModifiedDate.Value.ToShortDateString(),
+                    LastModifiedDate = message.ClassroomDto.LastModifiedDate == null ? null : message.ClassroomDto.LastModifiedDate.Value.ToShortDateString(),
                     LastModifiedBy = message.ClassroomDto.LastModifiedBy,
                     Childs = message.ClassroomDto.Childs
 

@@ -100,20 +100,20 @@
                             <!-- Dropdown menu -->
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <li>
-                                    <a class="dropdown-item" asp-controller="Child" asp-action="GetChildren">Children</a>
+                                    <a class="dropdown-item" asp-controller="Child" asp-action="GetChildren">Crianças</a>
                                 </li>
                                 <li><hr class="dropdown-divider" /></li>
                                 <li>
-                                    <a class="dropdown-item" asp-controller="Child" asp-action="GetChildrenInactives">Inactives Children</a>
+                                    <a class="dropdown-item" asp-controller="Child" asp-action="GetChildrenInactives">Crianças Inativas</a>
                                 </li>
                                 <li><hr class="dropdown-divider" /></li>
                                 <li>
-                                    <a class="dropdown-item" asp-controller="Child" asp-action="GetchildByCpf">Query By CPF</a>
+                                    <a class="dropdown-item" asp-controller="Classroom" asp-action="GetClassrooms">Salas</a>
                                 </li>
-                                <li><hr class="dropdown-divider" /></li>
+                                @*<li><hr class="dropdown-divider" /></li>
                                 <li>
                                     <a class="dropdown-item" asp-controller="Child" asp-action="Details">Detaild</a>
-                                </li>
+                                </li>*@
                             </ul>
                         </li>
                         <!-- Navbar dropdown -->
@@ -310,7 +310,7 @@
         $(function () {
             $('#datepicker4').datepicker({ format: 'dd/mm/yyyy' });
         });
-
+                
                             //$(function () {
                             //    $('#datepicker5').datepicker({ format: 'dd/mm/yyyy' });
                             //});

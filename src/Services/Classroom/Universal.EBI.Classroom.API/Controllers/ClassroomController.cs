@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Universal.EBI.Classrooms.API.Application.Commands;
 using Universal.EBI.Classrooms.API.Application.DTOs;
 using Universal.EBI.Classrooms.API.Application.Queries.Interfaces;
+using Universal.EBI.Classrooms.API.Models;
 using Universal.EBI.Core.Mediator.Interfaces;
 using Universal.EBI.WebAPI.Core.AspNetUser.Interfaces;
 using Universal.EBI.WebAPI.Core.Controllers;
@@ -16,46 +18,48 @@ namespace Universal.EBI.Classrooms.API.Controllers
     {
         private readonly IMediatorHandler _mediator;
         private readonly IAspNetUser _user;
-        private readonly IClassroomQueries _classroomQueries;       
+        private readonly IClassroomQueries _classroomQueries;
 
         public ClassroomController(IMediatorHandler mediator, IAspNetUser user, IClassroomQueries classroomQueries)
         {
             _mediator = mediator;
             _user = user;
             _classroomQueries = classroomQueries;
-        }        
+        }
 
         [HttpGet("api/classrooms")]
         public async Task<IActionResult> GetClassrooms([FromQuery] int ps = 8, [FromQuery] int page = 1, [FromQuery] string q = null)
         {
             var classroom = await _classroomQueries.GetClassrooms(ps, page, q);
-            return classroom == null ? NotFound() : CustomResponse(classroom);            
+            return classroom == null ? NotFound() : CustomResponse(classroom);
         }
 
-        [HttpGet("api/classroom/{id}")]
+        [HttpGet("api/classroom/{id:guid}")]
         public async Task<IActionResult> GetClassroomById(Guid id)
         {
             var classroom = await _classroomQueries.GetClassroomById(id);
-            return classroom == null ? NotFound() : CustomResponse(classroom);            
-        }        
+            var classroomDto = new ClassroomDto().ToConvertClassroomDto(classroom);
 
-        [HttpPost("api/classroom/create")]        
+            return classroomDto == null ? NotFound() : CustomResponse(classroomDto);
+        }
+
+        [HttpPost("api/classroom/create")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         public async Task<IActionResult> CreateClassroom([FromBody] ClassroomDto request)
-        {  
+        {
             return CustomResponse(await _mediator.SendCommand(new RegisterClassroomCommand(request)));
-        }        
+        }
 
         [HttpPut("api/Classroom/update")]
         public async Task<IActionResult> UpdateClassroom([FromBody] ClassroomDto request)
-        {   
+        {
             return CustomResponse(await _mediator.SendCommand(new UpdateClassroomCommand(request)));
         }
 
-        [HttpDelete("api/classroom/delete/{id}")]
+        [HttpDelete("api/classroom/delete/{id:guid}")]
         public async Task<IActionResult> DeleteClassromm(Guid id)
         {
-            var command = new DeleteClassroomCommand 
+            var command = new DeleteClassroomCommand
             {
                 Id = id,
                 LastModifiedDate = DateTime.Now.ToShortDateString(),
@@ -71,9 +75,9 @@ namespace Universal.EBI.Classrooms.API.Controllers
             if (request.Childs == null || request.Childs.Length <= 0)
             {
                 return CustomResponse(request);
-            }           
-           
-            return CustomResponse(await _mediator.SendCommand(new AddChildClassroomCommand(request)));                   
+            }
+
+            return CustomResponse(await _mediator.SendCommand(new AddChildClassroomCommand(request)));
 
         }
 

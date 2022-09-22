@@ -17,7 +17,7 @@ namespace Universal.EBI.BFF.Report.API.Controllers
         }
 
         [HttpGet]
-        [Route("reports/educators")]
+        [Route("api/bff/educators")]
         public async Task<PagedResult<EducatorClassroomDto>> GetEducators([FromQuery] int ps = 8, [FromQuery] int page = 1, [FromQuery] string q = null)
         {
             var pagedResultClassroomDto = await _educatorService.GetEducators(ps, page, q);            
@@ -25,14 +25,14 @@ namespace Universal.EBI.BFF.Report.API.Controllers
         }
 
         [HttpGet]
-        [Route("reports/educator/{id}")]
+        [Route("api/bff/educator/{id}")]
         public async Task<IActionResult> GetEducatorById(Guid id)
         {
             var educator = await _educatorService.GetEducatorById(id);
             return educator == null ? NotFound() : CustomResponse(educator);
         }
 
-        [HttpGet("reports/educator/{cpf:length(11)}")]
+        [HttpGet("api/bff/educator/{cpf:length(11)}")]
         public async Task<ActionResult<EducatorDto>> GetEducatorByCpf(string cpf)
         {
             var educator = await _educatorService.GetEducatorByCpf(cpf);

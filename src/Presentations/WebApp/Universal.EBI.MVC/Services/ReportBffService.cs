@@ -190,6 +190,37 @@ namespace Universal.EBI.MVC.Services
             HandlerResponseErrors(response);
 
             return await DeserializeResponseObject<PagedResult<EducatorClassroomViewModel>>(response);
+        }        
+
+        public async Task<ClassroomViewModel> GetClassroomById(Guid id)
+        {
+            var response = await _httpClient.GetAsync($"/api/bff/classroom/{id}");
+
+            if (response.StatusCode == HttpStatusCode.NotFound) return null;
+
+            HandlerResponseErrors(response);
+
+            return await DeserializeResponseObject<ClassroomViewModel>(response);
+        }
+
+        public async Task<ObjectResult> GetClassrooms(int pageSize, int pageIndex, string query = null)
+        {
+            var response = await _httpClient.GetAsync($"/api/bff/classrooms?ps={pageSize}&page={pageIndex}&q={query}");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var objResultError = new ObjectResult(await DeserializeResponseObject<ResponseResult>(response))
+                {
+                    StatusCode = (int)response.StatusCode
+                };
+                return objResultError;
+            }
+
+            var objResult = new ObjectResult(await DeserializeResponseObject<PagedResult<ClassroomResponseViewModel>>(response))
+            {
+                StatusCode = (int)response.StatusCode
+            };
+            return objResult;
         }
 
         public async Task<ResponseResult> CreateClassroom(ClassroomViewModel classroom)
@@ -202,5 +233,17 @@ namespace Universal.EBI.MVC.Services
 
             return ReturnOk();
         }
+
+        public async Task<ResponseResult> UpdateClassroom(ClassroomViewModel request)
+        {
+            var content = GetContent(request);
+
+            var response = await _httpClient.PutAsync("/api/bff/classroom/update", content);
+
+            if (!HandlerResponseErrors(response)) return await DeserializeResponseObject<ResponseResult>(response);
+
+            return ReturnOk();
+        }
+
     }
 }

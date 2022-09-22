@@ -2,36 +2,119 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Universal.EBI.Core.Comunication;
 using Universal.EBI.MVC.Extensions;
 using Universal.EBI.MVC.Models;
 using Universal.EBI.MVC.Services.Interfaces;
+using Universal.EBI.WebAPI.Core.AspNetUser.Interfaces;
 
 namespace Universal.EBI.MVC.Controllers
 {
     public class ClassroomController : BaseController
     {
         private readonly IReportBffService _bffService;
+        private readonly IAspNetUser _user;
 
-        public ClassroomController(IReportBffService bffService)
+        public ClassroomController(IReportBffService bffService, IAspNetUser user)
         {
             _bffService = bffService;
+            _user = user;
         }
-
-        public ActionResult Index()
-        {
-            return View();
-        }
-
 
         [HttpGet]
-        //[Route("Classroom/Details/{id}")]
-        public ActionResult Details(Guid id)
+        [Route("Classrooms")]
+        public async Task<ActionResult> GetClassrooms([FromQuery] int ps = 8, [FromQuery] int page = 1, [FromQuery] string q = null)
         {
-            //Recuparar classroom por Id
-            var vmEducatorClassroom = new EducatorClassroomTransportViewModel();
-            vmEducatorClassroom.ClassroomId = id;
-            return View(vmEducatorClassroom);
+            try
+            {
+                var response = await _bffService.GetClassrooms(ps, page, q);
+
+                if (response.Value is not ResponseResult)
+                {
+                    ViewBag.Search = q;
+                    var pagedResult = (PagedResult<ClassroomResponseViewModel>)response.Value;
+                    pagedResult.ReferenceAction = "GetClassrooms";
+                    TempDataExtension.Put(TempData, "Classrooms", pagedResult);
+                    return View("Index", pagedResult);
+                }
+
+                if (HasResponseErrors((ResponseResult)response.Value)) TempData["Errors"] =
+                    ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage)).ToList();
+
+                var rs = (ResponseResult)response.Value;
+                if (rs.Status == 404)
+                {
+                    var pagedResult = new PagedResult<ClassroomResponseViewModel>
+                    {
+                        List = new List<ClassroomResponseViewModel>(),
+                        PageSize = ps,
+                        PageIndex = page,
+                        Query = q,
+                        ReferenceAction = "GetClassrooms",
+                        TotalResults = ps * page
+                    };
+                    return View("Index", pagedResult);
+                }
+                return RedirectToAction("Error", "Home", new { id = rs.Status });
+
+            }
+            catch (Exception ex)
+            {
+                var response = new ResponseResult();
+                response.Errors.Messages.Add(ex.Message);
+                if (HasResponseErrors(response)) TempData["Erros"] =
+                    ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage)).ToList();
+                return RedirectToAction("Error", "Home", new { id = 500 });
+            }
+        }
+
+        [HttpGet]
+        [Route("Classroom/Details/{id}")]
+        public async Task<ActionResult> Details(Guid id)
+        {
+            try
+            {
+                if (Guid.Empty == id)
+                {
+                    return View();
+                }
+                var response = await _bffService.GetClassroomById(id);
+                if (response != null)
+                {
+                    var vmTransport = new EducatorClassroomTransportViewModel()
+                    {
+                        ClassroomId = response.Id,
+                        Region = response.Region,
+                        Church = response.Church,
+                        ClassroomType = response.ClassroomType,
+                        Actived = response.Actived,
+                        Lunch = response.Lunch,
+                        MeetingTime = response.MeetingTime,
+                        CreatedBy = response.CreatedBy,
+                        CreatedDate = response.CreatedDate,
+                        LastModifiedBy = response.LastModifiedBy,
+                        LastModifiedDate = response.LastModifiedDate,
+                        EducatorId = response.Educator.Id,
+                        EducatorFirstName = response.Educator.FirstName,
+                        EducatorLastName = response.Educator.LastName,
+                        EducatorFunctionType = response.Educator.FunctionType
+                    };
+
+                    return View(vmTransport);
+                }
+                return RedirectToAction("Error", "Home", new { id = 404 });
+            }
+            catch (Exception ex)
+            {
+                var response = new ResponseResult();
+                response.Errors.Messages.Add(ex.Message);
+                if (HasResponseErrors(response)) TempData["Erros"] =
+                    ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage)).ToList();
+                return RedirectToAction("Error", "Home", new { id = 500 });
+            }
+           
         }
 
 
@@ -47,15 +130,15 @@ namespace Universal.EBI.MVC.Controllers
         [Route("classroom/create")]
         public async Task<IActionResult> Create(ClassroomViewModel vmClassroom)
         {
+            if (!ModelState.IsValid) return View(vmClassroom);
             try
             {
                 vmClassroom.Id = Guid.NewGuid();                
-                vmClassroom.CreatedDate = DateTime.Now.ToString();
-                vmClassroom.CreatedBy = "CurrentUser";
-
-                if (ModelState.IsValid) return View(vmClassroom);
+                vmClassroom.CreatedDate = DateTime.Now;
+                vmClassroom.CreatedBy = _user.GetUserEmail();                
 
                 var response = await _bffService.CreateClassroom(vmClassroom);
+
                 if (HasResponseErrors(response)) return View(vmClassroom);
                 return RedirectToAction(nameof(Details), new { id = vmClassroom.Id });
             }
@@ -66,75 +149,137 @@ namespace Universal.EBI.MVC.Controllers
         }
 
         [HttpGet]
-        //[Route("Classroom/Edit/{id}")]
-        public ActionResult Edit(Guid id)
+        [Route("classroom/update/{id:guid}")]
+        public async Task<ActionResult> Update([FromRoute] Guid id)
         {
-            var vmClassroom = new ClassroomViewModel();
-            var vmChildren = new List<ChildViewModel>();
-            ViewBag.Children = vmChildren;
-            var vmResponsibles = new List<ResponsibleViewModel>();
-            ViewBag.Responsibles = vmResponsibles;
-            var vmEducator = new EducatorClassroomViewModel { Id = Guid.NewGuid() };
-            vmClassroom.Id = id;
-            //vmClassroom.Region = vmEducatorClassroom.Region;
-            //vmClassroom.Church = vmEducatorClassroom.Church;
-            //vmClassroom.Lunch = vmEducatorClassroom.Lunch;
-            //vmClassroom.CreatedDate = vmEducatorClassroom.CreatedDate;
-            //vmClassroom.ClassroomType = vmEducatorClassroom.ClassroomType;
-            //vmClassroom.Actived = vmEducatorClassroom.Actived;            
-            //vmClassroom.MeetingTime = vmEducatorClassroom.MeetingTime;
-            vmClassroom.Childs = new List<ChildViewModel>();
-            vmClassroom.Childs.Add(new ChildViewModel { Id = Guid.NewGuid() });
-            //vmClassroom.Childs[0].Responsibles = new List<ResponsibleViewModel>();
-            //vmClassroom.Childs[0].Responsibles.Add(new ResponsibleViewModel { Id = Guid.NewGuid() });
-            vmClassroom.Educator = vmEducator;
-
-            return View(vmClassroom);
+            try
+            {
+                if (Guid.Empty == id)
+                {
+                    return View();
+                }
+                var response = await _bffService.GetClassroomById(id);
+                if (response != null)
+                {
+                    //response.Children = response.Children ?? new List<ChildClassroomViewModel>() { new ChildClassroomViewModel() };
+                    if(response.Children == null) response.Children = new List<ChildClassroomViewModel>() { new ChildClassroomViewModel() };
+                    if (!response.Children.Any()) response.Children = new List<ChildClassroomViewModel>() { new ChildClassroomViewModel() };
+                    return View(response);
+                }
+                return RedirectToAction("Error", "Home", new { id = 404 });
+            }
+            catch (Exception ex)
+            {
+                var response = new ResponseResult();
+                response.Errors.Messages.Add(ex.Message);
+                if (HasResponseErrors(response)) TempData["Erros"] =
+                    ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage)).ToList();
+                return RedirectToAction("Error", "Home", new { id = 500 });
+            }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Guid id, ClassroomViewModel vmClassroom)
+        [Route("classroom/update/{id:guid}")]
+        public async Task<ActionResult> Update([FromRoute] Guid id, ClassroomViewModel request)
         {
+            if (!ModelState.IsValid) return View(request);
             try
             {
-                return RedirectToAction(nameof(Details), vmClassroom.Id);
+                request.LastModifiedDate = DateTime.Now;
+                request.LastModifiedBy = _user.GetUserEmail();               
+
+                var response = await _bffService.UpdateClassroom(request);
+                if (HasResponseErrors(response))
+                {
+                    TempData["Errors"] = ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage)).ToList();
+                    return View(request);
+                }
+                var vmChild = _bffService.GetClassroomById(id).Result;
+                if (vmChild != null)
+                {
+                    //vmChild.Children = vmChild.Children ?? new List<ChildClassroomViewModel>() { new ChildClassroomViewModel() };
+                    if (vmChild.Children == null) new List<ChildClassroomViewModel>() { new ChildClassroomViewModel() };
+                    if (!vmChild.Children.Any()) new List<ChildClassroomViewModel>() { new ChildClassroomViewModel() };
+                    return View(nameof(Details), vmChild);
+                }
+                return RedirectToAction("Error", "Home", new { id = 500 });
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                var response = new ResponseResult();
+                response.Errors.Messages.Add(ex.Message);
+                if (HasResponseErrors(response)) TempData["Erros"] =
+                    ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage)).ToList();
+                return RedirectToAction("Error", "Home", new { id = 500 });
             }
         }
 
-        public ActionResult Delete(Guid id)
+        [HttpGet]
+        [Route("classroom/delete/{id:guid}")]
+        public async Task<ActionResult> Delete([FromRoute] Guid id)
         {
-            return View();
+            if (Guid.Empty == id)
+            {
+                return RedirectToAction("Error", "Home", new { id = 404 });
+            }
+            var response = await _bffService.GetClassroomById(id);
+            if (response != null)
+            {
+                return View(nameof(Details), response);
+            }
+            return RedirectToAction("Error", "Home", new { id = 404 });
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(Guid id, IFormCollection collection)
+        [Route("classroom/delete/{id:guid}")]
+        public async Task<ActionResult> ConfirmDeletion(Guid id)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                if (Guid.Empty == id)
+                {
+                    return RedirectToAction("Error", "Home", new { id = 404 });
+                }
+                var response = await _bffService.DeleteChild(id);
+                if (HasResponseErrors(response))
+                {
+                    TempData["Errors"] = ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage)).ToList();
+                    return View(nameof(Index));
+                }
+                return RedirectToAction("Error", "Home", new { id = 404 });
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                var response = new ResponseResult();
+                response.Errors.Messages.Add(ex.Message);
+                if (HasResponseErrors(response)) TempData["Erros"] =
+                    ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage)).ToList();
+                return RedirectToAction("Error", "Home", new { id = 500 });
             }
         }
 
         [HttpGet]
         [Route("classroom/educadores")]
         public async Task<IActionResult> GetEducators([FromQuery] int ps = 8, [FromQuery] int page = 1, [FromQuery] string q = null)
-        {
-            var pagedResultEducator = await _bffService.GetEducators(ps, page, q);
-            //TempData["Search"] = q;
-            //pagedResultEducator.ReferenceAction = "Create";
-            //TempData["Educators"] = pagedResultEducator;
-            TempDataExtension.Put(TempData, "Educators", pagedResultEducator);
-            return RedirectToAction("Create", "Classroom");
+        {            
+            var response = await _bffService.GetEducators(ps, page, q);
+
+            if (response != null)
+            {
+                ViewBag.Search = q;
+                var pagedResult = response;
+                pagedResult.ReferenceAction = "Create";
+                TempDataExtension.Put(TempData, "Classrooms", pagedResult);
+                return View("Create", pagedResult);
+            }
+
+            TempData["Errors"] =
+                ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage)).ToList();
+                        
+            return RedirectToAction("Error", "Home", new { id = 404 });
+
         }
 
         [HttpGet]

@@ -10,8 +10,8 @@ namespace Universal.EBI.Reports.API.Configurations
     {
         public static void AddMessageBusConfiguration(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddMessageBus(configuration.GetMessageQueueConnection("MessageBus"))
-                            .AddHostedService<RegisterClassroomReportIntegrationHandler>();
+            services.AddMessageBus(configuration.GetMessageQueueConnection("MessageBus"));
+                            //.AddHostedService<RegisterClassroomReportIntegrationHandler>();
         }
     }
 }
