@@ -2,14 +2,14 @@
 @model Universal.EBI.MVC.Models.ClassroomViewModel
 
 @{
-    var modelPaged = TempDataExtension.Get<PagedResult<ChildViewModel>>(TempData, "Children");
-    ViewData["Title"] = "Edit";
+    var modelPaged = TempDataExtension.Get<PagedResult<ChildClassroomViewModel>>(TempData, "Children");
+    ViewData["Title"] = "Atualizar";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="row col-md-12 mt-md-3">
     <div class="col-md-6"><h5>Adicionar Criança</h5></div>
-    <div class="col-md-6 text-end"><a asp-action="Index">Back to List</a></div>
+    <div class="col-md-6 text-end"><a asp-action="GetClassrooms">Back to List</a></div>
 </div>
 
 <hr />
@@ -57,7 +57,7 @@
 
 <div class="col-md-12 mt-md-3">
     <div class="card col-md-12">
-        <form class="row g-4" asp-action="Edit" method="post">
+        <form class="row g-4" asp-action="Update" method="post">
             <div class="card-body">
                 <div class="card-text">
                     <div class="d-flex align-items-center justify-content-center">
@@ -90,7 +90,7 @@
                                                         <span asp-validation-for="Church" class="text-danger"></span>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-4">
+                                                <div class="col-md-3">
                                                     <div class="input-group form-outline">
                                                         <input asp-for="Lunch" class="form-control" id="lunch" />
                                                         <label for="lunch" class="form-label">Lanche</label>
@@ -99,15 +99,15 @@
                                                         <span asp-validation-for="Lunch" class="text-danger"></span>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-2">
+                                                <div class="col-md-3">
                                                     <div class="form-group">
-                                                        <div class='input-group date' id='datepicker2'>
-                                                            <input asp-for="CreatedDate" class="form-control" />
-                                                            <span class="input-group-append">
+                                                        <div class='input-group date' id='datepicker-1'>
+                                                            <input asp-for="CreatedDate" class="form-control" readonly/>
+                                                            @*<span class="input-group-append">
                                                                 <span class="input-group-text bg-white d-block">
                                                                     <i class="fa fa-calendar"></i>
                                                                 </span>
-                                                            </span>
+                                                            </span>*@
                                                         </div>
                                                     </div>
                                                 </div>
@@ -118,11 +118,11 @@
                                                         <label class="input-group-text" for="inputGroupSelect05">Tipo de Sala</label>
                                                         <select asp-for="ClassroomType" class="form-select" id="inputGroupSelect05">
                                                             <option selected>Selecione...</option>
-                                                            <option value="1">Berçário</option>
-                                                            <option value="2">Maternal</option>
-                                                            <option value="3">Primário</option>
-                                                            <option value="4">Juniores</option>
-                                                            <option value="5">Mista</option>
+                                                            <option value="Nursery">Berçário</option>
+                                                            <option value="Maternal">Maternal</option>
+                                                            <option value="Primary">Primário</option>
+                                                            <option value="Juniors">Juniores</option>
+                                                            <option value="Mixed">Mista</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -194,8 +194,8 @@
                                                         <label class="input-group-text" for="inputGroupSelect06">Função</label>
                                                         <select asp-for="Educator.FunctionType" class="form-select" id="inputGroupSelect06">
                                                             <option selected>Selecione...</option>
-                                                            <option value="1">Responsável</option>
-                                                            <option value="2">Auxiliar</option>
+                                                            <option value="Responsible">Responsável</option>
+                                                            <option value="Auxiliary">Auxiliar</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -211,10 +211,10 @@
                                         </button>
                                     </h2>
                                     <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
-                                        <div class="accordion-body">                                           
+                                        <div class="accordion-body">
                                             <div class="col-md-12">
                                                 <table id="tblChildren" class="table table-striped table-hover" style="width:100%">
-                                                    <thead class="table-dark">
+                                                    <thead class="table-info">
                                                         <tr>
                                                             <th></th>
                                                             <th>
@@ -233,7 +233,7 @@
                                                                 <strong>Data Nascimento</strong>
                                                             </th>
                                                             <th>
-                                                                <strong>Sexo</strong>
+                                                                <strong>Gênero</strong>
                                                             </th>
                                                             <th>
                                                                 <strong>Faixa Etária</strong>
@@ -255,11 +255,11 @@
                                                                     <th scope="row">
                                                                         <div class="form-check">
                                                                             <input class="form-check-input"
-                                                                           type="radio"
-                                                                           value=""
-                                                                           id="flexCheckDefault"
-                                                                           name="flexCheckDefault"
-                                                                           onclick="seedFields()" />
+                                                                                   type="radio"
+                                                                                   value=""
+                                                                                   id="flexCheckDefault"
+                                                                                   name="flexCheckDefault"
+                                                                                   onclick="seedFields()" />
                                                                         </div>
                                                                     </th>
                                                                     <td>
@@ -307,38 +307,38 @@
                                             <div class="row col-md-12 mt-md-3">
                                                 <div class="col-md-4 mv-md-3">
                                                     <div class="input-group form-outline">
-                                                        <input asp-for="@Model.Childs[0].FirstName" class="form-control" id="childFirstname" aria-describedby="inputGroupPrepend7" />
+                                                        <input asp-for="@Model.Children[0].FirstName" class="form-control" id="childFirstname" aria-describedby="inputGroupPrepend7" />
                                                         <label for="childFirstname" class="form-label">Primeiro nome</label>
                                                     </div>
                                                     <div>
-                                                        <span asp-validation-for="@Model.Childs[0].FirstName" class="text-danger"></span>
+                                                        <span asp-validation-for="@Model.Children[0].FirstName" class="text-danger"></span>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-5 mb-md-3">
                                                     <div class="input-group form-outline">
-                                                        <input asp-for="@Model.Childs[0].LastName" class="form-control" id="childLastname" />
+                                                        <input asp-for="@Model.Children[0].LastName" class="form-control" id="childLastname" />
                                                         <label for="childLastname" class="form-label">Sobrenome</label>
                                                     </div>
                                                     <div>
-                                                        <span asp-validation-for="@Model.Childs[0].LastName" class="text-danger"></span>
+                                                        <span asp-validation-for="@Model.Children[0].LastName" class="text-danger"></span>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3 mb-md-3">
                                                     <div class="form-group">
-                                                        <div class='input-group date' id='datepicker3'>
-                                                            <input asp-for="@Model.Childs[0].BirthDate" class="form-control" />
-                                                            <span class="input-group-append">
+                                                        <div class='input-group date' id='datepicker-2'>
+                                                            <input asp-for="@Model.Children[0].BirthDate" class="form-control" />
+                                                            @*<span class="input-group-append">
                                                                 <span class="input-group-text bg-white d-block">
                                                                     <i class="fa fa-calendar"></i>
                                                                 </span>
-                                                            </span>
+                                                            </span>*@
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="input-group">
                                                         <label class="input-group-text" for="inputGroupSelect07">Sexo</label>
-                                                        <select asp-for="@Model.Childs[0].GenderType" class="form-select" id="inputGroupSelect07">
+                                                        <select asp-for="@Model.Children[0].GenderType" class="form-select" id="inputGroupSelect07">
                                                             <option selected>Selecione...</option>
                                                             <option value="M">Masculino</option>
                                                             <option value="F">Feminino</option>
@@ -348,7 +348,7 @@
                                                 <div class="col-md-3">
                                                     <div class="input-group">
                                                         <label class="input-group-text" for="inputGroupSelect08">Faixa Etária</label>
-                                                        <select asp-for="@Model.Childs[0].AgeGroupType" class="form-select" id="inputGroupSelect08">
+                                                        <select asp-for="@Model.Children[0].AgeGroupType" class="form-select" id="inputGroupSelect08">
                                                             <option selected>Selecione...</option>
                                                             <option value="Nursery">Berçário</option>
                                                             <option value="Maternal">Maternal</option>
@@ -357,24 +357,24 @@
                                                         </select>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-3">
-                                                    <div class="input-group form-outline">
-                                                        <input asp-for="@Model.Childs[0].HoraryOfEntry" class="form-control" id="horaryEntry" aria-describedby="inputGroupPrepend8" />
-                                                        <label for="horaryEntry" class="form-label">Horário de entrada</label>
+                                                @*<div class="col-md-3">
+                                                        <div class="input-group form-outline">
+                                                            <input asp-for="@Model.Children[0].HoraryOfEntry" class="form-control" id="horaryEntry" aria-describedby="inputGroupPrepend8" />
+                                                            <label for="horaryEntry" class="form-label">Horário de entrada</label>
+                                                        </div>
+                                                        <div>
+                                                            <span asp-validation-for="@Model.Children[0].HoraryOfEntry" class="text-danger"></span>
+                                                        </div>
                                                     </div>
-                                                    <div>
-                                                        <span asp-validation-for="@Model.Childs[0].HoraryOfEntry" class="text-danger"></span>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-3">
-                                                    <div class="input-group form-outline">
-                                                        <input asp-for="@Model.Childs[0].HoraryOfExit" class="form-control" id="horaryExit" />
-                                                        <label for="horaryExit" class="form-label">Horário de saída</label>
-                                                    </div>
-                                                    <div>
-                                                        <span asp-validation-for="@Model.Childs[0].HoraryOfExit" class="text-danger"></span>
-                                                    </div>
-                                                </div>
+                                                    <div class="col-md-3">
+                                                        <div class="input-group form-outline">
+                                                            <input asp-for="@Model.Children[0].HoraryOfExit" class="form-control" id="horaryExit" />
+                                                            <label for="horaryExit" class="form-label">Horário de saída</label>
+                                                        </div>
+                                                        <div>
+                                                            <span asp-validation-for="@Model.Children[0].HoraryOfExit" class="text-danger"></span>
+                                                        </div>
+                                                    </div>*@
                                             </div>
                                         </div>
                                     </div>
@@ -389,7 +389,7 @@
                                         <div class="accordion-body">
                                             <div class="col-md-12">
                                                 <table id="example2" class="table table-striped" style="width:100%">
-                                                    <thead>
+                                                    <thead class="table-info">
                                                         <tr>
                                                             <th>
                                                                 <strong>#ID</strong>
@@ -410,7 +410,7 @@
                                                                 <strong>Data Nascimento</strong>
                                                             </th>
                                                             <th>
-                                                                <strong>Sexo</strong>
+                                                                <strong>Gênero</strong>
                                                             </th>
                                                             <th>
                                                                 <strong>Parentesco</strong>
@@ -418,13 +418,13 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        @if (ViewBag.Responsibles != null && ViewBag.Responsibles.Count > 0)
+                                                        @if (modelPaged != null && modelPaged.List.ToList()[0].Responsibles != null && modelPaged.List.ToList()[0].Responsibles.Count > 0)
                                                         {
-                                                            @for (int i = 0; i < ViewBag.Responsibles.Count; i++)
+                                                            @for (int i = 0; i < modelPaged.List.ToList()[0].Responsibles.Count; i++)
                                                             {
                                                                 <tr>
                                                                     <td>
-                                                                        ViewBag.Responsibles[i].Id
+                                                                        modelPaged.List.ToList()[i].Id
                                                                     </td>
                                                                     @*<td>
                                                                         ViewBag.Children[i].FirstName
@@ -433,19 +433,19 @@
                                                                         ViewBag.Children[i].LastName
                                                                         </td>*@
                                                                     <td>
-                                                                        ViewBag.Responsibles[i].Cpf.Number
+                                                                        modelPaged.List.ToList()[i].Cpf.Number
                                                                     </td>
                                                                     <td>
-                                                                        ViewBag.Responsibles[i].FullName
+                                                                        modelPaged.List.ToList()[i].FullName
                                                                     </td>
                                                                     <td>
-                                                                        ViewBag.Responsibles[i].BirthDate
+                                                                        modelPaged.List.ToList()[i].BirthDate
                                                                     </td>
                                                                     <td>
-                                                                        ViewBag.Responsibles[i].GenderType
+                                                                        modelPaged.List.ToList()[i].GenderType
                                                                     </td>
                                                                     <td>
-                                                                        ViewBag.Responsibles[i].KinshipType
+                                                                        modelPaged.List.ToList()[i].KinshipType
                                                                     </td>
                                                                 </tr>
                                                             }
@@ -465,38 +465,38 @@
                                             <div class="row col-md-12 mt-md-3">
                                                 <div class="col-md-4 mv-md-3">
                                                     <div class="input-group form-outline">
-                                                        <input asp-for="@Model.Childs[0].Responsibles[0].FirstName" class="form-control" id="responsibleFirstname" aria-describedby="inputGroupPrepend9" />
+                                                        <input asp-for="@Model.Children[0].Responsibles[0].FirstName" class="form-control" id="responsibleFirstname" aria-describedby="inputGroupPrepend9" />
                                                         <label for="responsibleFirstname" class="form-label">Primeiro nome</label>
                                                     </div>
                                                     <div>
-                                                        <span asp-validation-for="@Model.Childs[0].Responsibles[0].FirstName" class="text-danger"></span>
+                                                        <span asp-validation-for="@Model.Children[0].Responsibles[0].FirstName" class="text-danger"></span>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-5 mb-md-3">
                                                     <div class="input-group form-outline">
-                                                        <input asp-for="@Model.Childs[0].Responsibles[0].LastName" class="form-control" id="responsibleLastname" />
+                                                        <input asp-for="@Model.Children[0].Responsibles[0].LastName" class="form-control" id="responsibleLastname" />
                                                         <label for="responsibleLastname" class="form-label">Sobrenome</label>
                                                     </div>
                                                     <div>
-                                                        <span asp-validation-for="@Model.Childs[0].Responsibles[0].LastName" class="text-danger"></span>
+                                                        <span asp-validation-for="@Model.Children[0].Responsibles[0].LastName" class="text-danger"></span>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3 mb-md-3">
                                                     <div class="form-group">
-                                                        <div class='input-group date' id='datepicker4'>
-                                                            <input asp-for="@Model.Childs[0].Responsibles[0].BirthDate" class="form-control" />
-                                                            <span class="input-group-append">
+                                                        <div class='input-group date' id='datepicker-3'>
+                                                            <input asp-for="@Model.Children[0].Responsibles[0].BirthDate" class="form-control" />
+                                                            @*<span class="input-group-append">
                                                                 <span class="input-group-text bg-white d-block">
                                                                     <i class="fa fa-calendar"></i>
                                                                 </span>
-                                                            </span>
+                                                            </span>*@
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="input-group">
-                                                        <label class="input-group-text" for="inputGroupSelect09">Sexo</label>
-                                                        <select asp-for="@Model.Childs[0].Responsibles[0].GenderType" class="form-select" id="inputGroupSelect09">
+                                                        <label class="input-group-text" for="inputGroupSelect09">Gênero</label>
+                                                        <select asp-for="@Model.Children[0].Responsibles[0].GenderType" class="form-select" id="inputGroupSelect09">
                                                             <option selected>Selecione...</option>
                                                             <option value="M">Masculino</option>
                                                             <option value="F">Feminino</option>
@@ -506,7 +506,7 @@
                                                 <div class="col-md-3">
                                                     <div class="input-group">
                                                         <label class="input-group-text" for="inputGroupSelect10">Parentesco</label>
-                                                        <select asp-for="@Model.Childs[0].AgeGroupType" class="form-select" id="inputGroupSelect10">
+                                                        <select asp-for="@Model.Children[0].AgeGroupType" class="form-select" id="inputGroupSelect10">
                                                             <option selected>Selecione...</option>
                                                             <option value="Dad">Pai</option>
                                                             <option value="Mom">Mãe</option>
@@ -521,17 +521,17 @@
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="input-group form-outline">
-                                                        <input asp-for="@Model.Childs[0].Responsibles[0].Phones[0].Number" class="form-control" id="firstname" aria-describedby="inputGroupPrepend10" />
+                                                        <input asp-for="@Model.Children[0].Responsibles[0].Phones[0].Number" class="form-control" id="firstname" aria-describedby="inputGroupPrepend10" />
                                                         <label for="firstname" class="form-label">Telefone</label>
                                                     </div>
                                                     <div>
-                                                        <span asp-validation-for="@Model.Childs[0].Responsibles[0].Phones[0].Number" class="text-danger"></span>
+                                                        <span asp-validation-for="@Model.Children[0].Responsibles[0].Phones[0].Number" class="text-danger"></span>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="input-group">
                                                         <label class="input-group-text" for="inputGroupSelect11">Tipos telefones</label>
-                                                        <select asp-for="@Model.Childs[0].Responsibles[0].Phones[0].PhoneType" class="form-select" id="inputGroupSelect11">
+                                                        <select asp-for="@Model.Children[0].Responsibles[0].Phones[0].PhoneType" class="form-select" id="inputGroupSelect11">
                                                             <option selected>Selecione...</option>
                                                             <option value="Residential">Residencial</option>
                                                             <option value="Commercial">Comercial</option>
@@ -558,15 +558,15 @@
 
 @*<script>
     $(function () {
-    $('#datepicker3').datepicker({ format: 'dd/mm/yyyy' });
+    $('#datepicker-1').datepicker({ format: 'dd/mm/yyyy' });
     });
 
     $(function () {
-    $('#datepicker4').datepicker({ format: 'dd/mm/yyyy' });
+    $('#datepicker-2').datepicker({ format: 'dd/mm/yyyy' });
     });
 
     $(function () {
-    $('#datepicker5').datepicker({ format: 'dd/mm/yyyy' });
+    $('#datepicker-3').datepicker({ format: 'dd/mm/yyyy' });
     });
 
     </script>*@
@@ -604,9 +604,9 @@
     </script>*@
 
 <script>
-    function seedFields(){
+    function seedFields() {
 
-        $('#tblChildren tr').each(function() {
+        $('#tblChildren tr').each(function () {
 
             var childFirstname = $(this).find("td").eq(1).text();
             console.log(childFirstname)
@@ -616,7 +616,7 @@
 
             var birthDate = $(this).find("td").eq(2).text();
             birthDate = $.trim(birthDate);
-            $('#datepicker4').val(birthDate);
+            $('#datepicker-2').val(birthDate);
             //$('#lastname').addClass("active");
 
             var genderType = $(this).find("td").eq(3).text();
@@ -637,7 +637,7 @@
 <script src="~/mdb5-ui-kit/js/mdb.min.js"></script>
 
 @section Scripts {
-<partial name="_ValidationScriptsPartial" />
+    <partial name="_ValidationScriptsPartial" />
 }
 
 

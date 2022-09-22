@@ -20,7 +20,7 @@ namespace Universal.EBI.BFF.Report.API.Services
             _httpClient.BaseAddress = new Uri("https://localhost:5701");
         }
 
-        public async Task<ClassroomDto> GetClassroomById(Guid id)
+        public async Task<ClassroomResponseDto> GetClassroomById(Guid id)
         {
             var response = await _httpClient.GetAsync($"/api/classroom/{id}");
 
@@ -28,7 +28,7 @@ namespace Universal.EBI.BFF.Report.API.Services
 
             HandlerResponseErrors(response);
 
-            return await DeserializeResponseObject<ClassroomDto>(response);
+            return await DeserializeResponseObject<ClassroomResponseDto>(response);
         }
 
         public async Task<PagedResult<ClassroomDto>> GetClassrooms(int pageSize, int pageIndex, string query = null)

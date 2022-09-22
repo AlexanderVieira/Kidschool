@@ -11,9 +11,7 @@ namespace Universal.EBI.Classrooms.API.Models
         public string Church { get; set; }
         public ClassroomType ClassroomType { get; set; }
         public string Lunch { get; set; }
-        public string MeetingTime { get; set; }
-        public string HoraryOfEntry { get; set; }
-        public string HoraryOfExit { get; set; }
+        public string MeetingTime { get; set; }        
         public bool Actived { get; set; }
         public virtual Educator Educator { get; set; }
         public virtual List<Child> Children { get; set; }        

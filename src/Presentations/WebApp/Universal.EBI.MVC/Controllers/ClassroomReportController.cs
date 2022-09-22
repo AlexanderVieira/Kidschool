@@ -57,7 +57,7 @@ namespace Universal.EBI.MVC.Controllers
                 return View();
             }
 
-            var response = await _classroomReportService.GetClassroomReportByYear(region, church);
+            var response = await _classroomReportService.GetClassroomReportByMonth(region, church);
             if (response == null) return BadRequest();
             return File(response.FileContents, response.ContentType, response.FileDownloadName);
 
@@ -73,7 +73,7 @@ namespace Universal.EBI.MVC.Controllers
                 return View();
             }
 
-            var response = await _classroomReportService.GetClassroomReportByYear(region, church);
+            var response = await _classroomReportService.GetClassroomReportByWeek(region, church);
             if (response == null) return BadRequest();
             return File(response.FileContents, response.ContentType, response.FileDownloadName);
 

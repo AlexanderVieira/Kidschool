@@ -12,16 +12,16 @@ namespace Universal.EBI.MVC.Models
         public string ClassroomType { get; set; }      
         public string MeetingTime { get; set; }        
         public EducatorClassroomViewModel Educator { get; set; }
-        public List<ChildViewModel> Childs { get; set; }
+        public List<ChildClassroomViewModel> Children { get; set; }
         public bool Actived { get; set; }
         public string CreatedBy { get; set; }
-        public string CreatedDate { get; set; }
+        public DateTime? CreatedDate { get; set; }
         public string LastModifiedBy { get; set; }
-        public string LastModifiedDate { get; set; }
+        public DateTime? LastModifiedDate { get; set; }
 
         public ClassroomViewModel()
         {
-            Childs = new List<ChildViewModel>();
+            Children = new List<ChildClassroomViewModel>();
         }        
         
     }

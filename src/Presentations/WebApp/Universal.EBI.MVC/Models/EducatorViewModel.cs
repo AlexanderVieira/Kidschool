@@ -53,7 +53,7 @@ namespace Universal.EBI.MVC.Models
                     Id = phone.Id,
                     Number = phone.Number,
                     PhoneType = (PhoneType)Enum.Parse(typeof(PhoneType), phone.PhoneType, true),                    
-                    EducatorId = phone.ForeingKeyId
+                    //EducatorId = phone.ForeingKeyId
                 });
             }
 

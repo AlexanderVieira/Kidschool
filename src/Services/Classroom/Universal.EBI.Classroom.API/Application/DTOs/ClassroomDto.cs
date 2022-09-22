@@ -47,7 +47,7 @@ namespace Universal.EBI.Classrooms.API.Application.DTOs
 
             var educator = classroomDto.Educator.ToConvertEducator(classroomDto.Educator);
             classroom.Educator = educator;
-            var dictionary = classroomDto.Childs.Length > 0 ? classroomDto.Childs.ToDictionary(c => c.Id.ToString()) : new Dictionary<string, ChildDto>();
+            var dictionary = classroomDto.Childs != null ? classroomDto.Childs.ToDictionary(c => c.Id.ToString()) : new Dictionary<string, ChildDto>();
             foreach (var item in dictionary)
             {
                 if (dictionary.TryGetValue(item.Key.ToString(), out ChildDto childDto))
@@ -59,6 +59,39 @@ namespace Universal.EBI.Classrooms.API.Application.DTOs
             classroom.Children.ToArray();
             return classroom;            
         }
-        
+
+        public ClassroomDto ToConvertClassroomDto(Classroom classroom)
+        {
+            var classroomDto = new ClassroomDto
+            {
+                Id = classroom.Id,
+                Region = classroom.Region,
+                Church = classroom.Church,
+                MeetingTime = classroom.MeetingTime,
+                ClassroomType = classroom.ClassroomType.ToString(),
+                Lunch = classroom.Lunch,
+                Actived = classroom.Actived,
+                CreatedBy = classroom.CreatedBy,
+                CreatedDate = classroom.CreatedDate,
+                LastModifiedBy = classroom.LastModifiedBy,
+                LastModifiedDate = classroom.LastModifiedDate,
+                Educator = new EducatorDto().ToConvertEducatorDto(classroom.Educator),
+                Childs = new List<ChildDto>().ToArray()
+            };
+
+            var dictionary = classroom.Children != null ? classroom.Children.ToDictionary(c => c.Id.ToString()) : new Dictionary<string, Child>();
+            foreach (var item in dictionary)
+            {
+                if (dictionary.TryGetValue(item.Key.ToString(), out Child child))
+                {
+                    var childDto = new ChildDto();
+                    childDto = childDto.ToConvertChildDto(child);
+                    classroomDto.Childs[0] = childDto;
+                }
+            }
+            
+            return classroomDto;
+        }
+
     }
 }
